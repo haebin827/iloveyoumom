@@ -1,0 +1,71 @@
+/* SearchBar 스타일 */
+.search-bar-container {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid #979797;
+}
+
+.search-icon {
+  margin-right: 0.5rem;
+  color: black;
+}
+
+.search-input {
+  border: none;
+  padding: 0.5rem;
+  width: 100%;
+  font-size: 1rem;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+.search-input:focus {
+  outline: none;
+}
+
+.clear-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: var(--text-light);
+  box-shadow: none;
+  transition: var(--transition);
+}
+
+.clear-button:hover {
+  color: var(--primary-dark);
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .search-bar-container {
+    padding: 0.4rem 0.75rem;
+  }
+  
+  .search-input {
+    font-size: 0.9rem;
+    padding: 0.4rem;
+  }
+}
+
+/* 작은 모바일 화면 */
+@media (max-width: 480px) {
+  .search-bar-container {
+    padding: 0.3rem 0.5rem;
+  }
+  
+  .search-input {
+    font-size: 0.8rem;
+    padding: 0.3rem;
+  }
+  
+  .search-icon {
+    font-size: 0.9rem;
+  }
+} 

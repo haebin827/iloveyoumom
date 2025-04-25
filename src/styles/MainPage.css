@@ -1,0 +1,1108 @@
+/* MainPage 스타일 */
+.main-container {
+  padding-top: 7rem;
+  padding-bottom: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.search-container {
+  margin-bottom: 1.5rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 아코디언 스타일 고객 리스트 */
+.customer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.customer-item {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--primary-light);
+}
+
+.customer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.customer-header:hover {
+  background-color: #fffef5;
+}
+
+.customer-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.customer-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.customer-phone {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.customer-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.expand-icon {
+  font-size: 1rem;
+  color: var(--primary-color);
+  transition: transform 0.3s;
+}
+
+.customer-details {
+  padding: 1rem 1.5rem;
+  background-color: #fffef0;
+  border-top: 1px solid var(--primary-light);
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.detail-label {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.detail-value {
+  font-size: 0.95rem;
+  color: var(--text-color);
+}
+
+/* 방문 버튼 스타일 */
+.visit-button {
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  background-color: #ffd731;
+  color: black;
+  border-radius: 4px;
+  border: 1px solid var(--primary-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 80px;
+}
+
+.visit-button:hover {
+  background-color: var(--primary-color);
+  color: black;
+}
+
+.visit-button:disabled {
+  background-color: #f0f0f0;
+  color: #999;
+  border-color: #ddd;
+  cursor: not-allowed;
+}
+
+/* 노트 섹션 스타일 */
+.note-container {
+  border-top: 1px dashed var(--primary-light);
+  padding-top: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.note-content {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 3px solid var(--primary-color);
+  min-height: 80px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: inherit;
+  overflow-x: auto;
+}
+
+/* 방문 기록 테이블 스타일 */
+.visit-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 0.85rem;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  border: 1px solid #ccc;
+}
+
+.visit-table th {
+  background-color: #f5f5f5;
+  color: #333;
+  text-align: left;
+  padding: 10px 15px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.visit-table td {
+  padding: 8px 15px;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.85rem;
+}
+
+.visit-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* No 컬럼 스타일 */
+.visit-table th:first-child,
+.visit-table td:first-child {
+  width: 60px;
+  text-align: center;
+}
+
+/* 정렬 가능한 헤더 스타일 */
+.sortable {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.sortable:hover {
+  background-color: rgba(255, 215, 0, 0.15);
+  text-decoration: underline;
+}
+
+.sort-icon {
+  margin-left: 0.5rem;
+  display: inline-block;
+  font-weight: bold;
+}
+
+.sorted-asc, .sorted-desc {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .main-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+  
+  .customer-header {
+    padding: 0.8rem 1rem;
+  }
+  
+  .customer-name {
+    font-size: 0.95rem;
+  }
+  
+  .customer-phone {
+    font-size: 0.85rem;
+  }
+  
+  .details-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+  
+  .detail-item {
+    padding: 0.5rem;
+    background-color: #fefef9;
+    border-radius: 6px;
+    border: 1px solid #f0f0e0;
+  }
+  
+  .detail-label {
+    font-size: 0.75rem;
+    margin-bottom: 0.2rem;
+  }
+  
+  .detail-value {
+    font-size: 0.9rem;
+  }
+  
+  .note-content {
+    font-size: 1rem;
+    padding: 0.8rem;
+    min-height: 70px;
+  }
+  
+  .visit-button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    max-width: 70px;
+  }
+  
+  .visit-success {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    max-width: 70px;
+  }
+  
+  .visit-table th,
+  .visit-table td {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .sort-icon {
+    margin-left: 0.3rem;
+  }
+  
+  .edit-button, .delete-button {
+    padding: 7px 14px;
+    font-size: 0.85rem;
+  }
+  
+  .confirm-button {
+    padding: 5px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .search-filter-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
+  }
+  
+  .date-filter-container {
+    min-width: 100%;
+  }
+  
+  .date-filter-input {
+    flex: 1;
+  }
+  
+  .visit-count-badge {
+    font-size: 0.8rem;
+    padding: 2px 6px;
+  }
+  
+  .note-textarea {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
+  
+  .visit-success {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    max-width: 70px;
+  }
+}
+
+/* 작은 모바일 화면 */
+@media (max-width: 480px) {
+  .main-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+  
+  .customer-header {
+    padding: 0.7rem 0.8rem;
+  }
+  
+  .customer-name {
+    font-size: 0.9rem;
+  }
+  
+  .customer-phone {
+    font-size: 0.8rem;
+  }
+  
+  .details-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+  
+  .detail-item {
+    padding: 0.4rem;
+    background-color: #fefef9;
+    border-radius: 4px;
+    border: 1px solid #f0f0e0;
+  }
+  
+  .detail-label {
+    font-size: 0.7rem;
+    margin-bottom: 0.1rem;
+  }
+  
+  .detail-value {
+    font-size: 0.83rem;
+  }
+  
+  .note-content {
+    font-size: 0.85rem;
+    padding: 0.7rem;
+    min-height: 60px;
+  }
+  
+  .visit-button {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    max-width: 60px;
+  }
+  
+  .note-textarea {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+    min-height: 80px;
+  }
+  
+  .visit-success {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    max-width: 60px;
+  }
+  
+  .visit-table th,
+  .visit-table td {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .sort-icon {
+    margin-left: 0.2rem;
+  }
+  
+  .customer-edit-actions {
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: stretch;
+  }
+  
+  .delete-confirm {
+    margin-top: 0.5rem;
+  }
+  
+  .edit-button, .delete-button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    width: 100%;
+  }
+  
+  .date-filter-label {
+    font-size: 0.8rem;
+  }
+  
+  .date-filter-input {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .visit-count-badge {
+    font-size: 0.75rem;
+    padding: 1px 5px;
+  }
+}
+
+.form-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.submit-button {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  color: black;
+  background-color: var(--primary-color);
+  border: none;
+  padding: 12px 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.error-container {
+  text-align: center;
+  padding: 2rem;
+  color: red;
+}
+
+.empty-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+}
+
+.centered {
+  text-align: center;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 900px;
+  margin: 0 auto;
+  margin-bottom: 2rem;
+}
+
+.note-form-group {
+  margin-top: 1.5rem;
+  grid-column: 1 / -1;
+  border-top: 1px dashed var(--primary-light);
+  padding-top: 1.2rem;
+}
+
+.note-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 1rem;
+  border: 1px solid var(--primary-light);
+  border-radius: var(--border-radius);
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  transition: all 0.3s ease;
+}
+
+.note-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.25);
+}
+
+/* 날짜 선택 필드 스타일 */
+input[type="date"] {
+  font-family: inherit;
+  color: var(--text-color);
+}
+
+.visit-success {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  width: 100%;
+  max-width: 80px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 수정/삭제 버튼 영역 */
+.customer-edit-actions {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--primary-light);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+
+.edit-button, .delete-button {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-button {
+  background-color: #f8f9fa;
+  color: var(--text-color);
+  border: 1px solid #dee2e6;
+}
+
+.edit-button:hover {
+  background-color: #f1f3f5;
+  border-color: #adb5bd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.delete-button {
+  background-color: #fff5f5;
+  color: #e03131;
+  border: 1px solid #ffc9c9;
+}
+
+/* 삭제 확인 대화상자 */
+.delete-confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.confirm-message {
+  font-size: 0.95rem;
+  color: #e03131;
+  font-weight: 500;
+}
+
+.confirm-buttons {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.confirm-button {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirm-yes {
+  background-color: #e03131;
+  color: white;
+  border: 1px solid #c92a2a;
+}
+
+.confirm-yes:hover {
+  background-color: #c92a2a;
+}
+
+.confirm-no {
+  background-color: #f8f9fa;
+  color: var(--text-color);
+  border: 1px solid #dee2e6;
+}
+
+.confirm-no:hover {
+  background-color: #e9ecef;
+}
+
+/* 방문 기록 검색 및 필터 */
+.search-filter-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.date-filter-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  min-width: 220px;
+}
+
+.date-filter-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-light);
+  white-space: nowrap;
+}
+
+.date-filter-input {
+  border: 1px solid var(--primary-light);
+  border-radius: var(--border-radius);
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  min-width: 140px;
+}
+
+.date-filter-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.15);
+}
+
+.date-filter-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: #999;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+.date-filter-clear:hover {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 3rem;
+  gap: 5px;
+}
+
+.pagination-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  border-color: #ccc;
+}
+
+.pagination-button:disabled {
+  background-color: #f9f9f9;
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  padding: 0 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .pagination-button {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  
+  .pagination-info {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-button {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+  }
+  
+  .pagination-info {
+    font-size: 10px;
+    padding: 0 5px;
+  }
+}
+
+/* 방문 기록 필터 컨트롤 - 재설계 */
+.filter-controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.filter-control-item {
+  flex: 1;
+  position: relative;
+}
+
+.search-input-container,
+.date-input-container {
+  position: relative;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.search-input-container:focus-within,
+.date-input-container:focus-within {
+  border-color: #aaa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.search-icon,
+.date-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  color: #888;
+}
+
+.filter-input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  padding: 0;
+  font-size: 0.95rem;
+  color: #333;
+  background: transparent;
+  outline: none;
+  padding-right: 12px;
+}
+
+.filter-input::placeholder {
+  color: #aaa;
+}
+
+.filter-clear-button {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  padding: 0 12px;
+  font-size: 14px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.filter-clear-button:hover {
+  color: #666;
+  background-color: #f5f5f5;
+}
+
+/* 빠른 날짜 필터 버튼 */
+.quick-filter-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.quick-filter-button {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-filter-button:hover {
+  background-color: #eee;
+  border-color: #ccc;
+}
+
+.quick-filter-button.active {
+  background-color: #e9f0fd;
+  border-color: #c4d7f5;
+  color: #4285f4;
+  font-weight: 500;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .filter-controls {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .search-input-container,
+  .date-input-container {
+    height: 42px;
+  }
+  
+  .filter-input {
+    font-size: 0.9rem;
+  }
+  
+  .quick-filter-buttons {
+    gap: 6px;
+    margin-top: 6px;
+  }
+  
+  .quick-filter-button {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-controls {
+    gap: 10px;
+  }
+  
+  .search-input-container,
+  .date-input-container {
+    height: 40px;
+  }
+  
+  .search-icon,
+  .date-icon {
+    padding: 0 10px;
+  }
+  
+  .filter-input {
+    font-size: 0.85rem;
+  }
+  
+  .filter-clear-button {
+    padding: 0 10px;
+  }
+  
+  .quick-filter-buttons {
+    gap: 5px;
+    margin-top: 5px;
+  }
+  
+  .quick-filter-button {
+    padding: 3px 6px;
+    font-size: 0.7rem;
+  }
+}
+
+/* 레코드 수 표시 스타일 */
+.records-count {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+}
+
+.count-number {
+  font-weight: 600;
+  color: #333;
+  margin: 0 4px;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .records-count {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .records-count {
+    font-size: 0.8rem;
+  }
+}
+
+/* 필수 입력 필드 별표 스타일 */
+.required-star {
+  color: #e74c3c;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+/* 고객 이름 컨테이너 */
+.customer-name-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 방문 횟수 배지 */
+.visit-count-badge {
+  background-color: #e8f3ff;
+  color: #4a6fa5;
+  font-size: 0.85rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  border: 1px solid #d0e1f9;
+}
+
+/* 라디오 버튼 스타일 */
+.radio-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 5px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.radio-label input[type="radio"] {
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .radio-group {
+    gap: 12px;
+  }
+  
+  .radio-label {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .radio-group {
+    gap: 8px;
+  }
+  
+  .radio-label {
+    font-size: 0.85rem;
+  }
+}
+
+/* 날짜 범위 필터 스타일 */
+.date-range-container {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 6px 16px;
+  margin-bottom: 12px;
+  width: 100%;
+  position: relative;
+}
+
+.date-range-separator {
+  margin: 0 10px;
+  color: #666;
+  font-weight: 500;
+}
+
+.date-label {
+  font-size: 0.8rem;
+  margin-right: 8px;
+  color: #555;
+  white-space: nowrap;
+  min-width: 48px;
+}
+
+.date-input-container {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  height: 32px;
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+}
+
+.date-input-container .filter-input {
+  flex: 1;
+  height: 30px;
+  width: 100%;
+  position: relative;
+  padding: 0 8px;
+}
+
+@media (max-width: 768px) {
+  .date-range-container {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 16px;
+  }
+  
+  .date-range-separator {
+    display: none;
+  }
+  
+  .date-input-container {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    padding: 0;
+    height: 30px;
+  }
+  
+  .date-label {
+    min-width: 48px;
+    padding-left: 8px;
+  }
+} 

@@ -1,0 +1,280 @@
+/* 수정 폼 모달 스타일 */
+.edit-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  backdrop-filter: blur(3px);
+  animation: fadeIn 0.3s ease;
+}
+
+.edit-form-container {
+  width: 90%;
+  max-width: 800px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.4s ease;
+}
+
+.edit-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #f0f0f0;
+  background: linear-gradient(45deg, var(--primary-light), var(--primary-color));
+  color: white;
+}
+
+.edit-form-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.close-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.edit-form {
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 0.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background-color: #f9f9f9;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+  background-color: white;
+}
+
+.note-group {
+  grid-column: 1 / -1;
+  margin-top: 1rem;
+}
+
+.note-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 1.5rem;
+}
+
+.cancel-button, 
+.save-button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-button {
+  background-color: white;
+  color: var(--text-color);
+  border: 1px solid #e0e0e0;
+}
+
+.cancel-button:hover {
+  background-color: #f5f5f5;
+}
+
+.save-button {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: 1px solid var(--primary-dark);
+}
+
+.save-button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 반응형 조정 */
+@media (max-width: 992px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .edit-form-container {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .edit-form-header {
+    padding: 1.2rem 1.5rem;
+  }
+  
+  .edit-form {
+    padding: 1.5rem;
+  }
+  
+  .form-grid {
+    gap: 1rem;
+  }
+  
+  .cancel-button, 
+  .save-button {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  
+  .edit-form {
+    padding: 1.2rem;
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 0.8rem;
+  }
+  
+  .cancel-button, 
+  .save-button {
+    width: 100%;
+  }
+}
+
+/* 필수 입력 필드 별표 스타일 */
+.required-star {
+  color: #e74c3c;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+/* 라디오 버튼 스타일 */
+.radio-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 5px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-color);
+}
+
+.radio-label input[type="radio"] {
+  margin-right: 6px;
+  cursor: pointer;
+  width: auto;
+  padding: 0;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .radio-group {
+    gap: 12px;
+  }
+  
+  .radio-label {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .radio-group {
+    gap: 8px;
+  }
+  
+  .radio-label {
+    font-size: 0.85rem;
+  }
+} 
