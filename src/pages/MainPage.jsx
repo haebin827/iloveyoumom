@@ -238,6 +238,40 @@ function MainPage() {
                 
             if (error) throw error;
             
+            // 방문 기록이 추가되었으므로 고객 방문 횟수 즉시 업데이트
+            // 방문 횟수 데이터 새로 가져오기
+            const { data: historyData, error: historyError } = await supabase
+                .from('history')
+                .select('customer_id');
+                
+            if (historyError) throw historyError;
+            
+            // 고객별 방문 횟수 다시 계산
+            const visitCount = {};
+            historyData.forEach(visit => {
+                if (visit.customer_id in visitCount) {
+                    visitCount[visit.customer_id]++;
+                } else {
+                    visitCount[visit.customer_id] = 1;
+                }
+            });
+            
+            // 현재 고객 목록 업데이트
+            const updatedCustomers = customers.map(c => ({
+                ...c,
+                visit_count: visitCount[c.id] || 0
+            }));
+            
+            setCustomers(updatedCustomers);
+            setFilteredCustomers(
+                searchTerm 
+                ? updatedCustomers.filter(c => 
+                    (c.name && c.name.toLowerCase().includes(searchTerm.toLowerCase())) || 
+                    (c.phone && c.phone.includes(searchTerm))
+                  )
+                : updatedCustomers
+            );
+            
             // 성공 상태 설정 - 성공 메시지 표시용
             setVisitSuccess(customer.id);
             setTimeout(() => {

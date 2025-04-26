@@ -211,15 +211,15 @@ function VisitHistory({
               />
             </div>
             <span className="date-range-separator">~</span>
-            <div className="date-input-container">
+          <div className="date-input-container">
               <span className="date-label">종료일:</span>
-              <input
-                type="date"
+            <input
+              type="date"
                 value={endDateFilter}
                 onChange={(e) => setEndDateFilter(e.target.value)}
-                className="filter-input"
+              className="filter-input"
                 placeholder="종료 날짜"
-              />
+            />
             </div>
             {(startDateFilter || endDateFilter) && (
               <button 

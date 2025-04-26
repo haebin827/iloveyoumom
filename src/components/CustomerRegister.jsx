@@ -41,6 +41,18 @@ function CustomerRegister({ form, handleChange, handleSubmit, loading }) {
               />
             </div>
             <div className="form-group">
+              <label className="form-label">성별</label>
+              <select
+                name="gender"
+                value={form.gender || 'NA'}
+                onChange={handleChange}
+              >
+                <option value="NA">알수없음</option>
+                <option value="MAN">남</option>
+                <option value="WOMAN">여</option>
+              </select>
+            </div>
+            <div className="form-group">
               <label className="form-label">첫 방문일</label>
               <input
                 type="date"
