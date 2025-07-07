@@ -34,7 +34,7 @@ export function AuthProvider({ children }) {
         .single();
         
       if (error) {
-        console.error('사용자 정보 가져오기 실패:', error);
+        console.error('사용자 정보 가져오기 실패');
         return;
       }
       
@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
         setCurrentUser(data);
       }
     } catch (err) {
-      console.error('사용자 정보 가져오기 실패:', err);
+      console.error('사용자 정보 가져오기 실패');
     }
   };
 
@@ -55,7 +55,7 @@ export function AuthProvider({ children }) {
         .single();
         
       if (error) {
-        console.error('데이터 조회 오류:', error);
+        console.error('데이터 조회 오류');
         return { success: false, error: '사용자 정보를 조회할 수 없습니다.' };
       }
 
@@ -70,7 +70,7 @@ export function AuthProvider({ children }) {
         return { success: false, error: '잘못된 비밀번호입니다.' };
       }
     } catch (err) {
-      console.error('로그인 실패:', err);
+      console.error('로그인 실패');
       return { success: false, error: '인증 처리 중 오류가 발생했습니다.' };
     }
   };
@@ -84,7 +84,7 @@ export function AuthProvider({ children }) {
         .single();
         
       if (error) {
-        console.error('데이터 조회 오류:', error);
+        console.error('데이터 조회 오류');
         return { success: false, error: '사용자 정보를 조회할 수 없습니다.' };
       }
 
@@ -103,13 +103,13 @@ export function AuthProvider({ children }) {
         .eq('id', data.id);
         
       if (updateError) {
-        console.error('업데이트 오류:', updateError);
+        console.error('업데이트 오류');
         throw updateError;
       }
       
       return { success: true };
     } catch (err) {
-      console.error('비밀번호 변경 실패:', err);
+      console.error('비밀번호 변경 실패');
       return { success: false, error: '비밀번호 변경 중 오류가 발생했습니다.' };
     }
   };

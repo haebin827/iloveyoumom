@@ -21,7 +21,6 @@ function Navbar({ activeTab, setActiveTab }) {
     const { logout } = useAuth();
     const [showPasswordModal, setShowPasswordModal] = useState(false);
 
-    // 로그아웃 처리 함수
     const handleLogout = () => {
         logout();
         navigate('/');

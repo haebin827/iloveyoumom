@@ -7,11 +7,9 @@ function HomePage() {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-    
-    // 인증 컨텍스트 사용
+
     const { authenticated, login } = useAuth();
 
-    // 화면 크기 변경 감지
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth <= 768);
@@ -21,7 +19,6 @@ function HomePage() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // 이미 인증된 사용자는 MainPage로 리디렉션
     if (authenticated) {
         return <Navigate to="/main" replace />;
     }
@@ -42,17 +39,15 @@ function HomePage() {
         }
         
         try {
-            // AuthContext의 login 함수 사용
             const result = await login(password);
             
             if (result.success) {
                 setMessage('비밀번호가 확인되었습니다.');
-                // 인증 성공 시 리디렉션은 위의 if(authenticated) 조건에서 처리됨
             } else {
                 setMessage(result.error || '잘못된 비밀번호입니다. 다시 시도해주세요.');
             }
         } catch (err) {
-            console.error('오류 발생:', err);
+            console.error('오류 발생');
             setMessage('오류가 발생했습니다. 다시 시도해주세요.');
         } finally {
             setLoading(false);

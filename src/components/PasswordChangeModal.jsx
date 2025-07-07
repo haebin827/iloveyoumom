@@ -40,7 +40,6 @@ function PasswordChangeModal({ onClose }) {
         setMessage(result.error || '비밀번호 변경에 실패했습니다.');
       }
     } catch (err) {
-      console.error('비밀번호 변경 중 오류:', err);
       setMessage('비밀번호 변경 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);

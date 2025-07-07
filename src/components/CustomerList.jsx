@@ -19,7 +19,7 @@ function CustomerList({
   handleDelete,
   handleEdit
 }) {
-  // 한국 나이 계산 함수
+
   const calculateKoreanAge = (birthDate) => {
     if (!birthDate || birthDate === '-') return null;
     
@@ -27,53 +27,41 @@ function CustomerList({
     const birthDateObj = new Date(birthDate);
     const currentYear = today.getFullYear();
     const birthYear = birthDateObj.getFullYear();
-    
-    // 한국 나이 = 현재 연도 - 출생 연도 + 1
+
     return currentYear - birthYear + 1;
   };
-  
-  // 생년월일과 나이 표시 함수
+
   const renderBirthDateWithAge = (birthDate) => {
     if (!birthDate || birthDate === '-') return '-';
-    
-    // 날짜 형식 확인 및 처리
+
     let formattedDate = birthDate;
     if (birthDate.includes('T')) {
-      // ISO 형식의 날짜인 경우 (예: 2001-04-16T00:00:00)
       formattedDate = birthDate.split('T')[0];
     }
     
     const koreanAge = calculateKoreanAge(birthDate);
     return `${formattedDate} (${koreanAge}세)`;
   };
-  
-  // 성별 표시 변환 함수
+
   const formatGender = (gender) => {
     if (!gender || gender === 'NA') return null;
     return gender === 'MAN' ? '남' : '여';
   };
-  
-  // 전화번호 포맷팅 함수
+
   const formatPhoneNumber = (phone) => {
     if (!phone || phone === '-') return '-';
-    
-    // 기존 하이픈 제거
+
     const cleaned = phone.replace(/-/g, '');
-    
-    // 전화번호 길이에 따라 포맷팅
+
     if (cleaned.length === 11) {
-      // 010-XXXX-XXXX 형식
       return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
     } else if (cleaned.length === 10) {
-      // 02-XXXX-XXXX 또는 경우에 따라 다른 형식
       return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 6)}-${cleaned.slice(6, 10)}`;
     } else {
-      // 포맷팅 불가능한 경우 원본 반환
       return phone;
     }
   };
-  
-  // 이름과 나이 표시 함수
+
   const renderNameWithAge = (customer) => {
     if (!customer.birth && (!customer.gender || customer.gender === 'NA')) {
       return customer.name || '-';
@@ -97,10 +85,8 @@ function CustomerList({
 
   return (
     <div>
-      {/* 제목 추가 */}
       <h2 className="card-title centered">고객 관리</h2>
-      
-      {/* SearchBar 컴포넌트 사용 */}
+
       <div className="search-container">
         <SearchBar 
           searchTerm={searchTerm} 
@@ -127,7 +113,6 @@ function CustomerList({
           </div>
         ) : (
           <>
-            {/* 총 고객 수 표시 */}
             <div className="records-count">
               총 <span className="count-number">{filteredCustomers.length}</span>명의 고객
             </div>

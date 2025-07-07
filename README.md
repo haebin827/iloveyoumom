@@ -111,6 +111,10 @@ iloveyoumom/
 ![Main Page](/src/assets/ui/mainPage.png)
 - Customer list and search
 - Quick visit record registration
+- Password change functionality
+![Password Change](/src/assets/ui/changePassword.png)
+- Customer information editing
+![Customer Edit](/src/assets/ui/mainPage_customerInfo_edit.png)
 
 ### 3. Customer Details
 ![Customer Details](/src/assets/ui/mainPage_customerInfo.png)
