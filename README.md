@@ -1,8 +1,8 @@
-# Munkyung's Closet (Customer Management System)
+# Mungyeong’s Closet (Customer Management System)
 
 ## Project Overview
 
-Munkyung's Closet is an MVP (Minimum Viable Product) customer management system developed for a single client with the goal of rapid deployment.
+Munkyung's Closet is an MVP customer management system developed for a single client with the goal of rapid deployment.
 We digitized the customer registry and purchase history that had been manually written for years, making it easier for my mother to manage customer information.
 
 ---
