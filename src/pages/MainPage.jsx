@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../configs/supabase';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/layout/Navbar.jsx';
 import EditCustomerForm from '../components/EditCustomerForm';
 import CustomerList from '../components/CustomerList';
 import CustomerRegister from '../components/CustomerRegister';

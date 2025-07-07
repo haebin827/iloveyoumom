@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext.jsx';
 
 // 인증된 사용자만 접근할 수 있는 보호된 라우트 컴포넌트
 function ProtectedRoute({ children }) {

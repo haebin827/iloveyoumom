@@ -5,7 +5,7 @@ import HomePage from "./pages/HomePage.jsx";
 import MainPage from "./pages/MainPage.jsx";
 import Error404 from "./pages/Error404.jsx";
 import { AuthProvider } from "./contexts/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/routes/ProtectedRoute.jsx";
 
 function App() {
     return (

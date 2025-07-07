@@ -15,56 +15,46 @@ function VisitHistory({
   const [endDateFilter, setEndDateFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
-  
-  // 컴포넌트가 마운트될 때 검색값 초기화
+
   useEffect(() => {
     setHistorySearchTerm('');
     setStartDateFilter('');
     setEndDateFilter('');
   }, [setHistorySearchTerm]);
-  
-  // 날짜 필터를 적용한 기록 가져오기
+
   const getFilteredHistoryByDate = () => {
     if (!startDateFilter && !endDateFilter) return getSortedHistory(); // 날짜 필터가 없으면 기존 데이터 반환
     
     return getSortedHistory().filter(visit => {
-      // 시작 날짜만 있는 경우 해당 날짜만 필터링
       if (startDateFilter && !endDateFilter) {
         return visit.visit_date === startDateFilter;
       }
-      
-      // 끝 날짜만 있는 경우 해당 날짜만 필터링
+
       if (!startDateFilter && endDateFilter) {
         return visit.visit_date === endDateFilter;
       }
-      
-      // 시작 날짜와 끝 날짜 모두 있는 경우 범위로 필터링
+
       return visit.visit_date >= startDateFilter && visit.visit_date <= endDateFilter;
     });
   };
-  
-  // 필터링된 데이터의 총 페이지 수 계산
+
   const totalRecords = getFilteredHistoryByDate().length;
   const totalPages = Math.ceil(totalRecords / recordsPerPage);
-  
-  // 현재 페이지에 표시할 데이터 가져오기
+
   const getCurrentPageData = () => {
     const filteredData = getFilteredHistoryByDate();
     const startIndex = (currentPage - 1) * recordsPerPage;
     return filteredData.slice(startIndex, startIndex + recordsPerPage);
   };
-  
-  // 페이지 번호 클릭 핸들러
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // 검색어 변경 핸들러
   const handleSearchChange = (e) => {
     setHistorySearchTerm(e.target.value);
   };
-  
-  // 빠른 날짜 필터링 기능
+
   const getFormattedDate = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -91,8 +81,8 @@ function VisitHistory({
   
   const getThisWeekStart = () => {
     const today = new Date();
-    const day = today.getDay(); // 0: 일요일, 1: 월요일, ... 6: 토요일
-    const diff = today.getDate() - day + (day === 0 ? -6 : 1); // 월요일로 조정, 일요일이면 전주 월요일
+    const day = today.getDay();
+    const diff = today.getDate() - day + (day === 0 ? -6 : 1);일
     const monday = new Date(today);
     monday.setDate(diff);
     return getFormattedDate(monday);
@@ -100,7 +90,7 @@ function VisitHistory({
   
   const getThisWeekEnd = () => {
     const today = new Date();
-    const day = today.getDay(); // 0: 일요일, 1: 월요일, ... 6: 토요일
+    const day = today.getDay();
     const diff = today.getDate() + (day === 0 ? 0 : 7 - day); // 일요일로 조정
     const sunday = new Date(today);
     sunday.setDate(diff);
@@ -124,8 +114,7 @@ function VisitHistory({
     lastSunday.setDate(diff);
     return getFormattedDate(lastSunday);
   };
-  
-  // 날짜 필터 적용 핸들러
+
   const handleQuickFilter = (filterType) => {
     switch (filterType) {
       case 'today':
@@ -153,13 +142,12 @@ function VisitHistory({
         setEndDateFilter('');
     }
   };
-  
-  // 필터 초기화 핸들러
+
   const clearDateFilters = () => {
     setStartDateFilter('');
     setEndDateFilter('');
   };
-  
+
   // 필터나 검색어가 변경되면 페이지를 1로 리셋
   useEffect(() => {
     setCurrentPage(1);
@@ -168,8 +156,8 @@ function VisitHistory({
   return (
     <div>
       <h2 className="card-title centered">방문 기록</h2>
-      
-      {/* 검색창과 날짜 필터 - 재설계 */}
+
+      {/* 검색창 및 날짜필터 */}
       <div className="filter-controls">
         <div className="filter-control-item">
           <div className="search-input-container">
@@ -231,7 +219,7 @@ function VisitHistory({
               </button>
             )}
           </div>
-          
+
           {/* 빠른 날짜 필터 버튼 */}
           <div className="quick-filter-buttons">
             <button
@@ -290,7 +278,6 @@ function VisitHistory({
           </div>
         ) : (
           <>
-            {/* 레코드 수 표시 */}
             <div className="records-count">
               총 <span className="count-number">{totalRecords}</span>개의 방문 기록
             </div>

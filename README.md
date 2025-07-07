@@ -1,22 +1,129 @@
-# React + Vite + Supabase
+# Munkyung's Closet (Customer Management System)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
 
-Currently, two official plugins are available:
+Munkyung's Closet is an MVP (Minimum Viable Product) customer management system developed for a single client with the goal of rapid deployment.
+We digitized the customer registry and purchase history that had been manually written for years, making it easier for my mother to manage customer information.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Supabase 설정 방법
+## Key Features
 
-1. `.env.local` 파일을 프로젝트 루트에 생성하고 다음 내용을 추가합니다:
+- **Customer Information Management**
+  - Register/Edit/Delete customer basic information
+  - Detailed customer notes (preferred styles, sizes, preferred/avoided colors, etc.)
+  - Quick search by customer name and contact information
+
+- **Visit History Management**
+  - Record visit dates
+  - Date filtering (today/yesterday/day before/this week/last week)
+  - Visit count statistics
+
+---
+
+## Tech Stack
+
+- **Frontend**
+  - React + Vite
+  - React Router
+
+- **Backend**
+  - Supabase
+
+- **Authentication/Security**
+  - Password encryption (bcrypt)
+  - Session-based authentication
+
+---
+
+## Installation and Setup
+
+1. Clone Repository
+```bash
+git clone https://github.com/yourusername/iloveyoumom.git
+cd iloveyoumom
+```
+
+2. Environment Variables Setup
+- Create a `.env.local` file and add the following:
 ```
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-2. Supabase 프로젝트의 URL과 Anon key는 Supabase 대시보드의 프로젝트 설정 > API에서 확인할 수 있습니다.
+3. Install Dependencies and Run
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Project Structure
+
+```
+iloveyoumom/
+├── src/
+│   ├── components/     # Reusable components
+│   ├── contexts/       # Context API related files
+│   ├── pages/         # Page components
+│   ├── styles/        # CSS style files
+│   ├── assets/        # Images and static files
+│   └── configs/       # Configuration files
+└── public/            # Static files
+```
+
+---
+
+## DB Schema
+
+- **users**: System user information
+- **customers**: Customer information
+- **history**: Visit history records
+
+---
+
+## Security and Data Protection
+
+- All passwords are encrypted and stored using bcrypt
+- Sensitive information managed through environment variables
+
+---
+
+## Future Plans
+
+- System expansion for multi-user support
+- Add inventory management system
+- Sales statistics and reporting features
+- Mobile app version development
+- Online shop integration
+
+---
+
+## UX/UI
+
+### 1. Login Page
+![Login Page](/src/assets/ui/loginPage.png)
+- Single user login
+- Simple password-based authentication
+
+### 2. Main Page
+![Main Page](/src/assets/ui/mainPage.png)
+- Customer list and search
+- Quick visit record registration
+
+### 3. Customer Details
+![Customer Details](/src/assets/ui/mainPage_customerInfo.png)
+- View detailed customer information
+- Notes and visit history
+
+### 4. Customer Registration
+![Customer Registration - Basic Info](/src/assets/ui/registerPage1.png)
+![Customer Registration - Additional Info](/src/assets/ui/registerPage2.png)
+- Basic information (name, contact, date of birth, gender)
+- Additional information (sizes, preferences, notes)
+
+### 5. Visit History
+![Visit History Page](/src/assets/ui/historyPage.png)
+- View all visit records
+- Filter by date/period

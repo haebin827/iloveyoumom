@@ -33,7 +33,7 @@ function PasswordChangeModal({ onClose }) {
       if (result.success) {
         setSuccess(true);
         setMessage('비밀번호가 성공적으로 변경되었습니다.');
-        // 폼 초기화
+
         setCurrentPassword('');
         setNewPassword('');
       } else {

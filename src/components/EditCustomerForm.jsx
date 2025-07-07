@@ -17,11 +17,9 @@ function EditCustomerForm({ customer, onSave, onCancel }) {
     note: '',
     gender: 'NA'
   });
-  
-  // 초기값 설정
+
   useEffect(() => {
     if (customer) {
-      // birth와 first_visit이 있을 경우 날짜 형식으로 변환
       const formattedCustomer = { ...customer };
       if (formattedCustomer.birth) {
         formattedCustomer.birth = formattedCustomer.birth.split('T')[0];
@@ -29,8 +27,7 @@ function EditCustomerForm({ customer, onSave, onCancel }) {
       if (formattedCustomer.first_visit) {
         formattedCustomer.first_visit = formattedCustomer.first_visit.split('T')[0];
       }
-      
-      // gender 필드가 없으면 기본값으로 'NA' 설정
+
       if (!formattedCustomer.gender) {
         formattedCustomer.gender = 'NA';
       }
@@ -52,8 +49,7 @@ function EditCustomerForm({ customer, onSave, onCancel }) {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // 데이터 정제: 빈 날짜 필드는 null로 변환
+
     const formData = { ...form };
     formData.birth = formData.birth && formData.birth.trim() ? formData.birth : null;
     formData.first_visit = formData.first_visit && formData.first_visit.trim() ? formData.first_visit : null;

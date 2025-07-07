@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import PasswordChangeModal from './PasswordChangeModal';
-import '../styles/Navbar.css';
-import logo from '../assets/logo.png';
+import { useAuth } from '../../contexts/AuthContext.jsx';
+import PasswordChangeModal from '../PasswordChangeModal.jsx';
+import '../../styles/Navbar.css';
+import logo from '../../assets/logo.png';
 
-// TabButton 컴포넌트
 export function TabButton({ children, active, onClick }) {
     return (
         <button
@@ -17,7 +16,6 @@ export function TabButton({ children, active, onClick }) {
     );
 }
 
-// Navbar 컴포넌트
 function Navbar({ activeTab, setActiveTab }) {
     const navigate = useNavigate();
     const { logout } = useAuth();
@@ -25,16 +23,14 @@ function Navbar({ activeTab, setActiveTab }) {
 
     // 로그아웃 처리 함수
     const handleLogout = () => {
-        logout(); // AuthContext의 logout 함수 호출
-        navigate('/'); // 홈페이지로 리디렉션
+        logout();
+        navigate('/');
     };
-    
-    // 비밀번호 변경 모달 열기
+
     const openPasswordModal = () => {
         setShowPasswordModal(true);
     };
-    
-    // 비밀번호 변경 모달 닫기
+
     const closePasswordModal = () => {
         setShowPasswordModal(false);
     };

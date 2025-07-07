@@ -1,24 +1,20 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { supabase } from '../configs/supabase';
+import bcrypt from 'bcryptjs';
 
-// 인증 컨텍스트 생성
 const AuthContext = createContext();
 
-// 인증 상태 Provider 컴포넌트
 export function AuthProvider({ children }) {
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
 
-  // 컴포넌트 마운트 시 세션 확인
   useEffect(() => {
-    // 로컬 스토리지에서 인증 상태 확인
     const checkAuthStatus = async () => {
       const authStatus = localStorage.getItem('auth_status');
       const isAuthenticated = authStatus === 'true';
       setAuthenticated(isAuthenticated);
-      
-      // 인증된 경우에만 사용자 정보 가져오기
+
       if (isAuthenticated) {
         await fetchUserData();
       }
@@ -26,11 +22,9 @@ export function AuthProvider({ children }) {
       setLoading(false);
     };
 
-    // 초기 세션 확인
     checkAuthStatus();
   }, []);
-  
-  // 사용자 정보 가져오기
+
   const fetchUserData = async () => {
     try {
       const { data, error } = await supabase
@@ -52,10 +46,8 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // 비밀번호 인증 함수
   const login = async (password) => {
     try {
-      // Supabase에서 사용자 데이터 가져오기
       const { data, error } = await supabase
         .from('user')
         .select('*')
@@ -66,15 +58,13 @@ export function AuthProvider({ children }) {
         console.error('데이터 조회 오류:', error);
         return { success: false, error: '사용자 정보를 조회할 수 없습니다.' };
       }
-      
-      // 비밀번호 확인
-      const isCorrect = data && data.password === password;
+
+      const isCorrect = data && await bcrypt.compare(password, data.password);
       
       if (isCorrect) {
-        // 인증 성공 시 로컬 스토리지에 인증 상태 저장
         localStorage.setItem('auth_status', 'true');
         setAuthenticated(true);
-        setCurrentUser(data); // 사용자 정보 설정
+        setCurrentUser(data);
         return { success: true };
       } else {
         return { success: false, error: '잘못된 비밀번호입니다.' };
@@ -85,10 +75,8 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // 비밀번호 변경 함수
   const changePassword = async (currentPassword, newPassword) => {
     try {
-      // 현재 비밀번호 확인
       const { data, error } = await supabase
         .from('user')
         .select('*')
@@ -99,15 +87,19 @@ export function AuthProvider({ children }) {
         console.error('데이터 조회 오류:', error);
         return { success: false, error: '사용자 정보를 조회할 수 없습니다.' };
       }
+
+      const isCurrentPasswordValid = await bcrypt.compare(currentPassword, data.password);
       
-      if (!data || data.password !== currentPassword) {
+      if (!data || !isCurrentPasswordValid) {
         return { success: false, error: '현재 비밀번호가 일치하지 않습니다.' };
       }
-      
-      // 비밀번호 업데이트
+
+      const salt = await bcrypt.genSalt(10);
+      const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
       const { error: updateError } = await supabase
         .from('user')
-        .update({ password: newPassword })
+        .update({ password: hashedNewPassword })
         .eq('id', data.id);
         
       if (updateError) {
@@ -122,15 +114,12 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // 로그아웃 함수
   const logout = () => {
-    // 로컬 스토리지에서 인증 상태 제거
     localStorage.removeItem('auth_status');
     setAuthenticated(false);
     setCurrentUser(null);
   };
 
-  // 컨텍스트 값
   const value = {
     authenticated,
     loading,
@@ -143,5 +132,4 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-// 인증 컨텍스트 사용을 위한 커스텀 훅
 export const useAuth = () => useContext(AuthContext); 
