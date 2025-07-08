@@ -2,8 +2,8 @@
 
 ## Project Overview
 
-Munkyung's Closet is an MVP customer management system developed for a single client with the goal of rapid deployment.
-We digitized the customer registry and purchase history that had been manually written for years, making it easier for my mother to manage customer information.
+Mungyeong’s Closet is a lightweight customer-management MVP built for a single clothing store owner who needed a solution fast.
+I converted years of handwritten customer and purchase records into a simple digital dashboard, making it much easier for my mother to manage her clients.
 
 ---
 
