@@ -34,6 +34,9 @@ I converted years of handwritten customer and purchase records into a simple dig
   - Password encryption (bcrypt)
   - Session-based authentication
 
+- **Testing**
+  - Postman (API testing)
+
 ---
 
 ## Installation and Setup
