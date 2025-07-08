@@ -90,6 +90,13 @@ iloveyoumom/
 
 ---
 
+## Deployment
+
+- Deployed on Vercel: ***URL IS PRIVATE***
+- Environment variables managed through Vercel dashboard
+
+---
+
 ## Future Plans
 
 - System expansion for multi-user support
