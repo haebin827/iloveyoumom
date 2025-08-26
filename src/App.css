@@ -1,6 +1,6 @@
 :root {
-  --primary-color: #ffd300; /* 골드 노랑 */
-  --primary-light: #b1b1b1; /* 더 옅은 노랑 */
+  --primary-color: #ffe060; /* 골드 노랑 */
+  --primary-light: #bfbfbf; /* 더 옅은 노랑 */
   --primary-dark: #e6c300; /* 진한 노랑 */
   --text-color: #333;
   --text-light: #666;
@@ -22,10 +22,9 @@ html {
 }
 
 body {
-  font-family: 'Poppins', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-family: 'Noto Sans KR', 'Noto Serif KR', 'Noto Sans KR', sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
-  line-height: 1.6;
   padding-top: var(--navbar-height); /* 고정 navbar 위치만큼 패딩 추가 */
 }
 
@@ -70,9 +69,13 @@ input, select, textarea {
 }
 
 input:focus {
-  outline: none;
+  /*outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.25);
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.25);*/
+  outline: none;
+  /*border-color: #d4a300;*/
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(230, 184, 0, 0.1);
 }
 
 button {
@@ -85,14 +88,17 @@ button {
   cursor: pointer;
   transition: var(--transition);
   box-shadow: var(--box-shadow);
+
 }
 
 button:hover:not(.tab-button) {
-  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+  0 4px 6px rgba(0, 0, 0, 0.05);
+
 }
 
-button:active:not(.tab-button) {
-  transform: translateY(0);
+  button:active:not(.tab-button) {
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .container {
@@ -140,41 +146,41 @@ button:active:not(.tab-button) {
   html {
     font-size: 14px; /* 태블릿 환경에서 전체 폰트 사이즈 축소 */
   }
-  
+
   :root {
     --navbar-height: 60px; /* 네비게이션 바 높이 조정 */
   }
-  
+
   h1 {
     font-size: 2rem;
   }
-  
+
   h2 {
     font-size: 1.5rem;
   }
-  
+
   h3 {
     font-size: 1.2rem;
   }
-  
+
   input {
     padding: 10px 14px;
     font-size: 14px;
   }
-  
+
   button {
     padding: 10px 18px;
     font-size: 14px;
   }
-  
+
   .card {
     padding: 1.5rem;
   }
-  
+
   .container {
     padding: 1.5rem;
   }
-  
+
   .fixed-navbar {
     padding: 0.5rem 1rem;
   }
@@ -185,41 +191,41 @@ button:active:not(.tab-button) {
   html {
     font-size: 12px; /* 모바일 환경에서 전체 폰트 사이즈 더 축소 */
   }
-  
+
   :root {
     --navbar-height: 50px; /* 네비게이션 바 높이 더 조정 */
   }
-  
+
   h1 {
     font-size: 1.8rem;
   }
-  
+
   h2 {
     font-size: 1.3rem;
   }
-  
+
   h3 {
     font-size: 1.1rem;
   }
-  
+
   input {
     padding: 8px 12px;
     font-size: 13px;
   }
-  
+
   button {
     padding: 8px 16px;
     font-size: 13px;
   }
-  
+
   .card {
     padding: 1rem;
   }
-  
+
   .container {
     padding: 1rem;
   }
-  
+
   .fixed-navbar {
     padding: 0.4rem 0.6rem;
   }
