@@ -1,0 +1,105 @@
+/* RegisterConfirmed Component Styles */
+.home-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - var(--navbar-height));
+}
+
+.register-container {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.register-card {
+    background-color: white;
+    box-shadow: var(--box-shadow);
+    border: 1px solid #e6b800;
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2em;
+}
+
+.register-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.register-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+}
+
+.register-title-border {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.welcome-message {
+    text-align: center;
+    margin: 20px 0;
+    fontSize: 16px;
+    color: #333;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: var(--border-radius);
+    padding: 8px 12px;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.register-button {
+    background-color: var(--primary-color);
+    color: black;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 12px 24px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 1;
+    margin-top: 16px;
+    transition: all 0.2s ease;
+}
+
+.register-button:hover {
+    opacity: 0.9;
+}
+
+.register-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .register-container {
+        max-width: 300px;
+    }
+    
+    .register-card {
+        padding: 1.5rem;
+    }
+    
+    .register-title {
+        font-size: 20px;
+    }
+    
+    .welcome-message {
+        font-size: 14px;
+    }
+}
