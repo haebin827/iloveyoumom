@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext.jsx';
+import { useAuth } from '../../providers/AuthProvider.jsx';
+import { supabase } from '../../lib/supabase.js';
 import PasswordChangeModal from '../PasswordChangeModal.jsx';
-import '../../styles/Navbar.css';
-import logo from '../../assets/logo.png';
+import '../../assets/styles/Navbar.css';
+import logo from '../../assets/logo.png'
 
 export function TabButton({ children, active, onClick }) {
     return (
@@ -18,12 +19,17 @@ export function TabButton({ children, active, onClick }) {
 
 function Navbar({ activeTab, setActiveTab }) {
     const navigate = useNavigate();
-    const { logout } = useAuth();
+    const { session } = useAuth();
     const [showPasswordModal, setShowPasswordModal] = useState(false);
 
-    const handleLogout = () => {
-        logout();
-        navigate('/');
+    const handleLogout = async () => {
+        try {
+            await supabase.auth.signOut();
+            navigate('/');
+        } catch (error) {
+            console.error('Logout error:', error);
+            navigate('/');
+        }
     };
 
     const openPasswordModal = () => {
@@ -41,9 +47,16 @@ function Navbar({ activeTab, setActiveTab }) {
                     {/* 헤더 */}
                     <div className="navbar-header">
                         <div className="navbar-title">
-                            <img src={logo} alt="엄마 옷가게 로고" className="navbar-logo" />
+                            <div className="navbar-store-name">
+                                {session.user.email === import.meta.env.VITE_MOM_EMAIL ? (
+                                        <img src={logo} alt="엄마 옷가게 로고" className="navbar-logo"/>) :
+                                    (session.user.user_metadata?.store_name || '오까게')}
+                            </div>
                         </div>
                         <div className="navbar-actions">
+                            <div className="name">
+                                {session.user.user_metadata?.full_name && `안녕하세요, ${session.user.user_metadata.full_name}님!`}
+                            </div>
                             <button 
                                 onClick={openPasswordModal}
                                 className="change-password-button"
