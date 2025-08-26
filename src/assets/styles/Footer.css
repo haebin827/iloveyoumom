@@ -1,0 +1,34 @@
+.footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  margin-top: 2rem;
+  padding: 0.8rem 0;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.footer-content p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .footer {
+    padding: 0.6rem 0;
+  }
+  
+  .footer-content {
+    padding: 0 1rem;
+  }
+  
+  .footer-content p {
+    font-size: 0.8rem;
+  }
+}

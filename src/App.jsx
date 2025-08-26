@@ -4,21 +4,45 @@ import {Route, Routes} from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import MainPage from "./pages/MainPage.jsx";
 import Error404 from "./pages/Error404.jsx";
-import { AuthProvider } from "./contexts/AuthContext";
+import RegisterPage from "./pages/RegisterPage.jsx";
+import AuthCallback from "./routes/AuthCallback.jsx";
+import { AuthProvider } from "./providers/AuthProvider.jsx";
 import ProtectedRoute from "./components/routes/ProtectedRoute.jsx";
+import Footer from "./components/Footer.jsx";
 
 function App() {
     return (
         <AuthProvider>
             <Routes>
                 <Route path={'/'} element={<HomePage/>} />
+                <Route path={'/register'} element={<RegisterPage/>} />
+                <Route path={'/auth/callback'} element={<AuthCallback/>} />
                 <Route path={'/main'} element={
                     <ProtectedRoute>
-                        <MainPage/>
+                        <div className="app-container">
+                            <main className="main-content">
+                                <MainPage/>
+                            </main>
+                            <Footer />
+                        </div>
                     </ProtectedRoute>
                 } />
-                <Route path={'/404'} element={<Error404/>} />
-                <Route path={'*'} element={<Error404/>} />
+                <Route path={'/404'} element={
+                    <div className="app-container">
+                        <main className="main-content">
+                            <Error404/>
+                        </main>
+                        <Footer />
+                    </div>
+                } />
+                <Route path={'*'} element={
+                    <div className="app-container">
+                        <main className="main-content">
+                            <Error404/>
+                        </main>
+                        <Footer />
+                    </div>
+                } />
             </Routes>
         </AuthProvider>
     )
