@@ -1,30 +1,29 @@
-import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import React, { useState } from 'react';
+import { Navigate, Link } from 'react-router-dom';
+import { useAuth } from '../providers/AuthProvider.jsx';
+import { supabase } from '../lib/supabase.js';
+import '../assets/styles/HomePage.css';
 
 function HomePage() {
-    const [password, setPassword] = useState('');
+    const [loginData, setLoginData] = useState({
+        email: '',
+        password: ''
+    });
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-    const { authenticated, login } = useAuth();
+    const { session } = useAuth();
 
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-        
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    if (authenticated) {
+    if (session) {
         return <Navigate to="/main" replace />;
     }
 
     const handleChange = (e) => {
-        setPassword(e.target.value);
+        const {name, value} = e.target;
+        setLoginData(prev => ({
+            ...prev,
+            [name]: value.trim()
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -32,95 +31,77 @@ function HomePage() {
         setLoading(true);
         setMessage('');
         
-        if (!password) {
-            setMessage('비밀번호를 입력해주세요.');
+        if(!loginData.email || !loginData.password) {
+            setMessage('이메일/비밀번호를 입력해주세요.')
             setLoading(false);
             return;
         }
         
         try {
-            const result = await login(password);
+            const { error } = await supabase.auth.signInWithPassword({
+                email: loginData.email,
+                password: loginData.password,
+            });
             
-            if (result.success) {
-                setMessage('비밀번호가 확인되었습니다.');
-            } else {
-                setMessage(result.error || '잘못된 비밀번호입니다. 다시 시도해주세요.');
+            if (error) {
+                setMessage('잘못된 이메일/비밀번호입니다. 다시 시도해주세요.');
             }
         } catch (err) {
-            console.error('오류 발생');
-            setMessage('오류가 발생했습니다. 다시 시도해주세요.');
+            console.error('로그인 오류:', err);
+            setMessage('이메일/비밀번호가 일치하지 않습니다.');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="container" style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            height: 'calc(100vh - var(--navbar-height))'
-        }}>
-            <div className="password-container" style={{
-                width: '100%',
-                maxWidth: isMobile ? '300px' : '400px',
-                textAlign: 'center'
-            }}>
-                
-                <div className="card" style={{
-                    backgroundColor: 'white',
-                    boxShadow: 'var(--box-shadow)',
-                    border: '1px solid #e6b800',
-                    borderRadius: 'var(--border-radius)',
-                    padding: isMobile ? '1.5rem' : '2rem'
-                }}>
+        <div className="home-container">
+            <div className={`login-container`}>
+                <div className="login-logo">
+                        오까게
+                </div>
+                <div className="login-title">안녕하세요, 옷을 파는 오까게입니다 *^^*</div>
+                <div className={`login-card`}>
                     <form onSubmit={handleSubmit}>
-                        <div style={{ marginBottom: isMobile ? '1.2rem' : '1.5rem' }}>
+                        <div className={`input-container`}>
                             <input
-                                type="password"
-                                value={password}
+                                type="email"
+                                name="email"
+                                value={loginData.email}
                                 onChange={handleChange}
-                                placeholder="비밀번호를 입력하세요"
+                                placeholder="이메일"
                                 autoFocus
                                 disabled={loading}
-                                style={{
-                                    border: '1px solid #e6b800',
-                                    borderRadius: 'var(--border-radius)',
-                                    padding: isMobile ? '10px 14px' : '12px 16px',
-                                    width: '100%',
-                                    fontSize: isMobile ? '14px' : '16px'
-                                }}
+                                className={`username-input`}
+                            />
+                            <input
+                                type="password"
+                                name="password"
+                                value={loginData.password}
+                                onChange={handleChange}
+                                placeholder="비밀번호"
+                                disabled={loading}
+                                className={`password-input`}
                             />
                         </div>
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             disabled={loading}
-                            style={{
-                                backgroundColor: 'var(--primary-color)',
-                                color: 'black',
-                                border: 'none',
-                                borderRadius: 'var(--border-radius)',
-                                padding: isMobile ? '10px 20px' : '12px 24px',
-                                width: '100%',
-                                fontSize: isMobile ? '14px' : '16px',
-                                fontWeight: 'bold',
-                                cursor: loading ? 'not-allowed' : 'pointer',
-                                opacity: loading ? 0.7 : 1
-                            }}
+                            className={`login-button`}
                         >
                             {loading ? '로그인 중...' : '로그인'}
                         </button>
+
+                        <div className="register-link-container">
+                            <span className="register-link-text">회원가입이 필요하신가요? </span>
+                            <Link to="/register" className="register-link">회원가입</Link>
+                        </div>
+                        {message && (
+                            <p className={`message error-message`}>
+                                {message}
+                            </p>
+                        )}
                     </form>
-                    
-                    {message && (
-                        <p className={authenticated ? 'success-message' : 'error-message'} style={{
-                            marginTop: '1rem',
-                            fontSize: isMobile ? '14px' : '16px'
-                        }}>
-                            {message}
-                        </p>
-                    )}
                 </div>
             </div>
         </div>
