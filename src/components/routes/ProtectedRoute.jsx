@@ -1,9 +1,9 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext.jsx';
+import { useAuth } from '../../providers/AuthProvider.jsx';
 
 function ProtectedRoute({ children }) {
-  const { authenticated, loading } = useAuth();
+  const { session, loading } = useAuth();
 
   if (loading) {
     return (
@@ -20,8 +20,8 @@ function ProtectedRoute({ children }) {
     );
   }
 
-  if (!authenticated) {
-    return <Navigate to="/404" replace />;
+  if (!session) {
+    return <Navigate to="/" replace />;
   }
 
   return children;
