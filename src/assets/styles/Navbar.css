@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+.fixed-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.7rem 1.5rem;
+  height: auto;
+}
+
+.navbar-container {
+  max-width: 950px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.navbar-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  height: 0px;
+}
+
+.navbar-logo {
+  padding-top: 10px;
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+}
+
+.navbar-store-name {
+  font-family: "Gowun Dodum", sans-serif;
+  font-size: 23px;
+  font-weight: 600;
+  padding-top: 10px;
+  transition: text-shadow 0.2s;
+}
+
+.navbar-store-name:hover {
+  text-shadow: 10px 10px 4px rgba(0,0,0,0.2);
+}
+
+.logout-button {
+  background-color: white;
+  color: var(--text-color);
+  border: 1px solid var(--primary-color);
+  padding: 6px 14px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.logout-button:hover {
+  background-color: #e6c300;
+  border-color: var(--primary-color);
+}
+
+.tab-container {
+  display: flex;
+}
+
+.tab-button {
+  padding: 0.8rem 1.2rem;
+  border: none;
+  background: none;
+  border-bottom: 3px solid transparent;
+  color: var(--text-light);
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+  box-shadow: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-button:hover {
+  font-weight: 500;
+}
+
+.tab-button:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background-color: #cccccc;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+
+.tab-button:hover:after {
+  width: 80%;
+}
+
+.tab-button.active {
+  border-bottom: 3px solid var(--primary-color);
+  font-weight: 600;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.change-password-button {
+  background-color: white;
+  color: var(--text-color);
+  border: 1px solid #dee2e6;
+  padding: 6px 14px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.change-password-button:hover {
+  background-color: #f1f3f5;
+  border-color: #ced4da;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .fixed-navbar {
+    padding: 0.6rem 1rem;
+  }
+  
+  .navbar-header {
+    margin-bottom: 0.8rem;
+  }
+  
+  .navbar-title {
+    height: 35px;
+  }
+  
+  .navbar-logo {
+    height: 35px;
+  }
+  
+  .logout-button {
+    padding: 6px 12px;
+    height: 30px;
+    font-size: 12px;
+  }
+  
+  .tab-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .change-password-button {
+    padding: 6px 12px;
+    height: 30px;
+    font-size: 12px;
+  }
+}
+
+/* 작은 모바일 화면 */
+@media (max-width: 480px) {
+  .fixed-navbar {
+    padding: 0.5rem;
+  }
+  
+  .navbar-header {
+    margin-bottom: 0.6rem;
+  }
+  
+  .navbar-title {
+    height: 28px;
+  }
+  
+  .navbar-logo {
+    height: 28px;
+  }
+  
+  .logout-button {
+    padding: 4px 10px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
+  .tab-button {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.8rem;
+  }
+  
+  .change-password-button {
+    padding: 4px 10px;
+    height: 28px;
+    font-size: 11px;
+  }
+} 
