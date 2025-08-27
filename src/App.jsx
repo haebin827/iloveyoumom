@@ -1,6 +1,8 @@
 import './App.css'
+import './assets/styles/Toast.css'
 import React from "react";
 import {Route, Routes} from "react-router-dom";
+import { Toaster } from 'react-hot-toast';
 import HomePage from "./pages/HomePage.jsx";
 import MainPage from "./pages/MainPage.jsx";
 import Error404 from "./pages/Error404.jsx";
@@ -13,6 +15,27 @@ import Footer from "./components/Footer.jsx";
 function App() {
     return (
         <AuthProvider>
+            <Toaster
+                position="top-right"
+                gutter={12}
+                toastOptions={{
+                    duration: 3000,
+                    className: 'custom-toast',
+                    success: {
+                        iconTheme: {
+                            primary: '#10b981',
+                            secondary: '#ffffff',
+                        },
+                    },
+                    error: {
+                        iconTheme: {
+                            primary: '#ef4444',
+                            secondary: '#ffffff',
+                        },
+                    },
+                }}
+                containerClassName="toast-container"
+            />
             <Routes>
                 <Route path={'/'} element={<HomePage/>} />
                 <Route path={'/register'} element={<RegisterPage/>} />

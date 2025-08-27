@@ -1,44 +1,113 @@
-import React from 'react';
-import '../styles/MainPage.css';
+import React, { useState } from 'react';
+import { useAuth } from '../providers/AuthProvider.jsx';
+import { supabase } from '../lib/supabase.js';
+import toast from 'react-hot-toast';
+import '../assets/styles/CustomerRegister.css';
 
-function CustomerRegister({ form, handleChange, handleSubmit, loading }) {
+function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const { session } = useAuth();
+
+  const handleRegistration = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrors({});
+
+    // Form validation
+    const newErrors = {};
+    if (!form.name) {
+      newErrors.name = '이름을 입력해주세요.';
+    }
+    if (form.phone) {
+      // Phone number validation: must be exactly 11 digits
+      const phoneDigits = form.phone.replace(/\D/g, '');
+      if (phoneDigits.length !== 11) {
+        newErrors.phone = '올바르지 않은 전화번호입니다.';
+      }
+    }
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setIsLoading(false);
+      return;
+    }
+
+    if (!session?.user?.id) {
+      toast.error('로그인이 필요합니다.');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const customerData = {
+        user_id: session.user.id,
+        name: form.name,
+        phone: form.phone,
+        gender: form.gender || 'NA',
+        first_visit: form.first_visit || null,
+        top_size: form.top_size || null,
+        bottom_size: form.bottom_size || null,
+        body_type: form.body_type || null,
+        style_prefer: form.style_prefer || null,
+        note: form.note || null,
+      };
+
+      // Insert customer into database
+      const { error } = await supabase
+        .from('customer')
+        .insert([customerData]);
+
+      if (error) {
+          toast.error(`등록 실패: ${error.message}`);
+      } else {
+        toast.success('고객이 성공적으로 등록되었습니다!');
+        // Reset form after successful registration
+        if (onFormReset) {
+          onFormReset();
+        }
+        if (onSuccess) {
+          setTimeout(() => {
+            onSuccess();
+          }, 1000);
+        }
+      }
+    } catch (err) {
+      toast.error('고객 등록 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div>
       <h2 className="card-title centered">새 고객 등록</h2>
       
       <div className="card table-container">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleRegistration}>
           <div className="form-container">
             <div className="form-group">
-              <label className="form-label">이름 *</label>
+              <label className="form-label">이름 <span className="form-label-required">*</span></label>
               <input
                 type="text"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                required
                 placeholder="고객 이름"
+                className={errors.name ? 'error' : ''}
               />
+              {errors.name && <div className="error-message">{errors.name}</div>}
             </div>
             <div className="form-group">
-              <label className="form-label">전화번호 *</label>
+              <label className="form-label">전화번호</label>
               <input
                 type="text"
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                required
-                placeholder="010-0000-0000"
+                placeholder="(예: 01012345678)"
+                className={errors.phone ? 'error' : ''}
               />
-            </div>
-            <div className="form-group">
-              <label className="form-label">생년월일</label>
-              <input
-                type="date"
-                name="birth"
-                value={form.birth}
-                onChange={handleChange}
-              />
+              {errors.phone && <div className="error-message">{errors.phone}</div>}
             </div>
             <div className="form-group">
               <label className="form-label">성별</label>
@@ -82,36 +151,6 @@ function CustomerRegister({ form, handleChange, handleSubmit, loading }) {
               />
             </div>
             <div className="form-group">
-              <label className="form-label">선호 색상</label>
-              <input
-                type="text"
-                name="color_prefer"
-                value={form.color_prefer}
-                onChange={handleChange}
-                placeholder="블랙, 노랑 등"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">피하는 색상</label>
-              <input
-                type="text"
-                name="color_avoid"
-                value={form.color_avoid}
-                onChange={handleChange}
-                placeholder="노랑, 빨강 등"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">좋아하는 음료</label>
-              <input
-                type="text"
-                name="drink_prefer"
-                value={form.drink_prefer}
-                onChange={handleChange}
-                placeholder="아메리카노, 녹차 등"
-              />
-            </div>
-            <div className="form-group">
               <label className="form-label">신체 특징</label>
               <input
                 type="text"
@@ -147,11 +186,12 @@ function CustomerRegister({ form, handleChange, handleSubmit, loading }) {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={isLoading || loading}
             className="submit-button"
           >
-            {loading ? '등록 중...' : '고객 등록하기'}
+            {(isLoading || loading) ? '등록 중...' : '고객 등록하기'}
           </button>
+
         </form>
       </div>
     </div>
