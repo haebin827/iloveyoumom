@@ -8,9 +8,10 @@ import MainPage from "./pages/MainPage.jsx";
 import Error404 from "./pages/Error404.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import AuthCallback from "./routes/AuthCallback.jsx";
+import PasswordResetCallback from "./routes/PasswordResetCallback.jsx";
 import { AuthProvider } from "./providers/AuthProvider.jsx";
 import ProtectedRoute from "./components/routes/ProtectedRoute.jsx";
-import Footer from "./components/Footer.jsx";
+import Footer from "./components/layout/Footer.jsx";
 
 function App() {
     return (
@@ -40,6 +41,7 @@ function App() {
                 <Route path={'/'} element={<HomePage/>} />
                 <Route path={'/register'} element={<RegisterPage/>} />
                 <Route path={'/auth/callback'} element={<AuthCallback/>} />
+                <Route path={'/password-reset/callback'} element={<PasswordResetCallback/>} />
                 <Route path={'/main'} element={
                     <ProtectedRoute>
                         <div className="app-container">
