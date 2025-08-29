@@ -1,29 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/EditCustomerForm.css';
+import { useAuth } from '../providers/AuthProvider.jsx';
+import { supabase } from '../lib/supabase.js';
+import '../assets/styles/EditCustomerForm.css';
 
-function EditCustomerForm({ customer, onSave, onCancel }) {
+function EditCustomerForm({ customer, onComplete }) {
   const [form, setForm] = useState({
     name: '',
     phone: '',
     top_size: '',
     bottom_size: '',
-    color_prefer: '',
-    color_avoid: '',
-    drink_prefer: '',
     body_type: '',
     style_prefer: '',
-    birth: '',
     first_visit: '',
     note: '',
     gender: 'NA'
   });
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState('');
+  const { session } = useAuth();
 
   useEffect(() => {
     if (customer) {
       const formattedCustomer = { ...customer };
-      if (formattedCustomer.birth) {
-        formattedCustomer.birth = formattedCustomer.birth.split('T')[0];
-      }
       if (formattedCustomer.first_visit) {
         formattedCustomer.first_visit = formattedCustomer.first_visit.split('T')[0];
       }
@@ -41,20 +40,112 @@ function EditCustomerForm({ customer, onSave, onCancel }) {
   
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+
+    if (name === 'phone') {
+      const digits = value.replace(/\D/g, '');
+      if (digits.length <= 11) { // Only allow up to 11 digits
+        setForm(prevForm => ({
+          ...prevForm,
+          [name]: digits
+        }));
+      }
+      return;
+    }
+    
     setForm(prevForm => ({
       ...prevForm,
       [name]: value
     }));
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage('');
 
-    const formData = { ...form };
-    formData.birth = formData.birth && formData.birth.trim() ? formData.birth : null;
-    formData.first_visit = formData.first_visit && formData.first_visit.trim() ? formData.first_visit : null;
-    
-    onSave(formData);
+    const newErrors = {};
+    if (!form.name?.trim()) {
+      newErrors.name = '이름을 입력해주세요.';
+    }
+    if (form.phone) {
+      const phoneDigits = form.phone.replace(/\D/g, '');
+      if (phoneDigits.length !== 11) {
+        newErrors.phone = '전화번호는 11자리 숫자여야 합니다.';
+      }
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setLoading(false);
+      return;
+    }
+
+    if (!session?.user?.id) {
+      setMessage('로그인이 필요합니다.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      if (form.phone) {
+        const { data: existingCustomers, error: checkError } = await supabase
+          .from('customer')
+          .select('id, phone')
+          .eq('phone', form.phone.trim())
+          .neq('id', customer.id); // Exclude current customer
+          
+        if (checkError) throw checkError;
+
+        if (existingCustomers && existingCustomers.length > 0) {
+          setErrors({ phone: '이미 등록된 전화번호입니다.' });
+          setLoading(false);
+          return;
+        }
+      }
+
+      const formData = { ...form };
+      formData.first_visit = formData.first_visit && formData.first_visit.trim() ? formData.first_visit : null;
+      formData.name = formData.name?.trim() || null;
+      formData.phone = formData.phone?.trim() || null;
+      formData.top_size = formData.top_size?.trim() || null;
+      formData.bottom_size = formData.bottom_size?.trim() || null;
+      formData.body_type = formData.body_type?.trim() || null;
+      formData.style_prefer = formData.style_prefer?.trim() || null;
+      formData.note = formData.note?.trim() || null;
+
+      delete formData.id;
+      delete formData.user_id;
+      delete formData.created_at;
+      delete formData.visit_count;
+
+      const { error } = await supabase
+        .from('customer')
+        .update(formData)
+        .eq('id', customer.id)
+        .eq('user_id', session.user.id); // Ensure user owns this customer
+        
+      if (error) throw error;
+
+      onComplete({ type: 'save', data: { ...customer, ...formData }, success: true });
+      
+    } catch (err) {
+      console.error('Customer update error:', err);
+      setMessage('고객 정보 수정 중 오류가 발생했습니다.');
+      onComplete({ type: 'save', data: null, success: false });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    onComplete({ type: 'cancel' });
   };
   
   return (
@@ -62,7 +153,7 @@ function EditCustomerForm({ customer, onSave, onCancel }) {
       <div className="edit-form-container">
         <div className="edit-form-header">
           <h2>고객 정보 수정</h2>
-          <button className="close-button" onClick={onCancel}>×</button>
+          <button className="close-button" onClick={handleCancel}>×</button>
         </div>
         
         <form onSubmit={handleSubmit} className="edit-form">
@@ -74,9 +165,10 @@ function EditCustomerForm({ customer, onSave, onCancel }) {
                 name="name"
                 value={form.name || ''}
                 onChange={handleChange}
-                required
                 placeholder="고객 이름"
+                className={errors.name ? 'error' : ''}
               />
+              {errors.name && <div className="error-message">{errors.name}</div>}
             </div>
             
             <div className="form-group">
@@ -86,9 +178,10 @@ function EditCustomerForm({ customer, onSave, onCancel }) {
                 name="phone"
                 value={form.phone || ''}
                 onChange={handleChange}
-                required
-                placeholder="010-0000-0000"
+                placeholder="(예: 01012345678)"
+                className={errors.phone ? 'error' : ''}
               />
+              {errors.phone && <div className="error-message">{errors.phone}</div>}
             </div>
             
             <div className="form-group">
@@ -127,15 +220,6 @@ function EditCustomerForm({ customer, onSave, onCancel }) {
               </div>
             </div>
             
-            <div className="form-group">
-              <label>생년월일</label>
-              <input
-                type="date"
-                name="birth"
-                value={form.birth || ''}
-                onChange={handleChange}
-              />
-            </div>
             
             <div className="form-group">
               <label>첫 방문일</label>
@@ -191,38 +275,6 @@ function EditCustomerForm({ customer, onSave, onCancel }) {
               />
             </div>
             
-            <div className="form-group">
-              <label>선호 색상</label>
-              <input
-                type="text"
-                name="color_prefer"
-                value={form.color_prefer || ''}
-                onChange={handleChange}
-                placeholder="블랙, 노랑 등"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>피하는 색상</label>
-              <input
-                type="text"
-                name="color_avoid"
-                value={form.color_avoid || ''}
-                onChange={handleChange}
-                placeholder="노랑, 빨강 등"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>좋아하는 음료</label>
-              <input
-                type="text"
-                name="drink_prefer"
-                value={form.drink_prefer || ''}
-                onChange={handleChange}
-                placeholder="아메리카노, 녹차 등"
-              />
-            </div>
           </div>
           
           <div className="form-group note-group">
@@ -237,13 +289,19 @@ function EditCustomerForm({ customer, onSave, onCancel }) {
           </div>
           
           <div className="form-actions">
-            <button type="button" className="cancel-button" onClick={onCancel}>
+            <button type="button" className="cancel-button" onClick={handleCancel}>
               취소
             </button>
-            <button type="submit" className="save-button">
-              저장
+            <button type="submit" className="save-button" disabled={loading}>
+              {loading ? '저장 중...' : '저장'}
             </button>
           </div>
+          
+          {message && (
+            <div className={`message ${message.includes('성공') ? 'success-message' : 'error-message'}`}>
+              {message}
+            </div>
+          )}
         </form>
       </div>
     </div>
