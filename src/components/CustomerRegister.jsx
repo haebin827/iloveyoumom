@@ -9,6 +9,19 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
   const [errors, setErrors] = useState({});
   const { session } = useAuth();
 
+  const handleFormChange = (e) => {
+    const { name } = e.target;
+
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+
+    handleChange(e);
+  };
+
   const handleRegistration = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -16,14 +29,13 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
 
     // Form validation
     const newErrors = {};
-    if (!form.name) {
+    if (!form.name?.trim()) {
       newErrors.name = '이름을 입력해주세요.';
     }
     if (form.phone) {
-      // Phone number validation: must be exactly 11 digits
       const phoneDigits = form.phone.replace(/\D/g, '');
       if (phoneDigits.length !== 11) {
-        newErrors.phone = '올바르지 않은 전화번호입니다.';
+        newErrors.phone = '전화번호는 11자리 숫자여야 합니다.';
       }
     }
     
@@ -40,17 +52,32 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
     }
 
     try {
+      if (form.phone) {
+        const { data: existingCustomers, error: checkError } = await supabase
+          .from('customer')
+          .select('id, phone')
+          .eq('phone', form.phone.trim());
+          
+        if (checkError) throw checkError;
+
+        if (existingCustomers && existingCustomers.length > 0) {
+          setErrors({ phone: '이미 등록된 전화번호입니다.' });
+          setIsLoading(false);
+          return;
+        }
+      }
+
       const customerData = {
         user_id: session.user.id,
-        name: form.name,
-        phone: form.phone,
+        name: form.name?.trim() || null,
+        phone: form.phone?.trim() || null,
         gender: form.gender || 'NA',
         first_visit: form.first_visit || null,
-        top_size: form.top_size || null,
-        bottom_size: form.bottom_size || null,
-        body_type: form.body_type || null,
-        style_prefer: form.style_prefer || null,
-        note: form.note || null,
+        top_size: form.top_size?.trim() || null,
+        bottom_size: form.bottom_size?.trim() || null,
+        body_type: form.body_type?.trim() || null,
+        style_prefer: form.style_prefer?.trim() || null,
+        note: form.note?.trim() || null,
       };
 
       // Insert customer into database
@@ -91,7 +118,7 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
                 type="text"
                 name="name"
                 value={form.name}
-                onChange={handleChange}
+                onChange={handleFormChange}
                 placeholder="고객 이름"
                 className={errors.name ? 'error' : ''}
               />
@@ -103,7 +130,7 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
                 type="text"
                 name="phone"
                 value={form.phone}
-                onChange={handleChange}
+                onChange={handleFormChange}
                 placeholder="(예: 01012345678)"
                 className={errors.phone ? 'error' : ''}
               />
@@ -114,7 +141,7 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
               <select
                 name="gender"
                 value={form.gender || 'NA'}
-                onChange={handleChange}
+                onChange={handleFormChange}
               >
                 <option value="NA">알수없음</option>
                 <option value="MAN">남</option>
@@ -127,7 +154,7 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
                 type="date"
                 name="first_visit"
                 value={form.first_visit}
-                onChange={handleChange}
+                onChange={handleFormChange}
               />
             </div>
             <div className="form-group">
@@ -136,7 +163,7 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
                 type="text"
                 name="top_size"
                 value={form.top_size}
-                onChange={handleChange}
+                onChange={handleFormChange}
                 placeholder="S, M, L 등"
               />
             </div>
@@ -146,7 +173,7 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
                 type="text"
                 name="bottom_size"
                 value={form.bottom_size}
-                onChange={handleChange}
+                onChange={handleFormChange}
                 placeholder="26, 27, 28 등"
               />
             </div>
@@ -156,7 +183,7 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
                 type="text"
                 name="body_type"
                 value={form.body_type}
-                onChange={handleChange}
+                onChange={handleFormChange}
                 placeholder="어깨가 넓음, 다리가 길다 등"
               />
             </div>
@@ -166,7 +193,7 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
                 type="text"
                 name="style_prefer"
                 value={form.style_prefer}
-                onChange={handleChange}
+                onChange={handleFormChange}
                 placeholder="미니멀, 캐주얼 등"
               />
             </div>
