@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SearchBar from './SearchBar';
-import '../styles/MainPage.css';
+import '../assets/styles/CustomerList.css';
 
 function CustomerList({ 
   searchTerm,
@@ -8,17 +8,16 @@ function CustomerList({
   filteredCustomers,
   loading,
   error,
-  expandedCustomer,
-  toggleExpand,
   visitSuccess,
   visitLoading,
   handleVisit,
-  deleteConfirmId,
-  handleDeleteConfirm,
-  handleDeleteCancel,
-  handleDelete,
-  handleEdit
+  handleEdit,
+  onCustomerUpdate
 }) {
+  const [expandedCustomer, setExpandedCustomer] = useState(null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [sortBy, setSortBy] = useState('created_at');
+  const [sortDirection, setSortDirection] = useState('desc');
 
   const calculateKoreanAge = (birthDate) => {
     if (!birthDate || birthDate === '-') return null;
@@ -29,18 +28,6 @@ function CustomerList({
     const birthYear = birthDateObj.getFullYear();
 
     return currentYear - birthYear + 1;
-  };
-
-  const renderBirthDateWithAge = (birthDate) => {
-    if (!birthDate || birthDate === '-') return '-';
-
-    let formattedDate = birthDate;
-    if (birthDate.includes('T')) {
-      formattedDate = birthDate.split('T')[0];
-    }
-    
-    const koreanAge = calculateKoreanAge(birthDate);
-    return `${formattedDate} (${koreanAge}세)`;
   };
 
   const formatGender = (gender) => {
@@ -83,16 +70,120 @@ function CustomerList({
     return displayText;
   };
 
+  const toggleExpand = (customerId) => {
+    if (expandedCustomer === customerId) {
+      setExpandedCustomer(null);
+    } else {
+      setExpandedCustomer(customerId);
+    }
+  };
+
+  const handleDeleteConfirm = (e, customerId) => {
+    e.stopPropagation();
+    setDeleteConfirmId(customerId);
+  };
+
+  const handleDeleteCancel = (e) => {
+    e.stopPropagation();
+    setDeleteConfirmId(null);
+  };
+
+  const handleDelete = async (e, customerId) => {
+    e.stopPropagation();
+    try {
+      const { supabase } = await import('../lib/supabase.js');
+      
+      const { error } = await supabase
+        .from('customer')
+        .delete()
+        .eq('id', customerId);
+        
+      if (error) throw error;
+
+      setDeleteConfirmId(null);
+      onCustomerUpdate(); // 부모 컴포넌트에 업데이트 알림
+      
+      alert('고객 정보가 삭제되었습니다.');
+    } catch (err) {
+      alert('삭제 실패');
+    }
+  };
+
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+  };
+
+  const toggleSortDirection = () => {
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
+
+  // 정렬 함수
+  const sortCustomers = (customerList, sortField, direction) => {
+    return [...customerList].sort((a, b) => {
+      let aValue = a[sortField];
+      let bValue = b[sortField];
+      
+      // Handle null/undefined values
+      if (!aValue && !bValue) return 0;
+      if (!aValue) return direction === 'asc' ? 1 : -1;
+      if (!bValue) return direction === 'asc' ? -1 : 1;
+      
+      // Convert to string for name comparison
+      if (sortField === 'name') {
+        aValue = aValue.toLowerCase();
+        bValue = bValue.toLowerCase();
+      }
+      
+      // Date comparison for created_at and first_visit
+      if (sortField === 'created_at' || sortField === 'first_visit') {
+        aValue = new Date(aValue);
+        bValue = new Date(bValue);
+      }
+      
+      if (aValue < bValue) {
+        return direction === 'asc' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  };
+
+  // 정렬된 고객 목록 계산
+  const sortedCustomers = sortCustomers(filteredCustomers, sortBy, sortDirection);
+
   return (
     <div>
       <h2 className="card-title centered">고객 관리</h2>
 
-      <div className="search-container">
-        <SearchBar 
-          searchTerm={searchTerm} 
-          setSearchTerm={setSearchTerm} 
-          placeholder="이름 또는 전화번호로 검색..."
-        />
+      <div className="search-sort-container">
+        <div className="search-container">
+          <SearchBar
+            searchTerm={searchTerm} 
+            setSearchTerm={setSearchTerm} 
+            placeholder="이름 또는 전화번호로 검색..."
+          />
+        </div>
+        
+        <div className="sort-container">
+          <select 
+            className="sort-select"
+            value={sortBy}
+            onChange={handleSortChange}
+          >
+            <option value="created_at">등록순</option>
+            <option value="name">이름순</option>
+            <option value="first_visit">방문날짜순</option>
+          </select>
+          <button 
+            className="sort-direction-button"
+            onClick={toggleSortDirection}
+            title={sortDirection === 'asc' ? '오름차순' : '내림차순'}
+          >
+            {sortDirection === 'asc' ? '↑' : '↓'}
+          </button>
+        </div>
       </div>
       
       {/* 고객 목록 테이블 */}
@@ -105,7 +196,7 @@ function CustomerList({
           <div className="error-container">
             <p>{error}</p>
           </div>
-        ) : filteredCustomers.length === 0 ? (
+        ) : sortedCustomers.length === 0 ? (
           <div className="empty-container">
             <p>
               {searchTerm ? '검색 결과가 없습니다.' : '등록된 고객이 없습니다.'}
@@ -114,11 +205,11 @@ function CustomerList({
         ) : (
           <>
             <div className="records-count">
-              총 <span className="count-number">{filteredCustomers.length}</span>명의 고객
+              총 <span className="count-number">{sortedCustomers.length}</span>명의 고객
             </div>
             
           <ul className="customer-list">
-            {filteredCustomers.map((customer, index) => (
+            {sortedCustomers.map((customer, index) => (
               <li key={customer.id || index} className="customer-item">
                 <div 
                   className="customer-header" 
@@ -147,7 +238,7 @@ function CustomerList({
                         }}
                         disabled={visitLoading}
                       >
-                        방문
+                        구매
                       </button>
                     )}
                     <span className="expand-icon">
@@ -168,35 +259,12 @@ function CustomerList({
                         <span className="detail-value">{customer.bottom_size || '-'}</span>
                       </div>
                       <div className="detail-item">
-                        <span className="detail-label">선호 색상</span>
-                        <span className="detail-value">{customer.color_prefer || '-'}</span>
-                      </div>
-                      <div className="detail-item">
-                        <span className="detail-label">피하는 색상</span>
-                        <span className="detail-value">{customer.color_avoid || '-'}</span>
-                      </div>
-                      <div className="detail-item">
-                        <span className="detail-label">좋아하는 음료</span>
-                        <span className="detail-value">{customer.drink_prefer || '-'}</span>
-                      </div>
-                      <div className="detail-item">
                         <span className="detail-label">신체 특징</span>
                         <span className="detail-value">{customer.body_type || '-'}</span>
                       </div>
                       <div className="detail-item">
                         <span className="detail-label">선호 스타일</span>
                         <span className="detail-value">{customer.style_prefer || '-'}</span>
-                      </div>
-                        <div className="detail-item">
-                          <span className="detail-label">성별</span>
-                          <span className="detail-value">
-                            {customer.gender === 'MAN' ? '남자' : 
-                             customer.gender === 'WOMAN' ? '여자' : '-'}
-                          </span>
-                        </div>
-                      <div className="detail-item">
-                        <span className="detail-label">생년월일</span>
-                        <span className="detail-value">{renderBirthDateWithAge(customer.birth)}</span>
                       </div>
                       <div className="detail-item">
                         <span className="detail-label">첫 방문</span>

@@ -1,158 +1,12 @@
 /* MainPage 스타일 */
 .main-container {
-  padding-top: 7rem;
+  padding-top: 10rem;
   padding-bottom: 1rem;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding-left: 2rem;
   padding-right: 2rem;
-}
-
-.search-container {
-  margin-bottom: 1.5rem;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* 아코디언 스타일 고객 리스트 */
-.customer-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.customer-item {
-  background-color: white;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  margin-bottom: 1rem;
-  overflow: hidden;
-  border: 1px solid var(--primary-light);
-}
-
-.customer-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.9rem 1.2rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.customer-header:hover {
-  background-color: #fffef5;
-}
-
-.customer-main-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.customer-name {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--text-color);
-}
-
-.customer-phone {
-  font-size: 0.9rem;
-  color: var(--text-light);
-}
-
-.customer-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.expand-icon {
-  font-size: 1rem;
-  color: var(--primary-color);
-  transition: transform 0.3s;
-}
-
-.customer-details {
-  padding: 1rem 1.5rem;
-  background-color: #fffef0;
-  border-top: 1px solid var(--primary-light);
-}
-
-.details-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.2rem;
-  margin-bottom: 1.5rem;
-}
-
-.detail-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.detail-label {
-  font-size: 0.85rem;
-  color: var(--text-light);
-  font-weight: 500;
-}
-
-.detail-value {
-  font-size: 0.95rem;
-  color: var(--text-color);
-}
-
-/* 방문 버튼 스타일 */
-.visit-button {
-  padding: 8px 16px;
-  font-size: 0.95rem;
-  background-color: #ffd731;
-  color: black;
-  border-radius: 4px;
-  border: 1px solid var(--primary-color);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 100%;
-  max-width: 80px;
-}
-
-.visit-button:hover {
-  background-color: var(--primary-color);
-  color: black;
-}
-
-.visit-button:disabled {
-  background-color: #f0f0f0;
-  color: #999;
-  border-color: #ddd;
-  cursor: not-allowed;
-}
-
-/* 노트 섹션 스타일 */
-.note-container {
-  border-top: 1px dashed var(--primary-light);
-  padding-top: 1.2rem;
-  margin-top: 0.5rem;
-}
-
-.note-content {
-  margin-top: 0.5rem;
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--text-color);
-  background-color: white;
-  padding: 1rem;
-  border-radius: 8px;
-  border-left: 3px solid var(--primary-color);
-  min-height: 80px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  font-family: inherit;
-  overflow-x: auto;
 }
 
 /* 방문 기록 테이블 스타일 */
@@ -226,57 +80,6 @@
     padding-bottom: 4rem;
   }
   
-  .customer-header {
-    padding: 0.8rem 1rem;
-  }
-  
-  .customer-name {
-    font-size: 0.95rem;
-  }
-  
-  .customer-phone {
-    font-size: 0.85rem;
-  }
-  
-  .details-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.8rem;
-  }
-  
-  .detail-item {
-    padding: 0.5rem;
-    background-color: #fefef9;
-    border-radius: 6px;
-    border: 1px solid #f0f0e0;
-  }
-  
-  .detail-label {
-    font-size: 0.75rem;
-    margin-bottom: 0.2rem;
-  }
-  
-  .detail-value {
-    font-size: 0.9rem;
-  }
-  
-  .note-content {
-    font-size: 1rem;
-    padding: 0.8rem;
-    min-height: 70px;
-  }
-  
-  .visit-button {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    max-width: 70px;
-  }
-  
-  .visit-success {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    max-width: 70px;
-  }
-  
   .visit-table th,
   .visit-table td {
     padding: 8px 10px;
@@ -285,16 +88,6 @@
   
   .sort-icon {
     margin-left: 0.3rem;
-  }
-  
-  .edit-button, .delete-button {
-    padding: 7px 14px;
-    font-size: 0.85rem;
-  }
-  
-  .confirm-button {
-    padding: 5px 12px;
-    font-size: 0.8rem;
   }
   
   .search-filter-container {
@@ -311,20 +104,9 @@
     flex: 1;
   }
   
-  .visit-count-badge {
-    font-size: 0.8rem;
-    padding: 2px 6px;
-  }
-  
   .note-textarea {
     padding: 0.8rem;
     font-size: 0.95rem;
-  }
-  
-  .visit-success {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    max-width: 70px;
   }
 }
 
@@ -337,61 +119,10 @@
     padding-bottom: 3.5rem;
   }
   
-  .customer-header {
-    padding: 0.7rem 0.8rem;
-  }
-  
-  .customer-name {
-    font-size: 0.9rem;
-  }
-  
-  .customer-phone {
-    font-size: 0.8rem;
-  }
-  
-  .details-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.6rem;
-  }
-  
-  .detail-item {
-    padding: 0.4rem;
-    background-color: #fefef9;
-    border-radius: 4px;
-    border: 1px solid #f0f0e0;
-  }
-  
-  .detail-label {
-    font-size: 0.7rem;
-    margin-bottom: 0.1rem;
-  }
-  
-  .detail-value {
-    font-size: 0.83rem;
-  }
-  
-  .note-content {
-    font-size: 0.85rem;
-    padding: 0.7rem;
-    min-height: 60px;
-  }
-  
-  .visit-button {
-    padding: 5px 10px;
-    font-size: 0.8rem;
-    max-width: 60px;
-  }
-  
   .note-textarea {
     padding: 0.7rem;
     font-size: 0.9rem;
     min-height: 80px;
-  }
-  
-  .visit-success {
-    padding: 5px 10px;
-    font-size: 0.8rem;
-    max-width: 60px;
   }
   
   .visit-table th,
@@ -404,22 +135,6 @@
     margin-left: 0.2rem;
   }
   
-  .customer-edit-actions {
-    flex-direction: column;
-    gap: 0.6rem;
-    align-items: stretch;
-  }
-  
-  .delete-confirm {
-    margin-top: 0.5rem;
-  }
-  
-  .edit-button, .delete-button {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    width: 100%;
-  }
-  
   .date-filter-label {
     font-size: 0.8rem;
   }
@@ -428,104 +143,10 @@
     padding: 6px 10px;
     font-size: 0.8rem;
   }
-  
-  .visit-count-badge {
-    font-size: 0.75rem;
-    padding: 1px 5px;
-  }
 }
 
-.form-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
 
-.form-group {
-  margin-bottom: 1rem;
-}
 
-.form-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.submit-button {
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  width: 100%;
-  color: black;
-  background-color: var(--primary-color);
-  border: none;
-  padding: 12px 0;
-  font-size: 0.95rem;
-  font-weight: 500;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.loading-container {
-  text-align: center;
-  padding: 2rem;
-}
-
-.error-container {
-  text-align: center;
-  padding: 2rem;
-  color: red;
-}
-
-.empty-container {
-  text-align: center;
-  padding: 2rem;
-}
-
-.card-title {
-  font-size: 1.3rem;
-  margin-bottom: 1.5rem;
-}
-
-.centered {
-  text-align: center;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.table-container {
-  overflow-x: auto;
-  max-width: 900px;
-  margin: 0 auto;
-  margin-bottom: 2rem;
-}
-
-.note-form-group {
-  margin-top: 1.5rem;
-  grid-column: 1 / -1;
-  border-top: 1px dashed var(--primary-light);
-  padding-top: 1.2rem;
-}
-
-.note-textarea {
-  width: 100%;
-  min-height: 100px;
-  padding: 1rem;
-  border: 1px solid var(--primary-light);
-  border-radius: var(--border-radius);
-  font-family: inherit;
-  font-size: 1rem;
-  resize: vertical;
-  transition: all 0.3s ease;
-}
-
-.note-textarea:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.25);
-}
 
 /* 날짜 선택 필드 스타일 */
 input[type="date"] {
@@ -533,106 +154,8 @@ input[type="date"] {
   color: var(--text-color);
 }
 
-.visit-success {
-  background-color: #4CAF50;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  width: 100%;
-  max-width: 80px;
-  text-align: center;
-  animation: fadeIn 0.3s ease;
-}
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
 
-/* 수정/삭제 버튼 영역 */
-.customer-edit-actions {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px dashed var(--primary-light);
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.8rem;
-}
-
-.edit-button, .delete-button {
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.edit-button {
-  background-color: #f8f9fa;
-  color: var(--text-color);
-  border: 1px solid #dee2e6;
-}
-
-.edit-button:hover {
-  background-color: #f1f3f5;
-  border-color: #adb5bd;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.delete-button {
-  background-color: #fff5f5;
-  color: #e03131;
-  border: 1px solid #ffc9c9;
-}
-
-/* 삭제 확인 대화상자 */
-.delete-confirm {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.confirm-message {
-  font-size: 0.95rem;
-  color: #e03131;
-  font-weight: 500;
-}
-
-.confirm-buttons {
-  display: flex;
-  gap: 0.8rem;
-}
-
-.confirm-button {
-  padding: 6px 14px;
-  font-size: 0.85rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.confirm-yes {
-  background-color: #e03131;
-  color: white;
-  border: 1px solid #c92a2a;
-}
-
-.confirm-yes:hover {
-  background-color: #c92a2a;
-}
-
-.confirm-no {
-  background-color: #f8f9fa;
-  color: var(--text-color);
-  border: 1px solid #dee2e6;
-}
-
-.confirm-no:hover {
-  background-color: #e9ecef;
-}
 
 /* 방문 기록 검색 및 필터 */
 .search-filter-container {
@@ -937,20 +460,6 @@ input[type="date"] {
   }
 }
 
-/* 레코드 수 표시 스타일 */
-.records-count {
-  margin-bottom: 10px;
-  font-size: 0.9rem;
-  color: #666;
-  display: flex;
-  align-items: center;
-}
-
-.count-number {
-  font-weight: 600;
-  color: #333;
-  margin: 0 4px;
-}
 
 /* 모바일 최적화 */
 @media (max-width: 768px) {
@@ -972,26 +481,6 @@ input[type="date"] {
   margin-left: 2px;
 }
 
-/* 고객 이름 컨테이너 */
-.customer-name-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* 방문 횟수 배지 */
-.visit-count-badge {
-  background-color: #e8f3ff;
-  color: #4a6fa5;
-  font-size: 0.85rem;
-  padding: 3px 8px;
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  border: 1px solid #d0e1f9;
-}
 
 /* 라디오 버튼 스타일 */
 .radio-group {

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../configs/supabase';
 import Navbar from '../components/layout/Navbar.jsx';
 import EditCustomerForm from '../components/EditCustomerForm';
 import CustomerList from '../components/CustomerList';
 import CustomerRegister from '../components/CustomerRegister';
 import VisitHistory from '../components/VisitHistory';
-import '../styles/MainPage.css';
+import '../assets/styles/MainPage.css';
+import {supabase} from "../lib/supabase.js";
 
 function MainPage() {
     const [activeTab, setActiveTab] = useState('customers');
@@ -29,7 +29,6 @@ function MainPage() {
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredCustomers, setFilteredCustomers] = useState([]);
-    const [expandedCustomer, setExpandedCustomer] = useState(null);
     const [visitLoading, setVisitLoading] = useState(false);
     const [visitSuccess, setVisitSuccess] = useState(null);
     const [visitHistory, setVisitHistory] = useState([]);
@@ -41,69 +40,68 @@ function MainPage() {
         key: 'visit_date',
         direction: 'desc'
     });
-    const [editCustomerId, setEditCustomerId] = useState(null);
-    const [deleteConfirmId, setDeleteConfirmId] = useState(null);
     const [editingCustomer, setEditingCustomer] = useState(null);
     
     // 고객 데이터 가져오기
-    useEffect(() => {
-        const fetchCustomers = async () => {
-            try {
-                setLoading(true);
-                const { data, error } = await supabase
-                    .from('customer')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+    const fetchCustomers = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const { data, error } = await supabase
+                .from('customer')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) throw error;
+            
+            // 방문 횟수 데이터 가져오기
+            const { data: historyData, error: historyError } = await supabase
+                .from('history')
+                .select('customer_id');
                 
-                if (error) throw error;
-                
-                // 방문 횟수 데이터 가져오기
-                const { data: historyData, error: historyError } = await supabase
-                    .from('history')
-                    .select('customer_id');
-                    
-                if (historyError) throw historyError;
-                
-                // 고객별 방문 횟수 계산
-                const visitCount = {};
-                historyData.forEach(visit => {
-                    if (visit.customer_id in visitCount) {
-                        visitCount[visit.customer_id]++;
-                    } else {
-                        visitCount[visit.customer_id] = 1;
-                    }
-                });
+            if (historyError) throw historyError;
+            
+            // 고객별 방문 횟수 계산
+            const visitCount = {};
+            historyData.forEach(visit => {
+                if (visit.customer_id in visitCount) {
+                    visitCount[visit.customer_id]++;
+                } else {
+                    visitCount[visit.customer_id] = 1;
+                }
+            });
 
-                const customersWithVisitCount = data.map(customer => ({
-                    ...customer,
-                    visit_count: visitCount[customer.id] || 0
-                }));
-                
-                setCustomers(customersWithVisitCount || []);
-                setFilteredCustomers(customersWithVisitCount || []);
-            } catch (err) {
-                setError('고객 데이터를 불러오는 중 오류가 발생했습니다.');
-            } finally {
-                setLoading(false);
-            }
-        };
-        
+            const customersWithVisitCount = data.map(customer => ({
+                ...customer,
+                visit_count: visitCount[customer.id] || 0
+            }));
+            
+            setCustomers(customersWithVisitCount || []);
+            setFilteredCustomers(customersWithVisitCount || []);
+        } catch (err) {
+            setError('고객 데이터를 불러오는 중 오류가 발생했습니다.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchCustomers();
     }, []);
 
     // 검색 필터링
     useEffect(() => {
-        if (!searchTerm.trim()) {
-            setFilteredCustomers(customers);
-            return;
+        let filtered = customers;
+        
+        // 검색 필터링
+        if (searchTerm.trim()) {
+            const searchTermLower = searchTerm.toLowerCase();
+            filtered = customers.filter(customer => 
+                (customer.name && customer.name.toLowerCase().includes(searchTermLower)) || 
+                (customer.phone && customer.phone.includes(searchTerm))
+            );
         }
         
-        const searchTermLower = searchTerm.toLowerCase();
-        
-        const filtered = customers.filter(customer => 
-            (customer.name && customer.name.toLowerCase().includes(searchTermLower)) || 
-            (customer.phone && customer.phone.includes(searchTerm))
-        );
         setFilteredCustomers(filtered);
     }, [searchTerm, customers]);
 
@@ -130,78 +128,45 @@ function MainPage() {
     }, [activeTab]);
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            setLoading(true);
-
-            const { data: existingCustomers, error: checkError } = await supabase
-                .from('customer')
-                .select('id, phone')
-                .eq('phone', form.phone);
-                
-            if (checkError) throw checkError;
-
-            if (existingCustomers && existingCustomers.length > 0) {
-                alert('이미 등록된 전화번호입니다. 다른 전화번호를 입력해주세요.');
-                setLoading(false);
-                return;
+        const { name, value } = e.target;
+        
+        // Special handling for phone number - only allow digits and limit to 11 characters
+        if (name === 'phone') {
+            const digits = value.replace(/\D/g, ''); // Remove all non-digits
+            if (digits.length <= 11) { // Only allow up to 11 digits
+                setForm({ ...form, [name]: digits });
             }
-
-            const formData = { ...form };
-            if (!formData.birth.trim()) formData.birth = null;
-            if (!formData.first_visit.trim()) formData.first_visit = null;
-            
-            const { data, error } = await supabase
-                .from('customer')
-                .insert([formData]);
-                
-            if (error) throw error;
-
-            const { data: newCustomers, error: fetchError } = await supabase
-                .from('customer')
-                .select('*')
-                .order('created_at', { ascending: false });
-                
-            if (fetchError) throw fetchError;
-            
-            setCustomers(newCustomers || []);
-
-            setForm({
-                name: '',
-                phone: '',
-                top_size: '',
-                bottom_size: '',
-                color_prefer: '',
-                color_avoid: '',
-                drink_prefer: '',
-                body_type: '',
-                style_prefer: '',
-                birth: '',
-                first_visit: new Date().toISOString().split('T')[0],
-                note: '',
-                gender: 'NA'
-            });
-            
-            alert('고객 정보가 성공적으로 등록되었습니다!');
-            setActiveTab('customers');
-        } catch (err) {
-            alert('등록에 실패했습니다');
-        } finally {
-            setLoading(false);
+            return;
         }
+        
+        setForm({ ...form, [name]: value });
     };
 
-    const toggleExpand = (customerId) => {
-        if (expandedCustomer === customerId) {
-            setExpandedCustomer(null);
-        } else {
-            setExpandedCustomer(customerId);
-        }
+    // 폼 리셋 함수
+    const resetForm = () => {
+        setForm({
+            name: '',
+            phone: '',
+            top_size: '',
+            bottom_size: '',
+            color_prefer: '',
+            color_avoid: '',
+            drink_prefer: '',
+            body_type: '',
+            style_prefer: '',
+            birth: '',
+            first_visit: new Date().toISOString().split('T')[0],
+            note: '',
+            gender: 'NA'
+        });
     };
+
+    // 고객 등록 성공 콜백
+    const handleRegistrationSuccess = () => {
+        fetchCustomers(); // 데이터 새로고침
+        setActiveTab('customers'); // 고객 목록 탭으로 이동
+    };
+
 
     const handleVisit = async (customer) => {
         if (!customer.id) {
@@ -395,44 +360,9 @@ function MainPage() {
         }
     };
 
-    const handleDeleteConfirm = (e, customerId) => {
-        e.stopPropagation();
-        setDeleteConfirmId(customerId);
-    };
-
-    const handleDeleteCancel = (e) => {
-        e.stopPropagation();
-        setDeleteConfirmId(null);
-    };
-
-    const handleDelete = async (e, customerId) => {
-        e.stopPropagation();
-        try {
-            setLoading(true);
-
-            const { error } = await supabase
-                .from('customer')
-                .delete()
-                .eq('id', customerId);
-                
-            if (error) throw error;
-
-            const updatedCustomers = customers.filter(c => c.id !== customerId);
-            setCustomers(updatedCustomers);
-            setFilteredCustomers(updatedCustomers);
-            setDeleteConfirmId(null);
-            
-            alert('고객 정보가 삭제되었습니다.');
-        } catch (err) {
-            alert('삭제 실패');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <>
-            {/* Navbar 컴포넌트 사용 */}
             <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
             
             {/* 수정 폼 모달 */}
@@ -448,21 +378,16 @@ function MainPage() {
                 {/* 고객 관리 탭 */}
                 {activeTab === 'customers' && (
                     <CustomerList 
-                                searchTerm={searchTerm} 
-                                setSearchTerm={setSearchTerm} 
+                        searchTerm={searchTerm} 
+                        setSearchTerm={setSearchTerm} 
                         filteredCustomers={filteredCustomers}
                         loading={loading}
                         error={error}
-                        expandedCustomer={expandedCustomer}
-                        toggleExpand={toggleExpand}
                         visitSuccess={visitSuccess}
                         visitLoading={visitLoading}
                         handleVisit={handleVisit}
-                        deleteConfirmId={deleteConfirmId}
-                        handleDeleteConfirm={handleDeleteConfirm}
-                        handleDeleteCancel={handleDeleteCancel}
-                        handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        onCustomerUpdate={fetchCustomers}
                     />
                 )}
                 
@@ -471,8 +396,9 @@ function MainPage() {
                     <CustomerRegister 
                         form={form}
                         handleChange={handleChange}
-                        handleSubmit={handleSubmit}
                         loading={loading}
+                        onSuccess={handleRegistrationSuccess}
+                        onFormReset={resetForm}
                     />
                 )}
                 
