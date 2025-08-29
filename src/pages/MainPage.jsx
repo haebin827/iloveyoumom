@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import Navbar from '../components/layout/Navbar.jsx';
 import EditCustomerForm from '../components/EditCustomerForm';
 import CustomerList from '../components/CustomerList';
@@ -319,44 +320,30 @@ function MainPage() {
         setEditingCustomer(customer);
     };
 
-    const handleCancelEdit = () => {
-        setEditingCustomer(null);
-    };
-
-    const handleSaveEdit = async (updatedCustomer) => {
-        try {
-            setLoading(true);
-
-            const { ...customerDataToUpdate } = updatedCustomer;
-
-            const { data, error } = await supabase
-                .from('customer')
-                .update(customerDataToUpdate)
-                .eq('id', updatedCustomer.id)
-                .select();
-                
-            if (error) throw error;
-
-            const updatedCustomers = customers.map(c => 
-                c.id === updatedCustomer.id ? { ...updatedCustomer } : c
-            );
-            
-            setCustomers(updatedCustomers);
-            setFilteredCustomers(
-                searchTerm 
-                ? updatedCustomers.filter(customer => 
-                    (customer.name && customer.name.toLowerCase().includes(searchTerm.toLowerCase())) || 
-                    (customer.phone && customer.phone.includes(searchTerm))
-                  )
-                : updatedCustomers
-            );
-            
+    const handleEditComplete = ({ type, data, success }) => {
+        if (type === 'cancel') {
             setEditingCustomer(null);
-            alert('고객 정보가 성공적으로 업데이트되었습니다.');
-        } catch (err) {
-            alert('업데이트 실패');
-        } finally {
-            setLoading(false);
+        } else if (type === 'save') {
+            if (success) {
+                const updatedCustomers = customers.map(c => 
+                    c.id === data.id ? { ...data } : c
+                );
+                
+                setCustomers(updatedCustomers);
+                setFilteredCustomers(
+                    searchTerm 
+                    ? updatedCustomers.filter(customer => 
+                        (customer.name && customer.name.toLowerCase().includes(searchTerm.toLowerCase())) || 
+                        (customer.phone && customer.phone.includes(searchTerm))
+                      )
+                    : updatedCustomers
+                );
+                
+                setEditingCustomer(null);
+                toast.success('고객 정보가 성공적으로 업데이트되었습니다.');
+            } else {
+                toast.error('고객 정보 업데이트에 실패하였습니다.');
+            }
         }
     };
 
@@ -369,8 +356,7 @@ function MainPage() {
             {editingCustomer && (
                 <EditCustomerForm 
                     customer={editingCustomer}
-                    onSave={handleSaveEdit}
-                    onCancel={handleCancelEdit}
+                    onComplete={handleEditComplete}
                 />
             )}
             
