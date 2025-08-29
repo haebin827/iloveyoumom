@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import SearchBar from './SearchBar';
 import '../assets/styles/CustomerList.css';
+import {FaArrowDown, FaArrowUp} from "react-icons/fa";
 
 function CustomerList({ 
   searchTerm,
   setSearchTerm, 
   filteredCustomers,
+  setFilteredCustomers,
+  customers,
+  setCustomers,
   loading,
   error,
   visitSuccess,
   visitLoading,
   handleVisit,
-  handleEdit,
-  onCustomerUpdate
+  handleEdit
 }) {
   const [expandedCustomer, setExpandedCustomer] = useState(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
-  const [sortBy, setSortBy] = useState('created_at');
+  const [sortBy, setSortBy] = useState('id');
   const [sortDirection, setSortDirection] = useState('desc');
 
   const calculateKoreanAge = (birthDate) => {
@@ -100,12 +104,17 @@ function CustomerList({
         
       if (error) throw error;
 
+      const updatedCustomers = customers.filter(customer => customer.id !== customerId);
+      setCustomers(updatedCustomers);
+
+      const updatedFilteredCustomers = filteredCustomers.filter(customer => customer.id !== customerId);
+      setFilteredCustomers(updatedFilteredCustomers);
+
       setDeleteConfirmId(null);
-      onCustomerUpdate(); // 부모 컴포넌트에 업데이트 알림
-      
-      alert('고객 정보가 삭제되었습니다.');
+      toast.success('고객 정보가 성공적으로 삭제되었습니다.');
     } catch (err) {
-      alert('삭제 실패');
+      toast.error('고객 삭제에 실패했습니다.');
+      setDeleteConfirmId(null);
     }
   };
 
@@ -122,13 +131,11 @@ function CustomerList({
     return [...customerList].sort((a, b) => {
       let aValue = a[sortField];
       let bValue = b[sortField];
-      
-      // Handle null/undefined values
+
       if (!aValue && !bValue) return 0;
       if (!aValue) return direction === 'asc' ? 1 : -1;
       if (!bValue) return direction === 'asc' ? -1 : 1;
-      
-      // Convert to string for name comparison
+
       if (sortField === 'name') {
         aValue = aValue.toLowerCase();
         bValue = bValue.toLowerCase();
@@ -138,6 +145,12 @@ function CustomerList({
       if (sortField === 'created_at' || sortField === 'first_visit') {
         aValue = new Date(aValue);
         bValue = new Date(bValue);
+      }
+
+      // Number comparison for id and visit_count
+      if (sortField === 'id' || sortField === 'visit_count') {
+        aValue = Number(aValue);
+        bValue = Number(bValue);
       }
       
       if (aValue < bValue) {
@@ -150,7 +163,6 @@ function CustomerList({
     });
   };
 
-  // 정렬된 고객 목록 계산
   const sortedCustomers = sortCustomers(filteredCustomers, sortBy, sortDirection);
 
   return (
@@ -172,7 +184,7 @@ function CustomerList({
             value={sortBy}
             onChange={handleSortChange}
           >
-            <option value="created_at">등록순</option>
+            <option value="id">등록순</option>
             <option value="name">이름순</option>
             <option value="first_visit">방문날짜순</option>
           </select>
@@ -181,7 +193,7 @@ function CustomerList({
             onClick={toggleSortDirection}
             title={sortDirection === 'asc' ? '오름차순' : '내림차순'}
           >
-            {sortDirection === 'asc' ? '↑' : '↓'}
+            {sortDirection === 'asc' ? <FaArrowUp /> : <FaArrowDown />}
           </button>
         </div>
       </div>
@@ -238,7 +250,7 @@ function CustomerList({
                         }}
                         disabled={visitLoading}
                       >
-                        구매
+                        방문
                       </button>
                     )}
                     <span className="expand-icon">
