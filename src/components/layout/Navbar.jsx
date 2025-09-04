@@ -91,7 +91,7 @@ function Navbar({ activeTab, setActiveTab }) {
                             active={activeTab === 'visits'} 
                             onClick={() => setActiveTab('visits')}
                         >
-                            방문 기록
+                            구매 기록
                         </TabButton>
                     </div>
                 </div>
