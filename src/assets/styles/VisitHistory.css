@@ -381,3 +381,91 @@
     padding: 0 5px;
   }
 }
+
+/* Action buttons styles */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-btn, .delete-btn {
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-size: 15px;
+  box-shadow: none;
+  outline: none;
+  padding: 0;
+  line-height: 1;
+}
+
+.edit-btn {
+  color: #4a6fa5;
+}
+
+.edit-btn:hover {
+  color: #2d5a8c;
+}
+
+.delete-btn {
+  color: #e03131;
+}
+
+.delete-btn:hover {
+  color: #c92a2a;
+}
+
+/* Delete confirmation styles */
+.delete-confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+}
+
+.confirm-message {
+  font-size: 0.75rem;
+  color: #e03131;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.confirm-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.confirm-button {
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid;
+}
+
+.confirm-yes {
+  background-color: #e03131;
+  color: white;
+  border-color: #c92a2a;
+}
+
+.confirm-yes:hover {
+  background-color: #c92a2a;
+}
+
+.confirm-no {
+  background-color: #f8f9fa;
+  color: #333;
+  border-color: #dee2e6;
+}
+
+.confirm-no:hover {
+  background-color: #e9ecef;
+}

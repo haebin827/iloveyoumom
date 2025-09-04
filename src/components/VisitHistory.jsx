@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
+import {supabase} from "../lib/supabase.js";
+import PurchaseEditModal from './PurchaseEditModal';
 import '../assets/styles/VisitHistory.css';
+import toast from 'react-hot-toast';
 
 function VisitHistory({ 
   historySearchTerm, 
@@ -7,6 +11,9 @@ function VisitHistory({
   historyLoading, 
   historyError, 
   filteredHistory, 
+  setFilteredHistory,
+  visitHistory,
+  setVisitHistory,
   sortConfig, 
   requestSort,
   getSortedHistory 
@@ -15,6 +22,8 @@ function VisitHistory({
   const [endDateFilter, setEndDateFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [editingVisit, setEditingVisit] = useState(null);
 
   useEffect(() => {
     setHistorySearchTerm('');
@@ -148,6 +157,59 @@ function VisitHistory({
     setEndDateFilter('');
   };
 
+  const handleDelete = async (visitId) => {
+    try {
+      const { error } = await supabase
+        .from('history')
+        .delete()
+        .eq('id', visitId);
+        
+      if (error) throw error;
+
+      const updatedVisitHistory = visitHistory.filter(visit => visit.id !== visitId);
+      const updatedFilteredHistory = filteredHistory.filter(visit => visit.id !== visitId);
+      
+      setVisitHistory(updatedVisitHistory);
+      setFilteredHistory(updatedFilteredHistory);
+      setDeleteConfirmId(null);
+
+      toast.success('구매 기록이 성공적으로 삭제되었습니다.')
+    } catch (err) {
+      console.error('구매 기록 삭제 오류:', err);
+    }
+  };
+
+  const handleEditComplete = async (visitId, updatedData) => {
+    try {
+      const { error } = await supabase
+        .from('history')
+        .update(updatedData)
+        .eq('id', visitId);
+        
+      if (error) throw error;
+
+      const updatedVisitHistory = visitHistory.map(visit => 
+        visit.id === visitId ? { ...visit, ...updatedData } : visit
+      );
+      const updatedFilteredHistory = filteredHistory.map(visit => 
+        visit.id === visitId ? { ...visit, ...updatedData } : visit
+      );
+      
+      setVisitHistory(updatedVisitHistory);
+      setFilteredHistory(updatedFilteredHistory);
+      setEditingVisit(null);
+      toast.success('구매 기록이 성공적으로 수정되었습니다.')
+    } catch (err) {
+      console.error('구매 기록 수정 오류:', err);
+      throw err;
+    }
+  };
+
+  const handleEditClose = () => {
+    setEditingVisit(null);
+  };
+
+
   // 필터나 검색어가 변경되면 페이지를 1로 리셋
   useEffect(() => {
     setCurrentPage(1);
@@ -155,7 +217,7 @@ function VisitHistory({
 
   return (
     <div>
-      <h2 className="card-title centered">방문 기록</h2>
+      <h2 className="card-title centered">구매 기록</h2>
 
       {/* 검색창 및 날짜필터 */}
       <div className="filter-controls">
@@ -279,7 +341,7 @@ function VisitHistory({
         ) : (
           <>
             <div className="records-count">
-              총 <span className="count-number">{totalRecords}</span>개의 방문 기록
+              총 <span className="count-number">{totalRecords}</span>개의 구매 기록
             </div>
             
             <table className="visit-table">
@@ -299,16 +361,7 @@ function VisitHistory({
                         (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ' ⇅'}
                     </span>
                   </th>
-                  <th 
-                    className={`sortable ${sortConfig.key === 'visit_time' ? 'sorted-' + sortConfig.direction : ''}`}
-                    onClick={() => requestSort('visit_time')}
-                  >
-                    방문 시간
-                    <span className="sort-icon">
-                      {sortConfig.key === 'visit_time' ? 
-                        (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ' ⇅'}
-                    </span>
-                  </th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -319,7 +372,44 @@ function VisitHistory({
                     <td>{visit.customer_phone}</td>
                     <td>{visit.product}</td>
                     <td>{visit.visit_date}</td>
-                    <td>{visit.visit_time}</td>
+                    <td>
+                      {deleteConfirmId === visit.id ? (
+                        <div className="delete-confirm">
+                          <span className="confirm-message">정말 삭제하시겠습니까?</span>
+                          <div className="confirm-buttons">
+                            <button 
+                              className="confirm-button confirm-yes"
+                              onClick={() => handleDelete(visit.id)}
+                            >
+                              예
+                            </button>
+                            <button 
+                              className="confirm-button confirm-no"
+                              onClick={() => setDeleteConfirmId(null)}
+                            >
+                              아니오
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="action-buttons">
+                          <button 
+                            className="edit-btn"
+                            onClick={() => setEditingVisit(visit)}
+                            title="수정"
+                          >
+                            <FiEdit2 />
+                          </button>
+                          <button 
+                            className="delete-btn"
+                            onClick={() => setDeleteConfirmId(visit.id)}
+                            title="삭제"
+                          >
+                            <FiTrash2 />
+                          </button>
+                        </div>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -368,6 +458,15 @@ function VisitHistory({
           </>
         )}
       </div>
+      
+      {/* Edit Modal */}
+      {editingVisit && (
+        <PurchaseEditModal
+          onClose={handleEditClose}
+          onComplete={handleEditComplete}
+          visitData={editingVisit}
+        />
+      )}
     </div>
   );
 }
