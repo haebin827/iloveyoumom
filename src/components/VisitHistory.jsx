@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import {supabase} from "../lib/supabase.js";
 import PurchaseEditModal from './PurchaseEditModal';
+import Pagination from './Pagination';
 import '../assets/styles/VisitHistory.css';
 import toast from 'react-hot-toast';
 
@@ -416,45 +417,13 @@ function VisitHistory({
             </table>
             
             {/* 페이지네이션 */}
-            {totalPages > 1 && (
-              <div className="pagination">
-                <button 
-                  className="pagination-button" 
-                  onClick={() => handlePageChange(1)}
-                  disabled={currentPage === 1}
-                >
-                  &laquo;
-                </button>
-                
-                <button 
-                  className="pagination-button" 
-                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                  disabled={currentPage === 1}
-                >
-                  &lt;
-                </button>
-                
-                <div className="pagination-info">
-                  {currentPage} / {totalPages}
-                </div>
-                
-                <button 
-                  className="pagination-button" 
-                  onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                  disabled={currentPage === totalPages}
-                >
-                  &gt;
-                </button>
-                
-                <button 
-                  className="pagination-button" 
-                  onClick={() => handlePageChange(totalPages)}
-                  disabled={currentPage === totalPages}
-                >
-                  &raquo;
-                </button>
-              </div>
-            )}
+            <Pagination
+              currentPage={currentPage}
+              totalItems={totalRecords}
+              itemsPerPage={recordsPerPage}
+              onPageChange={handlePageChange}
+              showInfo={true}
+            />
           </>
         )}
       </div>
