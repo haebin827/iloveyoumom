@@ -166,11 +166,22 @@ function MainPage() {
 
     // 고객 등록 성공 콜백
     const handleRegistrationSuccess = () => {
-        fetchCustomers()
         setActiveTab('customers'); // 고객 목록 탭으로 이동
     };
 
-    const handleVisit = async (customer) => {
+    const handleCustomerAdded = (newCustomer) => {
+        const updatedCustomers = [newCustomer, ...customers];
+        setCustomers(updatedCustomers);
+
+        const searchTermLower = searchTerm.toLowerCase();
+        if (!searchTerm.trim() || 
+            (newCustomer.name && newCustomer.name.toLowerCase().includes(searchTermLower)) || 
+            (newCustomer.phone && newCustomer.phone.includes(searchTerm))) {
+            setFilteredCustomers([newCustomer, ...filteredCustomers]);
+        }
+    };
+
+    const handleVisit = async (customer, purchaseData) => {
         if (!customer.id) {
             alert('고객 ID가 없습니다. 고객 정보를 확인해주세요.');
             return;
@@ -186,13 +197,18 @@ function MainPage() {
 
             const today = new Date().toISOString().split('T')[0];
 
+            const productString = purchaseData ? 
+                `${purchaseData.product} (수량: ${purchaseData.quantity})` : 
+                null;
+
             const { data, error } = await supabase
                 .from('history')
                 .insert([
                     { 
                         user_id: session.user.id,
                         customer_id: customer.id, 
-                        visit_date: today
+                        visit_date: today,
+                        product: productString
                     }
                 ]);
                 
@@ -297,6 +313,7 @@ function MainPage() {
                     customer_id,
                     visit_date,
                     visit_time,
+                    product,
                     customer:customer_id (name, phone)
                 `)
                 .order('visit_date', { ascending: false })
@@ -310,7 +327,8 @@ function MainPage() {
                 customer_name: item.customer ? item.customer.name : '-',
                 customer_phone: item.customer ? item.customer.phone : '-',
                 visit_date: item.visit_date,
-                visit_time: item.visit_time ? new Date(item.visit_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'
+                visit_time: item.visit_time ? new Date(item.visit_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-',
+                product: item.product || '-'
             }));
 
             setVisitHistory(formattedData);
@@ -394,6 +412,7 @@ function MainPage() {
                         loading={loading}
                         onSuccess={handleRegistrationSuccess}
                         onFormReset={resetForm}
+                        onCustomerAdded={handleCustomerAdded}
                     />
                 )}
                 

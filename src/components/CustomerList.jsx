@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import SearchBar from './SearchBar';
 import Pagination from './Pagination';
+import PurchaseModal from './PurchaseModal';
 import '../assets/styles/CustomerList.css';
 import {FaArrowDown, FaArrowUp} from "react-icons/fa";
 
@@ -25,6 +26,8 @@ function CustomerList({
   const [sortDirection, setSortDirection] = useState('desc');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   const calculateKoreanAge = (birthDate) => {
     if (!birthDate || birthDate === '-') return null;
@@ -180,6 +183,20 @@ function CustomerList({
     setExpandedCustomer(null); // Close any expanded customer when changing page
   };
 
+  const handlePurchaseComplete = async (purchaseData) => {
+    if (!selectedCustomer) return;
+    
+    await handleVisit(selectedCustomer, purchaseData);
+    setShowPurchaseModal(false);
+    setSelectedCustomer(null);
+    toast.success(`${selectedCustomer.name}님의 구매 기록이 추가되었습니다.`);
+  };
+
+  const handlePurchaseClose = () => {
+    setShowPurchaseModal(false);
+    setSelectedCustomer(null);
+  };
+
   return (
     <div>
       <h2 className="card-title centered">고객 관리</h2>
@@ -214,7 +231,7 @@ function CustomerList({
       </div>
       
       {/* 고객 목록 테이블 */}
-      <div className="table-container">
+      <div className="customer-list-table-container">
         {loading ? (
           <div className="loading-container">
             <p>데이터를 불러오는 중...</p>
@@ -247,7 +264,7 @@ function CustomerList({
                       <span className="customer-name">{renderNameWithAge(customer)}</span>
                       {customer.visit_count > 0 && (
                         <span className="visit-count-badge">
-                          방문 {customer.visit_count}회
+                          구매 {customer.visit_count}회
                         </span>
                       )}
                     </div>
@@ -255,17 +272,18 @@ function CustomerList({
                   </div>
                   <div className="customer-actions">
                     {visitSuccess === customer.id ? (
-                      <span className="visit-success">✓ 완료</span>
+                      <span className="visit-success">완료</span>
                     ) : (
                       <button 
                         className="visit-button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleVisit(customer);
+                          setSelectedCustomer(customer);
+                          setShowPurchaseModal(true);
                         }}
                         disabled={visitLoading}
                       >
-                        방문
+                        구매
                       </button>
                     )}
                     <span className="expand-icon">
@@ -356,6 +374,15 @@ function CustomerList({
           </>
         )}
       </div>
+      
+      {/* Purchase Modal */}
+      {showPurchaseModal && selectedCustomer && (
+        <PurchaseModal
+          onClose={handlePurchaseClose}
+          onComplete={handlePurchaseComplete}
+          customerName={selectedCustomer.name}
+        />
+      )}
     </div>
   );
 }

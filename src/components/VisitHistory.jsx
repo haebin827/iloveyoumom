@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/MainPage.css';
+import '../assets/styles/VisitHistory.css';
 
 function VisitHistory({ 
   historySearchTerm, 
@@ -82,7 +82,7 @@ function VisitHistory({
   const getThisWeekStart = () => {
     const today = new Date();
     const day = today.getDay();
-    const diff = today.getDate() - day + (day === 0 ? -6 : 1);일
+    const diff = today.getDate() - day + (day === 0 ? -6 : 1);
     const monday = new Date(today);
     monday.setDate(diff);
     return getFormattedDate(monday);
@@ -288,6 +288,7 @@ function VisitHistory({
                   <th>No</th>
                   <th>고객명</th>
                   <th>전화번호</th>
+                  <th>구매 상품</th>
                   <th 
                     className={`sortable ${sortConfig.key === 'visit_date' ? 'sorted-' + sortConfig.direction : ''}`}
                     onClick={() => requestSort('visit_date')}
@@ -316,6 +317,7 @@ function VisitHistory({
                     <td>{totalRecords - ((currentPage - 1) * recordsPerPage) - index}</td>
                     <td>{visit.customer_name}</td>
                     <td>{visit.customer_phone}</td>
+                    <td>{visit.product}</td>
                     <td>{visit.visit_date}</td>
                     <td>{visit.visit_time}</td>
                   </tr>

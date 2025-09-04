@@ -1,0 +1,383 @@
+/* VisitHistory 컴포넌트 전용 스타일 */
+
+.table-container {
+  overflow-x: auto;
+  max-width: 800px;
+  margin: 0 auto;
+  margin-bottom: 1.5rem;
+}
+/* 필터 컨트롤 */
+.filter-controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.filter-control-item {
+  flex: 1;
+  position: relative;
+}
+
+/* 검색 및 날짜 입력 컨테이너 */
+
+.search-input-container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.search-input-container,
+.date-input-container {
+  position: relative;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.search-input-container:focus-within,
+.date-input-container:focus-within {
+  border-color: #aaa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.search-icon,
+.date-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  color: #aaa;
+  height: 100%;
+}
+
+.filter-input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  padding: 0;
+  font-size: 0.95rem;
+  color: #333;
+  background: transparent;
+  outline: none;
+  padding-right: 12px;
+}
+
+.filter-input::placeholder {
+  color: #aaa;
+}
+
+.filter-clear-button {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  padding: 0 12px;
+  font-size: 14px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: 0 8px 8px 0;
+}
+
+.filter-clear-button:hover {
+  color: #666;
+  background-color: #f5f5f5;
+}
+
+/* 날짜 범위 컨테이너 */
+.date-range-container {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 6px 16px;
+  margin-bottom: 12px;
+  width: 100%;
+  position: relative;
+}
+
+.date-range-separator {
+  margin: 0 10px;
+  color: #666;
+  font-weight: 500;
+}
+
+.date-label {
+  font-size: 0.8rem;
+  margin-right: 8px;
+  color: #555;
+  white-space: nowrap;
+  min-width: 48px;
+}
+
+.date-input-container .filter-input {
+  flex: 1;
+  height: 30px;
+  width: 100%;
+  position: relative;
+  padding: 0 8px;
+}
+
+/* 빠른 날짜 필터 버튼 */
+.quick-filter-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.quick-filter-button {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #333;
+}
+
+.quick-filter-button:hover {
+  background-color: #eee;
+  border-color: #ccc;
+}
+
+.quick-filter-button.active {
+  background-color: #e9f0fd;
+  border-color: #c4d7f5;
+  color: #4285f4;
+  font-weight: 500;
+}
+
+/* 방문 기록 테이블 스타일 */
+.visit-table {
+  width: 100%;
+  min-width: 550px;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 0.85rem;
+  text-align: center;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  border: 1px solid #ccc;
+}
+
+.visit-table th {
+  background-color: #f5f5f5;
+  color: #333;
+  text-align: center;
+  padding: 10px 15px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.visit-table td {
+  padding: 8px 15px;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.85rem;
+}
+
+.visit-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* No 컬럼 스타일 */
+.visit-table th:first-child,
+.visit-table td:first-child {
+  width: 60px;
+  text-align: center;
+}
+
+/* 정렬 가능한 헤더 스타일 */
+.sortable {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.sortable:hover {
+  background-color: rgba(255, 215, 0, 0.15);
+  text-decoration: underline;
+}
+
+.sort-icon {
+  margin-left: 0.5rem;
+  display: inline-block;
+  font-weight: bold;
+}
+
+.sorted-asc, .sorted-desc {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 3rem;
+  gap: 5px;
+}
+
+.pagination-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ddd;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  border-color: #ccc;
+}
+
+.pagination-button:disabled {
+  background-color: #f9f9f9;
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  padding: 0 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .filter-controls {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .search-input-container,
+  .date-input-container {
+    height: 42px;
+  }
+  
+  .filter-input {
+    font-size: 0.9rem;
+  }
+  
+  .quick-filter-buttons {
+    gap: 6px;
+    margin-top: 6px;
+  }
+  
+  .quick-filter-button {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .visit-table th,
+  .visit-table td {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .sort-icon {
+    margin-left: 0.3rem;
+  }
+  
+  .pagination-button {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  
+  .pagination-info {
+    font-size: 12px;
+  }
+  
+  .date-range-container {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 16px;
+  }
+  
+  .date-range-separator {
+    display: none;
+  }
+  
+  .date-input-container {
+    width: 100%;
+    background-color: #fff;
+    padding: 0;
+    height: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-controls {
+    gap: 10px;
+  }
+  
+  .search-input-container,
+  .date-input-container {
+    height: 40px;
+  }
+  
+  .search-icon,
+  .date-icon {
+    padding: 0 10px;
+  }
+  
+  .filter-input {
+    font-size: 0.85rem;
+  }
+  
+  .filter-clear-button {
+    padding: 0 10px;
+  }
+  
+  .quick-filter-buttons {
+    gap: 5px;
+    margin-top: 5px;
+  }
+  
+  .quick-filter-button {
+    padding: 3px 6px;
+    font-size: 0.7rem;
+  }
+  
+  .visit-table th,
+  .visit-table td {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .sort-icon {
+    margin-left: 0.2rem;
+  }
+  
+  .pagination-button {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+  }
+  
+  .pagination-info {
+    font-size: 10px;
+    padding: 0 5px;
+  }
+}
