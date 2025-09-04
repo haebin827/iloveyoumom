@@ -25,6 +25,18 @@ function RegisterPage() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+
+        if (name === 'phone') {
+            const digits = value.replace(/\D/g, ''); // Remove all non-digits
+            if (digits.length <= 11) { // Only allow up to 11 digits
+                setFormData(prevState => ({
+                    ...prevState,
+                    [name]: digits
+                }));
+            }
+            return;
+        }
+        
         setFormData(prevState => ({
             ...prevState,
             [name]: value
@@ -70,6 +82,14 @@ function RegisterPage() {
 
         if (!formData.phone.trim()) {
             setError('전화번호를 입력해주세요.');
+            setLoading(false);
+            return;
+        }
+
+        // Phone number validation: must be exactly 11 digits
+        const phoneDigits = formData.phone.replace(/\D/g, '');
+        if (phoneDigits.length !== 11) {
+            setError('전화번호는 11자리 숫자여야 합니다.');
             setLoading(false);
             return;
         }
