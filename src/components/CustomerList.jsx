@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import SearchBar from './SearchBar';
+import Pagination from './Pagination';
 import '../assets/styles/CustomerList.css';
 import {FaArrowDown, FaArrowUp} from "react-icons/fa";
 
@@ -22,6 +23,8 @@ function CustomerList({
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [sortBy, setSortBy] = useState('id');
   const [sortDirection, setSortDirection] = useState('desc');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   const calculateKoreanAge = (birthDate) => {
     if (!birthDate || birthDate === '-') return null;
@@ -120,10 +123,12 @@ function CustomerList({
 
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
+    setCurrentPage(1); // Reset to first page when sorting changes
   };
 
   const toggleSortDirection = () => {
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    setCurrentPage(1); // Reset to first page when sort direction changes
   };
 
   // 정렬 함수
@@ -164,6 +169,16 @@ function CustomerList({
   };
 
   const sortedCustomers = sortCustomers(filteredCustomers, sortBy, sortDirection);
+
+  const totalItems = sortedCustomers.length;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedCustomers = sortedCustomers.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setExpandedCustomer(null); // Close any expanded customer when changing page
+  };
 
   return (
     <div>
@@ -208,7 +223,7 @@ function CustomerList({
           <div className="error-container">
             <p>{error}</p>
           </div>
-        ) : sortedCustomers.length === 0 ? (
+        ) : totalItems === 0 ? (
           <div className="empty-container">
             <p>
               {searchTerm ? '검색 결과가 없습니다.' : '등록된 고객이 없습니다.'}
@@ -217,11 +232,11 @@ function CustomerList({
         ) : (
           <>
             <div className="records-count">
-              총 <span className="count-number">{sortedCustomers.length}</span>명의 고객
+              총 <span className="count-number">{totalItems}</span>명의 고객
             </div>
             
           <ul className="customer-list">
-            {sortedCustomers.map((customer, index) => (
+            {paginatedCustomers.map((customer, index) => (
               <li key={customer.id || index} className="customer-item">
                 <div 
                   className="customer-header" 
@@ -329,6 +344,15 @@ function CustomerList({
               </li>
             ))}
           </ul>
+          
+          <Pagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+            showInfo={true}
+            maxVisiblePages={5}
+          />
           </>
         )}
       </div>
