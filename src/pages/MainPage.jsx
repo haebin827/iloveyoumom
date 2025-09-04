@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { useAuth } from '../providers/AuthProvider.jsx';
 import Navbar from '../components/layout/Navbar.jsx';
 import EditCustomerForm from '../components/EditCustomerForm';
 import CustomerList from '../components/CustomerList';
@@ -9,6 +10,7 @@ import '../assets/styles/MainPage.css';
 import {supabase} from "../lib/supabase.js";
 
 function MainPage() {
+    const { session } = useAuth();
     const [activeTab, setActiveTab] = useState('customers');
     const [form, setForm] = useState({
         name: '',
@@ -164,14 +166,18 @@ function MainPage() {
 
     // 고객 등록 성공 콜백
     const handleRegistrationSuccess = () => {
-        fetchCustomers(); // 데이터 새로고침
+        fetchCustomers()
         setActiveTab('customers'); // 고객 목록 탭으로 이동
     };
-
 
     const handleVisit = async (customer) => {
         if (!customer.id) {
             alert('고객 ID가 없습니다. 고객 정보를 확인해주세요.');
+            return;
+        }
+        
+        if (!session?.user?.id) {
+            alert('로그인이 필요합니다.');
             return;
         }
         
@@ -184,6 +190,7 @@ function MainPage() {
                 .from('history')
                 .insert([
                     { 
+                        user_id: session.user.id,
                         customer_id: customer.id, 
                         visit_date: today
                     }
@@ -367,13 +374,15 @@ function MainPage() {
                         searchTerm={searchTerm} 
                         setSearchTerm={setSearchTerm} 
                         filteredCustomers={filteredCustomers}
+                        setFilteredCustomers={setFilteredCustomers}
+                        customers={customers}
+                        setCustomers={setCustomers}
                         loading={loading}
                         error={error}
                         visitSuccess={visitSuccess}
                         visitLoading={visitLoading}
                         handleVisit={handleVisit}
                         handleEdit={handleEdit}
-                        onCustomerUpdate={fetchCustomers}
                     />
                 )}
                 
