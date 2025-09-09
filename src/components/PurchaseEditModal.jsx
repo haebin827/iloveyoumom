@@ -2,19 +2,8 @@ import React, { useState } from 'react';
 import '../assets/styles/PurchaseEditModal.css';
 
 function PurchaseEditModal({ onClose, onComplete, visitData }) {
-  const [product, setProduct] = useState(() => {
-    if (visitData.product) {
-      return visitData.product.replace(/ \(수량: \d+\)$/, '');
-    }
-    return '';
-  });
-  const [quantity, setQuantity] = useState(() => {
-    if (visitData.product) {
-      const match = visitData.product.match(/\(수량: (\d+)\)$/);
-      return match ? parseInt(match[1]) : 1;
-    }
-    return 1;
-  });
+  const [product, setProduct] = useState(visitData.product);
+  const [quantity, setQuantity] = useState(visitData.quantity);
   const [visitDate, setVisitDate] = useState(visitData.visit_date || '');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -42,7 +31,7 @@ function PurchaseEditModal({ onClose, onComplete, visitData }) {
     
     try {
       const updatedData = {
-        product: `${product.trim()} (수량: ${quantity})`,
+        product: product.trim(),
         visit_date: visitDate
       };
       
@@ -70,7 +59,7 @@ function PurchaseEditModal({ onClose, onComplete, visitData }) {
           
           <div className="form-group">
             <label>전화번호</label>
-            <div className="readonly-field">{visitData.customer_phone}</div>
+            <div className="readonly-field">{visitData.customer_phone ?? '-'}</div>
           </div>
           
           <div className="form-group">

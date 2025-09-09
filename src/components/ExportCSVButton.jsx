@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { saveAs } from 'file-saver';
 import Papa from 'papaparse';
-import { supabase } from './supabase';
+import { supabase } from '../lib/supabase.js';
 
 export default function ExportCSVButton({ startDate, endDate }) {
     const [isExporting, setIsExporting] = useState(false);
@@ -16,9 +16,9 @@ export default function ExportCSVButton({ startDate, endDate }) {
                     customer_id,
                     visit_date,
                     product,
-                    status,
                     customer:customer_id (name, phone)
                 `)
+                .eq('status', 1)
                 .order('visit_date', { ascending: false });
 
             if (startDate && endDate) {
@@ -50,7 +50,6 @@ export default function ExportCSVButton({ startDate, endDate }) {
                 고객전화번호: item.customer?.phone || '알 수 없음',
                 방문날짜: item.visit_date,
                 구매상품: item.product || '-',
-                상태: item.status === 1 ? '활성' : '삭제됨'
             }));
 
             // JSON → CSV

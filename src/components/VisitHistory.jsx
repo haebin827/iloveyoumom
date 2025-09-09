@@ -379,7 +379,7 @@ function VisitHistory({
                   <tr key={visit.id}>
                     <td>{totalRecords - ((currentPage - 1) * recordsPerPage) - index}</td>
                     <td>{visit.customer_name}</td>
-                    <td>{visit.customer_phone}</td>
+                    <td>{visit.customer_phone ?? '-'}</td>
                     <td>{visit.product}</td>
                     <td>{visit.quantity}</td>
                     <td>{visit.visit_date}</td>
