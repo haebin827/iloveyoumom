@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import {supabase} from "../lib/supabase.js";
 import PurchaseEditModal from './PurchaseEditModal';
-import Pagination from './Pagination';
+import Pagination from './commons/Pagination.jsx';
+import CSVModal from './CSVModal';
 import '../assets/styles/VisitHistory.css';
 import toast from 'react-hot-toast';
 
@@ -25,6 +26,7 @@ function VisitHistory({
   const recordsPerPage = 10;
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [editingVisit, setEditingVisit] = useState(null);
+  const [showCSVModal, setShowCSVModal] = useState(false);
 
   useEffect(() => {
     setHistorySearchTerm('');
@@ -162,7 +164,7 @@ function VisitHistory({
     try {
       const { error } = await supabase
         .from('history')
-        .delete()
+        .update({ status: 0 })
         .eq('id', visitId);
         
       if (error) throw error;
@@ -315,6 +317,12 @@ function VisitHistory({
             >
               저번주
             </button>
+            <button
+              className="excel-download-button"
+              onClick={() => setShowCSVModal(true)}
+            >
+              엑셀로 다운로드
+            </button>
           </div>
         </div>
       </div>
@@ -347,23 +355,24 @@ function VisitHistory({
             
             <table className="visit-table">
               <thead>
-                <tr>
-                  <th>No</th>
-                  <th>고객명</th>
-                  <th>전화번호</th>
-                  <th>구매 상품</th>
-                  <th 
+              <tr>
+                <th>No</th>
+                <th>고객명</th>
+                <th>전화번호</th>
+                <th>구매 상품</th>
+                <th>수량</th>
+                <th
                     className={`sortable ${sortConfig.key === 'visit_date' ? 'sorted-' + sortConfig.direction : ''}`}
                     onClick={() => requestSort('visit_date')}
-                  >
-                    방문 날짜 
-                    <span className="sort-icon">
-                      {sortConfig.key === 'visit_date' ? 
-                        (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ' ⇅'}
+                >
+                  방문 날짜
+                  <span className="sort-icon">
+                      {sortConfig.key === 'visit_date' ?
+                          (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ' ⇅'}
                     </span>
-                  </th>
-                  <th></th>
-                </tr>
+                </th>
+                <th></th>
+              </tr>
               </thead>
               <tbody>
                 {getCurrentPageData().map((visit, index) => (
@@ -372,6 +381,7 @@ function VisitHistory({
                     <td>{visit.customer_name}</td>
                     <td>{visit.customer_phone}</td>
                     <td>{visit.product}</td>
+                    <td>{visit.quantity}</td>
                     <td>{visit.visit_date}</td>
                     <td>
                       {deleteConfirmId === visit.id ? (
@@ -434,6 +444,14 @@ function VisitHistory({
           onClose={handleEditClose}
           onComplete={handleEditComplete}
           visitData={editingVisit}
+        />
+      )}
+      
+      {/* CSV Download Modal */}
+      {showCSVModal && (
+        <CSVModal
+          onClose={() => setShowCSVModal(false)}
+          visitHistory={visitHistory}
         />
       )}
     </div>

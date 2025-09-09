@@ -469,3 +469,21 @@
 .confirm-no:hover {
   background-color: #e9ecef;
 }
+
+/* Excel download button */
+.excel-download-button {
+  background-color: #28a745;
+  color: white;
+  border: 1px solid #28a745;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 10px;
+}
+
+.excel-download-button:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
