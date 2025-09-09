@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase.js';
 import toast from 'react-hot-toast';
 import '../assets/styles/CustomerRegister.css';
 
-function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset }) {
+function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset, onCustomerAdded }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const { session } = useAuth();
@@ -56,7 +56,8 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
         const { data: existingCustomers, error: checkError } = await supabase
           .from('customer')
           .select('id, phone')
-          .eq('phone', form.phone.trim());
+          .eq('phone', form.phone.trim())
+          .eq('status', 1);
           
         if (checkError) throw checkError;
 
@@ -80,16 +81,22 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
         note: form.note?.trim() || null,
       };
 
-      // Insert customer into database
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('customer')
-        .insert([customerData]);
+        .insert([customerData])
+        .select();
 
       if (error) {
           toast.error(`등록 실패: ${error.message}`);
       } else {
         toast.success('고객이 성공적으로 등록되었습니다!');
-        // Reset form after successful registration
+        
+        // Add the new customer to the parent component's state
+        if (onCustomerAdded && data && data.length > 0) {
+          const newCustomer = { ...data[0], visit_count: 0 };
+          onCustomerAdded(newCustomer);
+        }
+
         if (onFormReset) {
           onFormReset();
         }
@@ -107,9 +114,9 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset 
   };
   return (
     <div>
-      <h2 className="card-title centered">새 고객 등록</h2>
+      <h2 className="card-title centered">고객 등록</h2>
       
-      <div className="card table-container">
+      <div className="card customer-register-table-container">
         <form onSubmit={handleRegistration}>
           <div className="form-container">
             <div className="form-group">

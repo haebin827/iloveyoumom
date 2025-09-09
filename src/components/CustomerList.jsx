@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import SearchBar from './SearchBar';
-import Pagination from './Pagination';
+import SearchBar from './commons/SearchBar.jsx';
+import Pagination from './commons/Pagination.jsx';
 import PurchaseModal from './PurchaseModal';
 import '../assets/styles/CustomerList.css';
 import {FaArrowDown, FaArrowUp} from "react-icons/fa";
@@ -102,10 +102,10 @@ function CustomerList({
     e.stopPropagation();
     try {
       const { supabase } = await import('../lib/supabase.js');
-      
+
       const { error } = await supabase
         .from('customer')
-        .delete()
+        .update({ status: 0 })
         .eq('id', customerId);
         
       if (error) throw error;

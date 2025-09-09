@@ -48,10 +48,11 @@
 .form-group input,
 .form-group select {
   width: 100%;
+  height: 40px;
   padding: 8px 10px;
   border: 1px solid #e6b800;
   border-radius: var(--border-radius);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   background-color: #fafafa;
   transition: all 0.2s ease;
 }

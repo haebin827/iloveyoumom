@@ -6,7 +6,7 @@ import EditCustomerForm from '../components/EditCustomerForm';
 import CustomerList from '../components/CustomerList';
 import CustomerRegister from '../components/CustomerRegister';
 import VisitHistory from '../components/VisitHistory';
-import '../assets/styles/MainPage.css';
+import '../assets/styles/pages/MainPage.css';
 import {supabase} from "../lib/supabase.js";
 
 function MainPage() {
@@ -53,14 +53,16 @@ function MainPage() {
             const { data, error } = await supabase
                 .from('customer')
                 .select('*')
+                .eq('status', 1)
                 .order('created_at', { ascending: false });
             
             if (error) throw error;
             
-            // 방문 횟수 데이터 가져오기
+            // 방문 횟수 데이터 가져오기 (활성 기록만)
             const { data: historyData, error: historyError } = await supabase
                 .from('history')
-                .select('customer_id');
+                .select('customer_id')
+                .eq('status', 1);
                 
             if (historyError) throw historyError;
             
@@ -132,8 +134,7 @@ function MainPage() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        
-        // Special handling for phone number - only allow digits and limit to 11 characters
+
         if (name === 'phone') {
             const digits = value.replace(/\D/g, ''); // Remove all non-digits
             if (digits.length <= 11) { // Only allow up to 11 digits
@@ -145,7 +146,6 @@ function MainPage() {
         setForm({ ...form, [name]: value });
     };
 
-    // 폼 리셋 함수
     const resetForm = () => {
         setForm({
             name: '',
@@ -164,7 +164,6 @@ function MainPage() {
         });
     };
 
-    // 고객 등록 성공 콜백
     const handleRegistrationSuccess = () => {
         setActiveTab('customers'); // 고객 목록 탭으로 이동
     };
@@ -216,7 +215,8 @@ function MainPage() {
 
             const { data: historyData, error: historyError } = await supabase
                 .from('history')
-                .select('customer_id');
+                .select('customer_id')
+                .eq('status', 1);
                 
             if (historyError) throw historyError;
             
@@ -316,6 +316,7 @@ function MainPage() {
                     product,
                     customer:customer_id (name, phone)
                 `)
+                .eq('status', 1)
                 .order('visit_date', { ascending: false })
                 .order('visit_time', { ascending: false });
 
@@ -424,6 +425,9 @@ function MainPage() {
                         historyLoading={historyLoading}
                         historyError={historyError}
                         filteredHistory={filteredHistory}
+                        setFilteredHistory={setFilteredHistory}
+                        visitHistory={visitHistory}
+                        setVisitHistory={setVisitHistory}
                         sortConfig={sortConfig}
                         requestSort={requestSort}
                         getSortedHistory={getSortedHistory}

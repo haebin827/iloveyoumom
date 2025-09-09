@@ -99,6 +99,7 @@ function EditCustomerForm({ customer, onComplete }) {
           .from('customer')
           .select('id, phone')
           .eq('phone', form.phone.trim())
+          .eq('status', 1)
           .neq('id', customer.id); // Exclude current customer
           
         if (checkError) throw checkError;
