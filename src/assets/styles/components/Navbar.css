@@ -124,6 +124,10 @@
   gap: 10px;
 }
 
+.name {
+  font-size: 15px;
+}
+
 .change-password-button {
   background-color: white;
   color: var(--text-color);

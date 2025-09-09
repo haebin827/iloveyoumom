@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../providers/AuthProvider.jsx';
 import { supabase } from '../../lib/supabase.js';
 import PasswordChangeModal from '../PasswordChangeModal.jsx';
-import '../../assets/styles/Navbar.css';
+import '../../assets/styles/components/Navbar.css';
 import logo from '../../assets/logo.png'
 
 export function TabButton({ children, active, onClick }) {

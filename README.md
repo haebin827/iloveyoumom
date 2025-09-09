@@ -60,6 +60,13 @@ npm install
 npm run dev
 ```
 
+4. Migration & Seeder
+```bash
+npx supabase db push
+
+npx supabase db execute --file supabase/seed/001_base.sql --linked
+npx supabase db execute --file supabase/seed/010_demo.sql --linked
+```
 ---
 
 ## Project Structure

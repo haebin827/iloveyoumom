@@ -1,6 +1,6 @@
 import React from 'react';
-import '../assets/styles/Pagination.css';
-import {MdOutlineArrowBackIos, MdOutlineArrowForwardIos, MdOutlineKeyboardArrowLeft} from "react-icons/md";
+import '../../assets/styles/components/Pagination.css';
+import {MdOutlineArrowBackIos, MdOutlineArrowForwardIos} from "react-icons/md";
 
 function Pagination({
   currentPage,

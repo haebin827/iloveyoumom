@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../providers/AuthProvider.jsx';
 import { supabase } from '../lib/supabase.js';
-import '../assets/styles/HomePage.css';
+import '../assets/styles/pages/HomePage.css';
 
 function HomePage() {
     const [loginData, setLoginData] = useState({

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../assets/styles/SearchBar.css';
+import '../../assets/styles/SearchBar.css';
 
 function SearchBar({ searchTerm, setSearchTerm, placeholder = "이름으로 검색..." }) {
     const handleSearchChange = (e) => {

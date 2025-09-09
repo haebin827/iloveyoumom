@@ -5,7 +5,7 @@ import {Route, Routes} from "react-router-dom";
 import { Toaster } from 'react-hot-toast';
 import HomePage from "./pages/HomePage.jsx";
 import MainPage from "./pages/MainPage.jsx";
-import Error404 from "./pages/Error404.jsx";
+import Error404 from "./pages/errors/Error404.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import AuthCallback from "./routes/AuthCallback.jsx";
 import PasswordResetCallback from "./routes/PasswordResetCallback.jsx";
