@@ -97,8 +97,7 @@ function MainPage() {
     // 검색 필터링
     useEffect(() => {
         let filtered = customers;
-        
-        // 검색 필터링
+
         if (searchTerm.trim()) {
             const searchTermLower = searchTerm.toLowerCase();
             filtered = customers.filter(customer => 
@@ -196,10 +195,6 @@ function MainPage() {
 
             const today = new Date().toISOString().split('T')[0];
 
-            const productString = purchaseData ? 
-                `${purchaseData.product} (수량: ${purchaseData.quantity})` : 
-                null;
-
             const { data, error } = await supabase
                 .from('history')
                 .insert([
@@ -207,7 +202,8 @@ function MainPage() {
                         user_id: session.user.id,
                         customer_id: customer.id, 
                         visit_date: today,
-                        product: productString
+                        product: purchaseData?.product || null,
+                        quantity: purchaseData?.quantity || 1
                     }
                 ]);
                 
@@ -314,6 +310,7 @@ function MainPage() {
                     visit_date,
                     visit_time,
                     product,
+                    quantity,
                     customer:customer_id (name, phone)
                 `)
                 .eq('status', 1)
@@ -329,7 +326,8 @@ function MainPage() {
                 customer_phone: item.customer ? item.customer.phone : '-',
                 visit_date: item.visit_date,
                 visit_time: item.visit_time ? new Date(item.visit_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-',
-                product: item.product || '-'
+                product: item.product || '-',
+                quantity: item.quantity || 1
             }));
 
             setVisitHistory(formattedData);
