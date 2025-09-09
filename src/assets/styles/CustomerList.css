@@ -269,18 +269,18 @@
   gap: 0.8rem;
 }
 
-.confirm-message {
-  font-size: 0.95rem;
+.delete-confirm-message {
+  font-size: 0.9rem;
   color: #e03131;
   font-weight: 500;
 }
 
-.confirm-buttons {
+.delete-confirm-buttons {
   display: flex;
   gap: 0.8rem;
 }
 
-.confirm-button {
+.delete-confirm-button {
   padding: 6px 14px;
   font-size: 0.85rem;
   border-radius: 4px;

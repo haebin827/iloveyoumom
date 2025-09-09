@@ -324,16 +324,16 @@ function CustomerList({
                     <div className="customer-edit-actions">
                       {deleteConfirmId === customer.id ? (
                         <div className="delete-confirm">
-                          <span className="confirm-message">정말 삭제하시겠습니까?</span>
-                          <div className="confirm-buttons">
+                          <span className="delete-confirm-message">정말 삭제하시겠습니까?</span>
+                          <div className="delete-confirm-buttons">
                             <button 
-                              className="confirm-button confirm-yes"
+                              className="delete-confirm-button confirm-yes"
                               onClick={(e) => handleDelete(e, customer.id)}
                             >
                               예
                             </button>
                             <button 
-                              className="confirm-button confirm-no"
+                              className="delete-confirm-button confirm-no"
                               onClick={handleDeleteCancel}
                             >
                               아니오

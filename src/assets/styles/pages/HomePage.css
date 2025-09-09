@@ -106,3 +106,111 @@ body {
     opacity: 0.7;
 }
 
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .home-container {
+    padding-top: 40px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .login-container {
+    max-width: 350px;
+  }
+  
+  .login-logo {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  
+  .login-title {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  
+  .login-card {
+    padding: 1.5rem;
+  }
+  
+  .input-container {
+    margin-bottom: 1rem;
+  }
+  
+  .username-input,
+  .password-input {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  
+  .username-input {
+    margin-bottom: 8px;
+  }
+  
+  .login-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  .register-link-container {
+    margin-top: 20px;
+    padding-top: 16px;
+  }
+  
+  .register-link-text,
+  .register-link {
+    font-size: 13px;
+  }
+}
+
+/* 작은 모바일 화면 */
+@media (max-width: 480px) {
+  .home-container {
+    padding-top: 20px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .login-container {
+    max-width: 300px;
+  }
+  
+  .login-logo {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  
+  .login-title {
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .login-card {
+    padding: 1rem;
+  }
+  
+  .username-input,
+  .password-input {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  
+  .username-input {
+    margin-bottom: 6px;
+  }
+  
+  .login-button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .register-link-container {
+    margin-top: 16px;
+    padding-top: 12px;
+  }
+  
+  .register-link-text,
+  .register-link {
+    font-size: 12px;
+  }
+}
+

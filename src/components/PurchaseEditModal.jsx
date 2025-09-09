@@ -32,6 +32,7 @@ function PurchaseEditModal({ onClose, onComplete, visitData }) {
     try {
       const updatedData = {
         product: product.trim(),
+        quantity,
         visit_date: visitDate
       };
       

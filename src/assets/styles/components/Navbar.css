@@ -152,7 +152,7 @@
 /* 모바일 최적화 */
 @media (max-width: 768px) {
   .fixed-navbar {
-    padding: 0.6rem 1rem;
+    padding: 1rem 1rem !important;
   }
   
   .navbar-header {
@@ -164,9 +164,16 @@
   }
   
   .navbar-logo {
-    height: 35px;
+    height: 30px;
   }
-  
+
+  .navbar-store-name {
+    font-size: 18px;
+    font-weight: 600;
+    padding-top: 10px;
+    transition: text-shadow 0.2s;
+  }
+
   .logout-button {
     padding: 6px 12px;
     height: 30px;
@@ -176,6 +183,10 @@
   .tab-button {
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
+  }
+  
+  .navbar-actions .name {
+    display: none;
   }
   
   .change-password-button {
@@ -200,7 +211,7 @@
   }
   
   .navbar-logo {
-    height: 28px;
+    height: 24px;
   }
   
   .logout-button {

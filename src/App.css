@@ -19,6 +19,7 @@
 
 html {
   font-size: 16px; /* 기본 폰트 사이즈 */
+  overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
 body {
@@ -26,12 +27,15 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   padding-top: var(--navbar-height); /* 고정 navbar 위치만큼 패딩 추가 */
+  overflow-x: hidden; /* 가로 스크롤 방지 */
+  -webkit-overflow-scrolling: touch; /* 모바일 스크롤 개선 */
 }
 
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -128,19 +132,6 @@ button:hover:not(.tab-button) {
   font-size: 0.9rem;
 }
 
-/* 고정된 Navbar 스타일 */
-.fixed-navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: white;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 2rem;
-  height: var(--navbar-height);
-}
-
 /* 모바일 최적화 */
 @media (max-width: 768px) {
   html {
@@ -180,16 +171,12 @@ button:hover:not(.tab-button) {
   .container {
     padding: 1.5rem;
   }
-
-  .fixed-navbar {
-    padding: 0.5rem 1rem;
-  }
 }
 
 /* 작은 모바일 화면 */
 @media (max-width: 480px) {
   html {
-    font-size: 12px; /* 모바일 환경에서 전체 폰트 사이즈 더 축소 */
+    font-size: 14px; /* 모바일 환경에서 전체 폰트 사이즈 더 축소 */
   }
 
   :root {
@@ -224,10 +211,6 @@ button:hover:not(.tab-button) {
 
   .container {
     padding: 1rem;
-  }
-
-  .fixed-navbar {
-    padding: 0.4rem 0.6rem;
   }
 }
 

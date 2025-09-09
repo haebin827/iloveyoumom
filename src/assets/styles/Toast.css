@@ -57,3 +57,19 @@
     filter: blur(1px);
   }
 }
+
+/* 모바일에서 Toast 위치 조정 */
+@media (max-width: 768px) {
+  .toast-container .custom-toast {
+    margin-top: 10px !important;
+    margin-right: 100px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .toast-container .custom-toast {
+    margin-top: -50px !important;
+    margin-right: -20px !important;
+    font-size: 10px !important;
+  }
+}
