@@ -6,7 +6,7 @@ Mungyeong’s Closet is a lightweight customer-management MVP built for a single
 I converted years of handwritten customer and purchase records into a simple digital dashboard, making it much easier for my mother to manage her clients.
 
 ---
-
+ 
 ## Key Features
 
 - **Customer Information Management**
