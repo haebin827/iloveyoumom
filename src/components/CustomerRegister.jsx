@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../providers/AuthProvider.jsx';
 import { supabase } from '../lib/supabase.js';
 import toast from 'react-hot-toast';
+import Button from './commons/Button.jsx';
 import '../assets/styles/CustomerRegister.css';
 
 function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset, onCustomerAdded }) {
@@ -218,13 +219,15 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset,
             />
           </div>
 
-          <button
+          <Button
             type="submit"
             disabled={isLoading || loading}
             className="submit-button"
-          >
-            {(isLoading || loading) ? '등록 중...' : '고객 등록하기'}
-          </button>
+            color="yellow"
+            size="large"
+            text={(isLoading || loading) ? '등록 중...' : '고객 등록하기'}
+            style={{ width: '100%', padding: '12px 24px' }}
+          />
 
         </form>
       </div>

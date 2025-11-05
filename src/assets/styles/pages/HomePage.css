@@ -88,23 +88,6 @@ body {
     text-decoration: underline;
 }
 
-.login-button {
-    background-color: var(--primary-color);
-    color: black;
-    border: none;
-    border-radius: var(--border-radius);
-    padding: 12px 24px;
-    width: 100%;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    opacity: 1;
-}
-
-.login-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
-}
 
 /* 모바일 최적화 */
 @media (max-width: 768px) {
@@ -144,11 +127,6 @@ body {
   
   .username-input {
     margin-bottom: 8px;
-  }
-  
-  .login-button {
-    padding: 10px 20px;
-    font-size: 14px;
   }
   
   .register-link-container {
@@ -196,11 +174,6 @@ body {
   
   .username-input {
     margin-bottom: 6px;
-  }
-  
-  .login-button {
-    padding: 8px 16px;
-    font-size: 14px;
   }
   
   .register-link-container {

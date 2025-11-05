@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import SearchBar from './commons/SearchBar.jsx';
 import Pagination from './commons/Pagination.jsx';
 import PurchaseModal from './PurchaseModal';
+import Button from './commons/Button.jsx';
 import '../assets/styles/CustomerList.css';
 import {FaArrowDown, FaArrowUp} from "react-icons/fa";
 
@@ -274,17 +275,19 @@ function CustomerList({
                     {visitSuccess === customer.id ? (
                       <span className="visit-success">완료</span>
                     ) : (
-                      <button 
-                        className="visit-button"
+                      <Button
+                        text="구매"
+                        color="yellow"
+                        size="large"
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedCustomer(customer);
                           setShowPurchaseModal(true);
                         }}
                         disabled={visitLoading}
-                      >
-                        구매
-                      </button>
+                        width="70px"
+                        style={{ fontWeight: 700 }}
+                      />
                     )}
                     <span className="expand-icon">
                       {expandedCustomer === customer.id ? '▲' : '▼'}
@@ -326,34 +329,35 @@ function CustomerList({
                         <div className="delete-confirm">
                           <span className="delete-confirm-message">정말 삭제하시겠습니까?</span>
                           <div className="delete-confirm-buttons">
-                            <button 
-                              className="delete-confirm-button confirm-yes"
+                            <Button
+                              text="예"
+                              color="red"
+                              size="small"
                               onClick={(e) => handleDelete(e, customer.id)}
-                            >
-                              예
-                            </button>
-                            <button 
-                              className="delete-confirm-button confirm-no"
+                            />
+                            <Button
+                              text="아니오"
+                              color="light"
+                              size="small"
                               onClick={handleDeleteCancel}
-                            >
-                              아니오
-                            </button>
+                            />
                           </div>
                         </div>
                       ) : (
                         <>
-                          <button 
-                            className="edit-button"
+                          <Button
+                            text="수정"
+                            color="light"
+                            size="medium"
                             onClick={(e) => handleEdit(e, customer)}
-                          >
-                            수정
-                          </button>
-                          <button 
-                            className="delete-button"
+                          />
+                          <Button
+                            text="삭제"
+                            color="light"
+                            size="medium"
                             onClick={(e) => handleDeleteConfirm(e, customer.id)}
-                          >
-                            삭제
-                          </button>
+                            style={{ color: '#e03131' }}
+                          />
                         </>
                       )}
                     </div>

@@ -135,23 +135,7 @@
   flex-wrap: wrap;
 }
 
-.quick-filter-button {
-  padding: 5px 10px;
-  font-size: 0.8rem;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #333;
-}
-
-.quick-filter-button:hover {
-  background-color: #eee;
-  border-color: #ccc;
-}
-
-.quick-filter-button.active {
+.quick-filter-buttons .btn.active {
   background-color: #e9f0fd;
   border-color: #c4d7f5;
   color: #4285f4;
@@ -440,51 +424,4 @@
 .confirm-buttons {
   display: flex;
   gap: 4px;
-}
-
-.confirm-button {
-  padding: 3px 8px;
-  font-size: 0.7rem;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid;
-}
-
-.confirm-yes {
-  background-color: #e03131;
-  color: white;
-  border-color: #c92a2a;
-}
-
-.confirm-yes:hover {
-  background-color: #c92a2a;
-}
-
-.confirm-no {
-  background-color: #f8f9fa;
-  color: #333;
-  border-color: #dee2e6;
-}
-
-.confirm-no:hover {
-  background-color: #e9ecef;
-}
-
-/* Excel download button */
-.excel-download-button {
-  background-color: #28a745;
-  color: white;
-  border: 1px solid #28a745;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-left: 10px;
-}
-
-.excel-download-button:hover {
-  background-color: #218838;
-  border-color: #1e7e34;
 }

@@ -92,29 +92,6 @@
   box-shadow: 0 0 0 2px rgba(230, 184, 0, 0.1);
 }
 
-.submit-button {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  width: 100%;
-  color: black;
-  background-color: var(--primary-color);
-  border: none;
-  padding: 10px 0;
-  font-size: 0.9rem;
-  font-weight: 500;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.submit-button:hover {
-  opacity: 0.9;
-}
-
-.submit-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
 
 /* 날짜 선택 필드 스타일 */
 input[type="date"] {
@@ -192,11 +169,6 @@ input[type="date"] {
     padding: 0.8rem;
     font-size: 0.95rem;
   }
-  
-  .submit-button {
-    font-size: 0.9rem;
-    padding: 10px 0;
-  }
 }
 
 @media (max-width: 480px) {
@@ -231,12 +203,5 @@ input[type="date"] {
     padding: 0.7rem;
     font-size: 0.9rem;
     min-height: 80px;
-  }
-  
-  .submit-button {
-    font-size: 0.85rem;
-    padding: 8px 0;
-    margin-top: 1.2rem;
-    margin-bottom: 1.2rem;
   }
 }

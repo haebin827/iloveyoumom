@@ -4,6 +4,7 @@ import {supabase} from "../lib/supabase.js";
 import PurchaseEditModal from './PurchaseEditModal';
 import Pagination from './commons/Pagination.jsx';
 import CSVModal from './CSVModal';
+import Button from './commons/Button.jsx';
 import '../assets/styles/VisitHistory.css';
 import toast from 'react-hot-toast';
 
@@ -287,42 +288,47 @@ function VisitHistory({
 
           {/* 빠른 날짜 필터 버튼 */}
           <div className="quick-filter-buttons">
-            <button
-              className={`quick-filter-button ${startDateFilter === getToday() && endDateFilter === getToday() ? 'active' : ''}`}
+            <Button
+              text="오늘"
+              color="default"
+              size="small"
+              className={`${startDateFilter === getToday() && endDateFilter === getToday() ? 'active' : ''}`}
               onClick={() => handleQuickFilter('today')}
-            >
-              오늘
-            </button>
-            <button
-              className={`quick-filter-button ${startDateFilter === getYesterday() && endDateFilter === getYesterday() ? 'active' : ''}`}
+            />
+            <Button
+              text="어제"
+              color="default"
+              size="small"
+              className={`${startDateFilter === getYesterday() && endDateFilter === getYesterday() ? 'active' : ''}`}
               onClick={() => handleQuickFilter('yesterday')}
-            >
-              어제
-            </button>
-            <button
-              className={`quick-filter-button ${startDateFilter === getTwoDaysAgo() && endDateFilter === getTwoDaysAgo() ? 'active' : ''}`}
+            />
+            <Button
+              text="그저께"
+              color="default"
+              size="small"
+              className={`${startDateFilter === getTwoDaysAgo() && endDateFilter === getTwoDaysAgo() ? 'active' : ''}`}
               onClick={() => handleQuickFilter('twoDaysAgo')}
-            >
-              그저께
-            </button>
-            <button
-              className={`quick-filter-button ${startDateFilter === getThisWeekStart() && endDateFilter === getThisWeekEnd() ? 'active' : ''}`}
+            />
+            <Button
+              text="이번주"
+              color="default"
+              size="small"
+              className={`${startDateFilter === getThisWeekStart() && endDateFilter === getThisWeekEnd() ? 'active' : ''}`}
               onClick={() => handleQuickFilter('thisWeek')}
-            >
-              이번주
-            </button>
-            <button
-              className={`quick-filter-button ${startDateFilter === getLastWeekStart() && endDateFilter === getLastWeekEnd() ? 'active' : ''}`}
+            />
+            <Button
+              text="저번주"
+              color="default"
+              size="small"
+              className={`${startDateFilter === getLastWeekStart() && endDateFilter === getLastWeekEnd() ? 'active' : ''}`}
               onClick={() => handleQuickFilter('lastWeek')}
-            >
-              저번주
-            </button>
-            <button
-              className="excel-download-button"
+            />
+            <Button
+              text="엑셀로 다운로드"
+              color="green"
+              size="medium"
               onClick={() => setShowCSVModal(true)}
-            >
-              엑셀로 다운로드
-            </button>
+            />
           </div>
         </div>
       </div>
@@ -388,18 +394,18 @@ function VisitHistory({
                         <div className="delete-confirm">
                           <span className="confirm-message">정말 삭제하시겠습니까?</span>
                           <div className="confirm-buttons">
-                            <button 
-                              className="confirm-button confirm-yes"
+                            <Button
+                              text="예"
+                              color="red"
+                              size="small"
                               onClick={() => handleDelete(visit.id)}
-                            >
-                              예
-                            </button>
-                            <button 
-                              className="confirm-button confirm-no"
+                            />
+                            <Button
+                              text="아니오"
+                              color="light"
+                              size="small"
                               onClick={() => setDeleteConfirmId(null)}
-                            >
-                              아니오
-                            </button>
+                            />
                           </div>
                         </div>
                       ) : (
@@ -426,7 +432,7 @@ function VisitHistory({
               </tbody>
             </table>
             
-            {/* 페이지네이션 */}
+            {/* Pagination */}
             <Pagination
               currentPage={currentPage}
               totalItems={totalRecords}

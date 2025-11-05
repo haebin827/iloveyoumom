@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../providers/AuthProvider.jsx';
 import { supabase } from '../lib/supabase.js';
+import Button from '../components/commons/Button.jsx';
 import '../assets/styles/pages/HomePage.css';
 
 function HomePage() {
@@ -84,13 +85,15 @@ function HomePage() {
                                 className={`password-input`}
                             />
                         </div>
-                        <button
+                        <Button
                             type="submit"
                             disabled={loading}
-                            className={`login-button`}
-                        >
-                            {loading ? '로그인 중...' : '로그인'}
-                        </button>
+                            className="login-button"
+                            color="yellow"
+                            size="large"
+                            text={loading ? '로그인 중...' : '로그인'}
+                            style={{ width: '100%', padding: '12px 24px', fontWeight: 700 }}
+                        />
 
                         <div className="register-link-container">
                             <span className="register-link-text">회원가입이 필요하신가요? </span>

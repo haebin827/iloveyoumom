@@ -1,14 +1,42 @@
 :root {
-  --primary-color: #ffe060; /* 골드 노랑 */
-  --primary-light: #bfbfbf; /* 더 옅은 노랑 */
-  --primary-dark: #e6c300; /* 진한 노랑 */
+  --primary-color: #ffe060;
+  --primary-light: #bfbfbf;
+  --primary-dark: #e6c300;
   --text-color: #333;
   --text-light: #666;
-  --background-color: #fffdf5; /* 매우 옅은 노랑 배경 */
+  --background-color: #fffdf5;
   --box-shadow: 0 4px 6px rgba(255, 215, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
   --transition: all 0.3s ease;
   --border-radius: 8px;
-  --navbar-height: 70px; /* Navbar 높이 */
+  --navbar-height: 70px;
+
+  /* Button Color */
+  --btn-default-bg: #f5f5f5;
+  --btn-default-hover-bg: #eee;
+  --btn-default-border: #ddd;
+  --btn-default-hover-border: #ccc;
+  --btn-default-text: #333;
+
+  --btn-yellow-bg: #ffd731;
+  --btn-yellow-hover-bg: #e6c940;
+  --btn-yellow-border: #ffe060;
+  --btn-yellow-text: black;
+
+  --btn-green-bg: #28a745;
+  --btn-green-hover-bg: #218838;
+  --btn-green-border: #28a745;
+  --btn-green-hover-border: #1e7e34;
+  --btn-green-text: white;
+
+  --btn-red-bg: #e03131;
+  --btn-red-hover-bg: #c92a2a;
+  --btn-red-border: #c92a2a;
+  --btn-red-text: white;
+
+  --btn-light-bg: #f8f9fa;
+  --btn-light-hover-bg: #e9ecef;
+  --btn-light-border: #dee2e6;
+  --btn-light-text: #333;
 }
 
 * {
@@ -18,24 +46,24 @@
 }
 
 html {
-  font-size: 16px; /* 기본 폰트 사이즈 */
-  overflow-x: hidden; /* 가로 스크롤 방지 */
+  font-size: 16px;
+  overflow-x: hidden;
 }
 
 body {
   font-family: 'Noto Sans KR', 'Noto Serif KR', 'Noto Sans KR', sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
-  padding-top: var(--navbar-height); /* 고정 navbar 위치만큼 패딩 추가 */
-  overflow-x: hidden; /* 가로 스크롤 방지 */
-  -webkit-overflow-scrolling: touch; /* 모바일 스크롤 개선 */
+  padding-top: var(--navbar-height);
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden; /* 가로 스크롤 방지 */
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -135,11 +163,11 @@ button:hover:not(.tab-button) {
 /* 모바일 최적화 */
 @media (max-width: 768px) {
   html {
-    font-size: 14px; /* 태블릿 환경에서 전체 폰트 사이즈 축소 */
+    font-size: 14px;
   }
 
   :root {
-    --navbar-height: 60px; /* 네비게이션 바 높이 조정 */
+    --navbar-height: 60px;
   }
 
   h1 {
@@ -176,11 +204,11 @@ button:hover:not(.tab-button) {
 /* 작은 모바일 화면 */
 @media (max-width: 480px) {
   html {
-    font-size: 14px; /* 모바일 환경에서 전체 폰트 사이즈 더 축소 */
+    font-size: 14px;
   }
 
   :root {
-    --navbar-height: 50px; /* 네비게이션 바 높이 더 조정 */
+    --navbar-height: 50px;
   }
 
   h1 {
@@ -229,4 +257,105 @@ button:hover:not(.tab-button) {
 
 .main-content {
   flex: 1;
+}
+
+/* Reusable Button Component Styles */
+.btn {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: none;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Button Variants */
+.btn-default {
+  background-color: var(--btn-default-bg);
+  color: var(--btn-default-text);
+  border-color: var(--btn-default-border);
+}
+
+.btn-default:hover:not(:disabled) {
+  background-color: var(--btn-default-hover-bg);
+  border-color: var(--btn-default-hover-border);
+}
+
+.btn-yellow {
+  background-color: var(--btn-yellow-bg);
+  color: var(--btn-yellow-text);
+  border-color: var(--btn-yellow-border);
+}
+
+.btn-yellow:hover:not(:disabled) {
+  background-color: var(--btn-yellow-hover-bg);
+}
+
+.btn-green {
+  background-color: var(--btn-green-bg);
+  color: var(--btn-green-text);
+  border-color: var(--btn-green-border);
+}
+
+.btn-green:hover:not(:disabled) {
+  background-color: var(--btn-green-hover-bg);
+  border-color: var(--btn-green-hover-border);
+}
+
+.btn-red {
+  background-color: var(--btn-red-bg);
+  color: var(--btn-red-text);
+  border-color: var(--btn-red-border);
+}
+
+.btn-red:hover:not(:disabled) {
+  background-color: var(--btn-red-hover-bg);
+}
+
+.btn-light {
+  background-color: var(--btn-light-bg);
+  color: var(--btn-light-text);
+  border-color: var(--btn-light-border);
+}
+
+.btn-light:hover:not(:disabled) {
+  background-color: var(--btn-light-hover-bg);
+}
+
+/* Button Sizes */
+.btn-small {
+  padding: 3px 8px;
+  font-size: 0.7rem;
+}
+
+.btn-medium {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+}
+
+.btn-large {
+  padding: 8px 16px;
+  font-size: 0.95rem;
+}
+
+/* Button Icon */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Full Width Button */
+.btn-full-width {
+  width: 100%;
 }

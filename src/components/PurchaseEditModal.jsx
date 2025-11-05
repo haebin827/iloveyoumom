@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from './commons/Button.jsx';
 import '../assets/styles/PurchaseEditModal.css';
 
 function PurchaseEditModal({ onClose, onComplete, visitData }) {
@@ -105,21 +106,24 @@ function PurchaseEditModal({ onClose, onComplete, visitData }) {
           )}
           
           <div className="form-actions">
-            <button 
-              type="button" 
+            <Button
+              type="button"
               className="cancel-button"
+              color="light"
+              size="medium"
+              text="취소"
               onClick={onClose}
               disabled={loading}
-            >
-              취소
-            </button>
-            <button 
-              type="submit" 
+            />
+            <Button
+              type="submit"
               className="save-button"
+              color="yellow"
+              size="medium"
+              text={loading ? '수정 중...' : '수정 완료'}
+              style={{ fontWeight: 700 }}
               disabled={loading}
-            >
-              {loading ? '수정 중...' : '수정 완료'}
-            </button>
+            />
           </div>
         </form>
       </div>

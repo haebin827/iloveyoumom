@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../providers/AuthProvider.jsx';
 import { supabase } from '../lib/supabase.js';
 import * as XLSX from 'xlsx';
+import Button from './commons/Button.jsx';
 import '../assets/styles/CSVModal.css';
 
 function CSVModal({ onClose, visitHistory }) {
@@ -152,22 +153,24 @@ function CSVModal({ onClose, visitHistory }) {
           )}
           
           <div className="form-actions">
-            <button 
-              type="button" 
+            <Button
+              type="button"
               className="cancel-button"
+              color="light"
+              size="medium"
+              text="취소"
               onClick={onClose}
               disabled={loading}
-            >
-              취소
-            </button>
-            <button 
-              type="button" 
+            />
+            <Button
+              type="button"
               className="save-button"
+              color="green"
+              size="medium"
+              text={loading ? '다운로드 중...' : '다운로드'}
               onClick={handleDownload}
               disabled={loading}
-            >
-              {loading ? '다운로드 중...' : '다운로드'}
-            </button>
+            />
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase.js';
+import Button from './commons/Button.jsx';
 import '../assets/styles/PasswordResetConfirmed.css';
 import {IoMdInformationCircle} from "react-icons/io";
 
@@ -127,13 +128,15 @@ function PasswordResetConfirmed({ session }) {
           )}
           
           <div className="form-actions password-reset-actions">
-            <button 
-              type="submit" 
+            <Button
+              type="submit"
               className="password-reset-submit-button"
+              color="yellow"
+              size="large"
+              text={loading ? '변경 중...' : success ? '변경 완료' : '비밀번호 변경'}
               disabled={loading || success}
-            >
-              {loading ? '변경 중...' : success ? '변경 완료' : '비밀번호 변경'}
-            </button>
+              style={{ width: '100%', padding: '12px 24px', fontWeight: 700 }}
+            />
           </div>
         </form>
       </div>

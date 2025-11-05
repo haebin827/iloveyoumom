@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import Button from './commons/Button.jsx';
 import '../assets/styles/RegisterFailed.css';
 
 function RegisterFailed({ error }) {
@@ -25,12 +26,14 @@ function RegisterFailed({ error }) {
                         </div>
                     </div>
 
-                    <button
+                    <Button
                         onClick={handleReturnToRegister}
                         className="register-button"
-                    >
-                        회원가입 페이지로 돌아가기
-                    </button>
+                        color="yellow"
+                        size="large"
+                        text="회원가입 페이지로 돌아가기"
+                        style={{ width: '100%', padding: '12px 24px', fontWeight: 700 }}
+                    />
                 </div>
             </div>
         </div>

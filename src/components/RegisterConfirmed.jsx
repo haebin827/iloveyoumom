@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import Button from './commons/Button.jsx';
 import '../assets/styles/RegisterConfirmed.css';
 
 function RegisterConfirmed({ userName }) {
@@ -26,12 +27,14 @@ function RegisterConfirmed({ userName }) {
                         </div>
                     </div>
 
-                    <button
+                    <Button
                         onClick={handleGoHome}
                         className="register-button"
-                    >
-                        홈으로
-                    </button>
+                        color="yellow"
+                        size="large"
+                        text="홈으로"
+                        style={{ width: '100%', padding: '12px 24px', fontWeight: 700 }}
+                    />
                 </div>
             </div>
         </div>

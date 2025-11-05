@@ -45,27 +45,6 @@
   box-shadow: 0 0 0 2px rgba(230, 184, 0, 0.1);
 }
 
-.sort-direction-button {
-  padding: 8px 10px;
-  border: 1px solid var(--primary-light);
-  border-radius: var(--border-radius);
-  background-color: white;
-  color: var(--primary-dark);
-  font-size: 1rem;
-  font-weight: 100;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-}
-
-.sort-direction-button:hover {
-  background-color: var(--primary-color);
-  color: white;
-}
 
 /* 아코디언 스타일 고객 리스트 */
 .customer-list {
@@ -157,31 +136,6 @@
   color: var(--text-color);
 }
 
-/* 방문 버튼 스타일 */
-.visit-button {
-  padding: 8px 16px;
-  font-size: 0.95rem;
-  background-color: #ffd731;
-  color: black;
-  border-radius: 4px;
-  border: 1px solid var(--primary-color);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 100%;
-  max-width: 80px;
-}
-
-.visit-button:hover {
-  background-color: var(--primary-color);
-  color: black;
-}
-
-.visit-button:disabled {
-  background-color: #f0f0f0;
-  color: #999;
-  border-color: #ddd;
-  cursor: not-allowed;
-}
 
 .visit-success {
   background-color: #f5f5f5;
@@ -235,32 +189,6 @@
   gap: 0.8rem;
 }
 
-.edit-button, .delete-button {
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.edit-button {
-  background-color: #f8f9fa;
-  color: var(--text-color);
-  border: 1px solid #dee2e6;
-}
-
-.edit-button:hover {
-  background-color: #f1f3f5;
-  border-color: #adb5bd;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.delete-button {
-  background-color: #fff5f5;
-  color: #e03131;
-  border: 1px solid #ffc9c9;
-}
-
 /* 삭제 확인 대화상자 */
 .delete-confirm {
   display: flex;
@@ -278,34 +206,6 @@
 .delete-confirm-buttons {
   display: flex;
   gap: 0.8rem;
-}
-
-.delete-confirm-button {
-  padding: 6px 14px;
-  font-size: 0.85rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.confirm-yes {
-  background-color: #e03131;
-  color: white;
-  border: 1px solid #c92a2a;
-}
-
-.confirm-yes:hover {
-  background-color: #c92a2a;
-}
-
-.confirm-no {
-  background-color: #f8f9fa;
-  color: var(--text-color);
-  border: 1px solid #dee2e6;
-}
-
-.confirm-no:hover {
-  background-color: #e9ecef;
 }
 
 /* 로딩/에러/빈 상태 컨테이너 */

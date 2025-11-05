@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../providers/AuthProvider.jsx';
 import { supabase } from '../lib/supabase.js';
+import Button from './commons/Button.jsx';
 import '../assets/styles/PasswordChangeModal.css';
 
 function PasswordChangeModal({ onClose }) {
@@ -62,21 +63,23 @@ function PasswordChangeModal({ onClose }) {
           )}
           
           <div className="form-actions">
-            <button 
-              type="button" 
+            <Button
+              type="button"
               className="cancel-button"
+              color="light"
+              size="medium"
+              text="취소"
               onClick={onClose}
               disabled={loading}
-            >
-              취소
-            </button>
-            <button 
-              type="submit" 
+            />
+            <Button
+              type="submit"
               className="save-button"
+              color="yellow"
+              size="medium"
+              text={loading ? '전송 중...' : success ? '전송 완료' : '재설정 링크 전송'}
               disabled={loading || success}
-            >
-              {loading ? '전송 중...' : success ? '전송 완료' : '재설정 링크 전송'}
-            </button>
+            />
           </div>
         </form>
       </div>

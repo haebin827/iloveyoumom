@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../providers/AuthProvider.jsx';
 import { supabase } from '../lib/supabase.js';
+import Button from './commons/Button.jsx';
 import '../assets/styles/EditCustomerForm.css';
 
 function EditCustomerForm({ customer, onComplete }) {
@@ -290,12 +291,22 @@ function EditCustomerForm({ customer, onComplete }) {
           </div>
           
           <div className="form-actions">
-            <button type="button" className="cancel-button" onClick={handleCancel}>
-              취소
-            </button>
-            <button type="submit" className="save-button" disabled={loading}>
-              {loading ? '저장 중...' : '저장'}
-            </button>
+            <Button
+              type="button"
+              className="cancel-button"
+              color="light"
+              size="medium"
+              text="취소"
+              onClick={handleCancel}
+            />
+            <Button
+              type="submit"
+              className="save-button"
+              color="yellow"
+              size="medium"
+              text={loading ? '저장 중...' : '저장'}
+              disabled={loading}
+            />
           </div>
           
           {message && (

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {Link, Navigate} from 'react-router-dom';
 import { supabase } from '../lib/supabase.js';
+import Button from '../components/commons/Button.jsx';
 import '../assets/styles/RegisterPage.css';
 import {useAuth} from "../providers/AuthProvider.jsx";
 
@@ -225,13 +226,15 @@ function RegisterPage() {
                             {message && <div className="success-message">{message}</div>}
                         </div>
 
-                        <button
+                        <Button
                             type="submit"
-                            className={`register-button`}
+                            className="register-button"
+                            color="yellow"
+                            size="large"
+                            text={loading ? '가입 중...' : '회원가입'}
                             disabled={loading}
-                        >
-                            {loading ? '가입 중...' : '회원가입'}
-                        </button>
+                            style={{ width: '100%', padding: '12px 24px', fontWeight: 700 }}
+                        />
 
                         <div className="register-link-container">
                             <span className="register-link-text">이미 계정이 있으신가요? </span>

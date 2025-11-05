@@ -132,40 +132,6 @@
   margin-top: 1.5rem;
 }
 
-.cancel-button, .save-button {
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--border-radius);
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.cancel-button {
-  background-color: #f8f9fa;
-  color: var(--text-color);
-  border: 1px solid #dee2e6;
-}
-
-.cancel-button:hover {
-  background-color: #e9ecef;
-  border-color: #ced4da;
-}
-
-.save-button {
-  background-color: var(--primary-color);
-  color: var(--text-color);
-  border: 1px solid var(--primary-dark);
-  font-weight: 500;
-}
-
-.save-button:hover {
-  background-color: var(--primary-dark);
-}
-
-.save-button:disabled, .cancel-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-20px); }
@@ -188,10 +154,5 @@
   
   .purchase-modal-form {
     padding: 1rem;
-  }
-  
-  .cancel-button, .save-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
   }
 }

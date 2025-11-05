@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from './commons/Button.jsx';
 import '../assets/styles/PurchaseModal.css';
 
 function PurchaseModal({ onClose, onComplete, customerName }) {
@@ -90,21 +91,24 @@ function PurchaseModal({ onClose, onComplete, customerName }) {
           )}
 
           <div className="form-actions">
-            <button 
-              type="button" 
-              className="cancel-button" 
+            <Button
+              type="button"
+              className="cancel-button"
+              color="light"
+              size="medium"
+              text="취소"
               onClick={onClose}
               disabled={loading}
-            >
-              취소
-            </button>
-            <button 
-              type="submit" 
+            />
+            <Button
+              type="submit"
               className="save-button"
+              color="yellow"
+              size="medium"
+              text={loading ? '저장 중...' : '완료'}
+              style={{fontWeight: 700}}
               disabled={loading || !productName.trim()}
-            >
-              {loading ? '저장 중...' : '완료'}
-            </button>
+            />
           </div>
         </form>
       </div>
