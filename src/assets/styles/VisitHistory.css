@@ -2,9 +2,27 @@
 
 .table-container {
   overflow-x: auto;
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
   margin-bottom: 1.5rem;
+}
+
+.table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }
 /* 필터 컨트롤 */
 .filter-controls {
@@ -145,7 +163,7 @@
 /* 방문 기록 테이블 스타일 */
 .visit-table {
   width: 100%;
-  min-width: 550px;
+  min-width: 700px;
   border-collapse: collapse;
   margin-top: 15px;
   font-size: 0.85rem;
@@ -179,6 +197,13 @@
 .visit-table td:first-child {
   width: 60px;
   text-align: center;
+}
+
+/* 구매 상품 컬럼 스타일 */
+.visit-table th:nth-child(4),
+.visit-table td:nth-child(4) {
+  width: 180px;
+  min-width: 180px;
 }
 
 /* 정렬 가능한 헤더 스타일 */
