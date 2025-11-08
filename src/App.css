@@ -160,7 +160,7 @@ button:hover:not(.tab-button) {
   font-size: 0.9rem;
 }
 
-/* 모바일 최적화 */
+/* Mobile optimization */
 @media (max-width: 768px) {
   html {
     font-size: 14px;
@@ -201,7 +201,7 @@ button:hover:not(.tab-button) {
   }
 }
 
-/* 작은 모바일 화면 */
+/* Small mobile screens */
 @media (max-width: 480px) {
   html {
     font-size: 14px;

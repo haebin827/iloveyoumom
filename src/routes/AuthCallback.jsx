@@ -4,8 +4,8 @@ import { supabase } from '../lib/supabase.js';
 import RegisterConfirmed from '../components/RegisterConfirmed.jsx';
 import RegisterFailed from '../components/./RegisterFailed.jsx';
 
-function AuthCallback() {
-  const navigate = useNavigate();
+const AuthCallback = () => {
+  const nav = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [session, setSession] = useState(null);
@@ -16,14 +16,13 @@ function AuthCallback() {
         const { data, error } = await supabase.auth.getSession();
         
         if (error) {
-          console.error('Auth callback error:', error);
+          console.error('Auth callback error');
           setError('인증 처리 중 오류가 발생했습니다.');
           setLoading(false);
           return;
         }
 
         if (data.session) {
-          console.log('Session confirmed:', data.session);
           setSession(data.session);
           setLoading(false);
         } else {
@@ -31,14 +30,14 @@ function AuthCallback() {
           setLoading(false);
         }
       } catch (err) {
-        console.error('Callback processing error:', err);
+        console.error('Callback processing error');
         setError('인증 처리 중 예기치 못한 오류가 발생했습니다.');
         setLoading(false);
       }
     };
 
     handleAuthCallback();
-  }, [navigate]);
+  }, [nav]);
 
   if (loading) {
     return (

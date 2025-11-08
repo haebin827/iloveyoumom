@@ -1,17 +1,18 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../providers/AuthProvider.jsx';
+import useAuthStore from '../../stores/useAuthStore';
 
-function ProtectedRoute({ children }) {
-  const { session, loading } = useAuth();
+const ProtectedRoute = ({ children }) => {
+  const session = useAuthStore((state) => state.session);
+  const loading = useAuthStore((state) => state.loading);
 
   if (loading) {
     return (
-      <div className="container" style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
+      <div className="container" style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh'
       }}>
         <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
           <p>로딩 중...</p>
@@ -27,4 +28,4 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
-export default ProtectedRoute; 
+export default ProtectedRoute;

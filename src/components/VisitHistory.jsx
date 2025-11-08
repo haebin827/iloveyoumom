@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
-import {supabase} from "../lib/supabase.js";
+import useVisitStore from '../stores/useVisitStore';
+import useCustomerStore from '../stores/useCustomerStore';
 import PurchaseEditModal from './PurchaseEditModal';
 import Pagination from './commons/Pagination.jsx';
 import CSVModal from './CSVModal';
@@ -8,19 +9,11 @@ import Button from './commons/Button.jsx';
 import '../assets/styles/VisitHistory.css';
 import toast from 'react-hot-toast';
 
-function VisitHistory({ 
-  historySearchTerm, 
-  setHistorySearchTerm, 
-  historyLoading, 
-  historyError, 
-  filteredHistory, 
-  setFilteredHistory,
-  visitHistory,
-  setVisitHistory,
-  sortConfig, 
-  requestSort,
-  getSortedHistory 
-}) {
+const VisitHistory = () => {
+
+  const { historySearchTerm, setHistorySearchTerm, loading, error, filteredHistory, visitHistory, sortConfig, setSortConfig, updateVisit, deleteVisit } = useVisitStore((state) => state);
+  const updateVisitCounts = useCustomerStore((state) => state.updateVisitCounts);
+
   const [startDateFilter, setStartDateFilter] = useState('');
   const [endDateFilter, setEndDateFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,9 +28,33 @@ function VisitHistory({
     setEndDateFilter('');
   }, [setHistorySearchTerm]);
 
+  const getSortedHistory = () => {
+    const sortableHistory = [...filteredHistory];
+    if (sortConfig.key) {
+      sortableHistory.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableHistory;
+  };
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
   const getFilteredHistoryByDate = () => {
-    if (!startDateFilter && !endDateFilter) return getSortedHistory(); // 날짜 필터가 없으면 기존 데이터 반환
-    
+    if (!startDateFilter && !endDateFilter) return getSortedHistory();
+
     return getSortedHistory().filter(visit => {
       if (startDateFilter && !endDateFilter) {
         return visit.visit_date === startDateFilter;
@@ -52,7 +69,6 @@ function VisitHistory({
   };
 
   const totalRecords = getFilteredHistoryByDate().length;
-  const totalPages = Math.ceil(totalRecords / recordsPerPage);
 
   const getCurrentPageData = () => {
     const filteredData = getFilteredHistoryByDate();
@@ -74,24 +90,24 @@ function VisitHistory({
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
-  
+
   const getToday = () => {
     const today = new Date();
     return getFormattedDate(today);
   };
-  
+
   const getYesterday = () => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     return getFormattedDate(yesterday);
   };
-  
+
   const getTwoDaysAgo = () => {
     const twoDaysAgo = new Date();
     twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
     return getFormattedDate(twoDaysAgo);
   };
-  
+
   const getThisWeekStart = () => {
     const today = new Date();
     const day = today.getDay();
@@ -100,29 +116,29 @@ function VisitHistory({
     monday.setDate(diff);
     return getFormattedDate(monday);
   };
-  
+
   const getThisWeekEnd = () => {
     const today = new Date();
     const day = today.getDay();
-    const diff = today.getDate() + (day === 0 ? 0 : 7 - day); // 일요일로 조정
+    const diff = today.getDate() + (day === 0 ? 0 : 7 - day);
     const sunday = new Date(today);
     sunday.setDate(diff);
     return getFormattedDate(sunday);
   };
-  
+
   const getLastWeekStart = () => {
     const today = new Date();
     const day = today.getDay();
-    const diff = today.getDate() - day - 6; // 전주 월요일
+    const diff = today.getDate() - day - 6;
     const lastMonday = new Date(today);
     lastMonday.setDate(diff);
     return getFormattedDate(lastMonday);
   };
-  
+
   const getLastWeekEnd = () => {
     const today = new Date();
     const day = today.getDay();
-    const diff = today.getDate() - day; // 전주 일요일
+    const diff = today.getDate() - day;
     const lastSunday = new Date(today);
     lastSunday.setDate(diff);
     return getFormattedDate(lastSunday);
@@ -163,48 +179,24 @@ function VisitHistory({
 
   const handleDelete = async (visitId) => {
     try {
-      const { error } = await supabase
-        .from('history')
-        .update({ status: 0 })
-        .eq('id', visitId);
-        
-      if (error) throw error;
-
-      const updatedVisitHistory = visitHistory.filter(visit => visit.id !== visitId);
-      const updatedFilteredHistory = filteredHistory.filter(visit => visit.id !== visitId);
-      
-      setVisitHistory(updatedVisitHistory);
-      setFilteredHistory(updatedFilteredHistory);
+      await deleteVisit(visitId);
+      await updateVisitCounts(); // Update customer visit counts
       setDeleteConfirmId(null);
-
-      toast.success('구매 기록이 성공적으로 삭제되었습니다.')
+      toast.success('구매 기록이 성공적으로 삭제되었습니다.');
     } catch (err) {
       console.error('구매 기록 삭제 오류:', err);
+      toast.error('구매 기록 삭제에 실패했습니다.');
     }
   };
 
   const handleEditComplete = async (visitId, updatedData) => {
     try {
-      const { error } = await supabase
-        .from('history')
-        .update(updatedData)
-        .eq('id', visitId);
-        
-      if (error) throw error;
-
-      const updatedVisitHistory = visitHistory.map(visit => 
-        visit.id === visitId ? { ...visit, ...updatedData } : visit
-      );
-      const updatedFilteredHistory = filteredHistory.map(visit => 
-        visit.id === visitId ? { ...visit, ...updatedData } : visit
-      );
-      
-      setVisitHistory(updatedVisitHistory);
-      setFilteredHistory(updatedFilteredHistory);
+      await updateVisit(visitId, updatedData);
       setEditingVisit(null);
-      toast.success('구매 기록이 성공적으로 수정되었습니다.')
+      toast.success('구매 기록이 성공적으로 수정되었습니다.');
     } catch (err) {
       console.error('구매 기록 수정 오류:', err);
+      toast.error('구매 기록 수정에 실패했습니다.');
       throw err;
     }
   };
@@ -213,8 +205,7 @@ function VisitHistory({
     setEditingVisit(null);
   };
 
-
-  // 필터나 검색어가 변경되면 페이지를 1로 리셋
+  // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [startDateFilter, endDateFilter, historySearchTerm]);
@@ -223,7 +214,7 @@ function VisitHistory({
     <div>
       <h2 className="card-title centered">구매 기록</h2>
 
-      {/* 검색창 및 날짜필터 */}
+      {/* Search and Date Filter */}
       <div className="filter-controls">
         <div className="filter-control-item">
           <div className="search-input-container">
@@ -241,7 +232,7 @@ function VisitHistory({
               className="filter-input"
             />
             {historySearchTerm && (
-              <button 
+              <button
                 onClick={() => setHistorySearchTerm('')}
                 className="filter-clear-button"
                 title="검색어 지우기"
@@ -251,7 +242,7 @@ function VisitHistory({
             )}
           </div>
         </div>
-        
+
         <div className="filter-control-item">
           <div className="date-range-container">
             <div className="date-input-container">
@@ -265,18 +256,18 @@ function VisitHistory({
               />
             </div>
             <span className="date-range-separator">~</span>
-          <div className="date-input-container">
+            <div className="date-input-container">
               <span className="date-label">종료일:</span>
-            <input
-              type="date"
+              <input
+                type="date"
                 value={endDateFilter}
                 onChange={(e) => setEndDateFilter(e.target.value)}
-              className="filter-input"
+                className="filter-input"
                 placeholder="종료 날짜"
-            />
+              />
             </div>
             {(startDateFilter || endDateFilter) && (
-              <button 
+              <button
                 onClick={clearDateFilters}
                 className="filter-clear-button"
                 title="날짜 필터 지우기"
@@ -286,7 +277,7 @@ function VisitHistory({
             )}
           </div>
 
-          {/* 빠른 날짜 필터 버튼 */}
+          {/* Quick Date Filter Buttons */}
           <div className="quick-filter-buttons">
             <Button
               text="오늘"
@@ -332,16 +323,16 @@ function VisitHistory({
           </div>
         </div>
       </div>
-      
-      {/* 방문 기록 테이블 */}
+
+      {/* Visit History Table */}
       <div className="table-container">
-        {historyLoading ? (
+        {loading ? (
           <div className="loading-container">
             <p>데이터를 불러오는 중...</p>
           </div>
-        ) : historyError ? (
+        ) : error ? (
           <div className="error-container">
-            <p>{historyError}</p>
+            <p>{error}</p>
           </div>
         ) : filteredHistory.length === 0 ? (
           <div className="empty-container">
@@ -358,27 +349,27 @@ function VisitHistory({
             <div className="records-count">
               총 <span className="count-number">{totalRecords}</span>개의 구매 기록
             </div>
-            
+
             <table className="visit-table">
               <thead>
-              <tr>
-                <th>No</th>
-                <th>고객명</th>
-                <th>전화번호</th>
-                <th>구매 상품</th>
-                <th>수량</th>
-                <th
+                <tr>
+                  <th>No</th>
+                  <th>고객명</th>
+                  <th>전화번호</th>
+                  <th>구매 상품</th>
+                  <th>수량</th>
+                  <th
                     className={`sortable ${sortConfig.key === 'visit_date' ? 'sorted-' + sortConfig.direction : ''}`}
                     onClick={() => requestSort('visit_date')}
-                >
-                  방문 날짜
-                  <span className="sort-icon">
+                  >
+                    방문 날짜
+                    <span className="sort-icon">
                       {sortConfig.key === 'visit_date' ?
-                          (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ' ⇅'}
+                        (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ' ⇅'}
                     </span>
-                </th>
-                <th></th>
-              </tr>
+                  </th>
+                  <th></th>
+                </tr>
               </thead>
               <tbody>
                 {getCurrentPageData().map((visit, index) => (
@@ -410,14 +401,14 @@ function VisitHistory({
                         </div>
                       ) : (
                         <div className="action-buttons">
-                          <button 
+                          <button
                             className="edit-btn"
                             onClick={() => setEditingVisit(visit)}
                             title="수정"
                           >
                             <FiEdit2 />
                           </button>
-                          <button 
+                          <button
                             className="delete-btn"
                             onClick={() => setDeleteConfirmId(visit.id)}
                             title="삭제"
@@ -431,7 +422,7 @@ function VisitHistory({
                 ))}
               </tbody>
             </table>
-            
+
             {/* Pagination */}
             <Pagination
               currentPage={currentPage}
@@ -443,7 +434,7 @@ function VisitHistory({
           </>
         )}
       </div>
-      
+
       {/* Edit Modal */}
       {editingVisit && (
         <PurchaseEditModal
@@ -452,7 +443,7 @@ function VisitHistory({
           visitData={editingVisit}
         />
       )}
-      
+
       {/* CSV Download Modal */}
       {showCSVModal && (
         <CSVModal
@@ -464,4 +455,4 @@ function VisitHistory({
   );
 }
 
-export default VisitHistory; 
+export default VisitHistory;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from './commons/Button.jsx';
 import '../assets/styles/PurchaseEditModal.css';
 
-function PurchaseEditModal({ onClose, onComplete, visitData }) {
+const PurchaseEditModal = ({ onClose, onComplete, visitData }) => {
   const [product, setProduct] = useState(visitData.product);
   const [quantity, setQuantity] = useState(visitData.quantity);
   const [visitDate, setVisitDate] = useState(visitData.visit_date || '');

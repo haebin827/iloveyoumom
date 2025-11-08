@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../providers/AuthProvider.jsx';
-import { supabase } from '../../lib/supabase.js';
+import useAuthStore from '../../stores/useAuthStore';
+import useUIStore from '../../stores/useUIStore';
 import PasswordChangeModal from '../PasswordChangeModal.jsx';
 import '../../assets/styles/components/Navbar.css';
-import logo from '../../assets/logo.png'
+import logo from '../../assets/logo.png';
 
-export function TabButton({ children, active, onClick }) {
+export const TabButton = ({ children, active, onClick }) => {
     return (
         <button
             onClick={onClick}
@@ -17,18 +17,22 @@ export function TabButton({ children, active, onClick }) {
     );
 }
 
-function Navbar({ activeTab, setActiveTab }) {
-    const navigate = useNavigate();
-    const { session } = useAuth();
+const Navbar = () => {
+    const nav = useNavigate();
+    const session = useAuthStore((state) => state.session);
+    const signOut = useAuthStore((state) => state.signOut);
+    const activeTab = useUIStore((state) => state.activeTab);
+    const setActiveTab = useUIStore((state) => state.setActiveTab);
+
     const [showPasswordModal, setShowPasswordModal] = useState(false);
 
     const handleLogout = async () => {
         try {
-            await supabase.auth.signOut();
-            navigate('/');
+            await signOut();
+            nav('/');
         } catch (error) {
-            console.error('Logout error:', error);
-            navigate('/');
+            console.error('Logout error');
+            nav('/');
         }
     };
 
@@ -44,27 +48,27 @@ function Navbar({ activeTab, setActiveTab }) {
         <>
             <div className="fixed-navbar">
                 <div className="navbar-container">
-                    {/* 헤더 */}
+                    {/* header */}
                     <div className="navbar-header">
                         <div className="navbar-title">
                             <div className="navbar-store-name">
-                                {session.user.email === import.meta.env.VITE_MOM_EMAIL ? (
+                                {session?.user?.email === import.meta.env.VITE_MOM_EMAIL ? (
                                         <img src={logo} alt="엄마 옷가게 로고" className="navbar-logo"/>) :
-                                    (session.user.user_metadata?.store_name || '오까게')}
+                                    (session?.user?.user_metadata?.store_name || '오까게')}
                             </div>
                         </div>
                         <div className="navbar-actions">
                             <div className="name">
-                                {session.user.user_metadata?.full_name && `안녕하세요, ${session.user.user_metadata.full_name}님!`}
+                                {session?.user?.user_metadata?.full_name && `안녕하세요, ${session?.user?.user_metadata.full_name}님!`}
                             </div>
-                            <button 
+                            <button
                                 onClick={openPasswordModal}
                                 className="change-password-button"
                                 title="비밀번호 변경"
                             >
                                 비밀번호 변경
                             </button>
-                            <button 
+                            <button
                                 onClick={handleLogout}
                                 className="logout-button"
                             >
@@ -72,23 +76,23 @@ function Navbar({ activeTab, setActiveTab }) {
                             </button>
                         </div>
                     </div>
-                    
-                    {/* 탭 메뉴 */}
+
+                    {/* tab menu */}
                     <div className="tab-container">
-                        <TabButton 
-                            active={activeTab === 'customers'} 
+                        <TabButton
+                            active={activeTab === 'customers'}
                             onClick={() => setActiveTab('customers')}
                         >
                             고객 관리
                         </TabButton>
-                        <TabButton 
-                            active={activeTab === 'register'} 
+                        <TabButton
+                            active={activeTab === 'register'}
                             onClick={() => setActiveTab('register')}
                         >
                             고객 등록
                         </TabButton>
-                        <TabButton 
-                            active={activeTab === 'visits'} 
+                        <TabButton
+                            active={activeTab === 'visits'}
                             onClick={() => setActiveTab('visits')}
                         >
                             구매 기록
@@ -96,11 +100,11 @@ function Navbar({ activeTab, setActiveTab }) {
                     </div>
                 </div>
             </div>
-            
-            {/* 비밀번호 변경 모달 */}
+
+            {/* password change modal */}
             {showPasswordModal && <PasswordChangeModal onClose={closePasswordModal} />}
         </>
     );
 }
 
-export default Navbar; 
+export default Navbar;

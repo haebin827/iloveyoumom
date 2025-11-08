@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from './commons/Button.jsx';
 import '../assets/styles/PurchaseModal.css';
 
-function PurchaseModal({ onClose, onComplete, customerName }) {
+const PurchaseModal = ({ onClose, onComplete, customerName }) => {
   const [productName, setProductName] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);

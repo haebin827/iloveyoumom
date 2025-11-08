@@ -4,8 +4,8 @@ import { supabase } from '../lib/supabase.js';
 import PasswordResetConfirmed from '../components/PasswordResetConfirmed.jsx';
 import PasswordResetFailed from '../components/PasswordResetFailed.jsx';
 
-function PasswordResetCallback() {
-  const navigate = useNavigate();
+const PasswordResetCallback = () => {
+  const nav = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [session, setSession] = useState(null);
@@ -16,14 +16,13 @@ function PasswordResetCallback() {
         const { data, error } = await supabase.auth.getSession();
         
         if (error) {
-          console.error('Password reset callback error:', error);
+          console.error('Password reset callback error');
           setError('비밀번호 재설정 처리 중 오류가 발생했습니다.');
           setLoading(false);
           return;
         }
 
         if (data.session) {
-          console.log('Password reset session confirmed:', data.session);
           setSession(data.session);
           setLoading(false);
         } else {
@@ -31,14 +30,14 @@ function PasswordResetCallback() {
           setLoading(false);
         }
       } catch (err) {
-        console.error('Password reset callback processing error:', err);
+        console.error('Password reset callback processing error');
         setError('비밀번호 재설정 처리 중 예기치 못한 오류가 발생했습니다.');
         setLoading(false);
       }
     };
 
     handlePasswordResetCallback();
-  }, [navigate]);
+  }, [nav]);
 
   if (loading) {
     return (

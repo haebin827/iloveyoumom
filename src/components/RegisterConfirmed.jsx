@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router-dom';
 import Button from './commons/Button.jsx';
 import '../assets/styles/RegisterConfirmed.css';
 
-function RegisterConfirmed({ userName }) {
-    const navigate = useNavigate();
+const RegisterConfirmed = ({ userName }) => {
+    const nav = useNavigate();
 
     const handleGoHome = () => {
-        navigate('/', { replace: true });
+        nav('/', { replace: true });
     };
 
     return (

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../providers/AuthProvider.jsx';
+import useAuthStore from '../stores/useAuthStore';
 import { supabase } from '../lib/supabase.js';
 import * as XLSX from 'xlsx';
 import Button from './commons/Button.jsx';
 import '../assets/styles/CSVModal.css';
 
-function CSVModal({ onClose, visitHistory }) {
+const CSVModal = ({ onClose, visitHistory }) => {
+  const session = useAuthStore((state) => state.session);
+
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
-  const { session } = useAuth();
 
   useEffect(() => {
     // Set default dates
@@ -36,7 +36,7 @@ function CSVModal({ onClose, visitHistory }) {
         ownerName: data.user?.user_metadata?.full_name || '점주명 없음'
       };
     } catch (err) {
-      console.error('매장 정보 가져오기 오류:', err);
+      console.error('매장 정보 가져오기 오류');
       return {
         storeName: '매장명 없음',
         ownerName: '점주명 없음'
@@ -104,7 +104,7 @@ function CSVModal({ onClose, visitHistory }) {
 
       onClose();
     } catch (err) {
-      console.error('엑셀 다운로드 오류:', err);
+      console.error('엑셀 다운로드 오류');
       setError('다운로드 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../../assets/styles/pages/errors/Error404.css';
 
-function Error404() {
+const Error404 = () => {
   return (
     <div className="error-404-container">
       <div className="error-404-card">

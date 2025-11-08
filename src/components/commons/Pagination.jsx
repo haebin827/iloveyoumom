@@ -2,14 +2,14 @@ import React from 'react';
 import '../../assets/styles/components/Pagination.css';
 import {MdOutlineArrowBackIos, MdOutlineArrowForwardIos} from "react-icons/md";
 
-function Pagination({
+const Pagination = ({
   currentPage,
   totalItems,
   itemsPerPage,
   onPageChange,
   showInfo = true,
   maxVisiblePages = 5
-}) {
+}) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   
   if (totalPages <= 1) return null;

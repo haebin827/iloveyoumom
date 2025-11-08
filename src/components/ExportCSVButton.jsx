@@ -3,7 +3,7 @@ import { saveAs } from 'file-saver';
 import Papa from 'papaparse';
 import { supabase } from '../lib/supabase.js';
 
-export default function ExportCSVButton({ startDate, endDate }) {
+const ExportCSVButton = ({ startDate, endDate }) => {
     const [isExporting, setIsExporting] = useState(false);
 
     const handleDownload = async () => {
@@ -32,7 +32,7 @@ export default function ExportCSVButton({ startDate, endDate }) {
             const { data, error } = await query;
 
             if (error) {
-                console.error('Error fetching data:', error.message);
+                console.error('Error fetching data');
                 alert('데이터 가져오기 실패: ' + error.message);
                 return;
             }
@@ -64,7 +64,7 @@ export default function ExportCSVButton({ startDate, endDate }) {
             const fileName = `구매기록_${startDate || '전체'}_${endDate || '전체'}_${new Date().toISOString().split('T')[0]}.csv`;
             saveAs(blob, fileName);
         } catch (err) {
-            console.error('Export error:', err);
+            console.error('Export error');
             alert('내보내기 중 오류가 발생했습니다.');
         } finally {
             setIsExporting(false);
@@ -88,3 +88,5 @@ export default function ExportCSVButton({ startDate, endDate }) {
         </button>
     );
 }
+
+export default ExportCSVButton;

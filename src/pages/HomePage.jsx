@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import { useAuth } from '../providers/AuthProvider.jsx';
+import useAuthStore from '../stores/useAuthStore';
 import { supabase } from '../lib/supabase.js';
 import Button from '../components/commons/Button.jsx';
 import '../assets/styles/pages/HomePage.css';
 
-function HomePage() {
+const HomePage = () => {
+    const session = useAuthStore((state) => state.session);
+
     const [loginData, setLoginData] = useState({
         email: '',
         password: ''
@@ -13,17 +15,14 @@ function HomePage() {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const { session } = useAuth();
-
     if (session) {
         return <Navigate to="/main" replace />;
     }
 
     const handleChange = (e) => {
-        const {name, value} = e.target;
         setLoginData(prev => ({
             ...prev,
-            [name]: value.trim()
+            [e.target.name]: e.target.value.trim()
         }));
     };
 
@@ -48,7 +47,7 @@ function HomePage() {
                 setMessage('잘못된 이메일/비밀번호입니다. 다시 시도해주세요.');
             }
         } catch (err) {
-            console.error('로그인 오류:', err);
+            console.error('로그인 오류');
             setMessage('이메일/비밀번호가 일치하지 않습니다.');
         } finally {
             setLoading(false);

@@ -5,8 +5,8 @@ import Button from './commons/Button.jsx';
 import '../assets/styles/PasswordResetConfirmed.css';
 import {IoMdInformationCircle} from "react-icons/io";
 
-function PasswordResetConfirmed({ session }) {
-  const navigate = useNavigate();
+const PasswordResetConfirmed = ({ session }) => {
+  const nav = useNavigate();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -55,11 +55,11 @@ function PasswordResetConfirmed({ session }) {
         setSuccess(true);
         setMessage('비밀번호가 성공적으로 변경되었습니다.');
         setTimeout(() => {
-          navigate('/main');
+          nav('/main');
         }, 2000);
       }
     } catch (err) {
-      console.error('Password update error:', err);
+      console.error('Password update error');
       setMessage('비밀번호 변경 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../providers/AuthProvider.jsx';
+import useAuthStore from '../stores/useAuthStore';
 import { supabase } from '../lib/supabase.js';
 import Button from './commons/Button.jsx';
 import '../assets/styles/EditCustomerForm.css';
 
-function EditCustomerForm({ customer, onComplete }) {
+const EditCustomerForm = ({ customer, onComplete }) => {
+  const session = useAuthStore((state) => state.session);
+
   const [form, setForm] = useState({
     name: '',
     phone: '',
@@ -19,7 +21,6 @@ function EditCustomerForm({ customer, onComplete }) {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState('');
-  const { session } = useAuth();
 
   useEffect(() => {
     if (customer) {
@@ -112,20 +113,16 @@ function EditCustomerForm({ customer, onComplete }) {
         }
       }
 
-      const formData = { ...form };
-      formData.first_visit = formData.first_visit && formData.first_visit.trim() ? formData.first_visit : null;
-      formData.name = formData.name?.trim() || null;
-      formData.phone = formData.phone?.trim() || null;
-      formData.top_size = formData.top_size?.trim() || null;
-      formData.bottom_size = formData.bottom_size?.trim() || null;
-      formData.body_type = formData.body_type?.trim() || null;
-      formData.style_prefer = formData.style_prefer?.trim() || null;
-      formData.note = formData.note?.trim() || null;
-
-      delete formData.id;
-      delete formData.user_id;
-      delete formData.created_at;
-      delete formData.visit_count;
+      const formData  = { ...form};
+      const fieldsToTrim = [ "first_visit", "name", "phone", "top_size", "bottom_size", "body_type", "style_prefer", "note" ];
+      fieldsToTrim.forEach(key => {
+        const value = formData[key]?.trim();
+        if (value) {
+          formData[key] = value;
+        } else {
+          delete formData[key];
+        }
+      });
 
       const { error } = await supabase
         .from('customer')
@@ -138,7 +135,7 @@ function EditCustomerForm({ customer, onComplete }) {
       onComplete({ type: 'save', data: { ...customer, ...formData }, success: true });
       
     } catch (err) {
-      console.error('Customer update error:', err);
+      console.error('Customer update error');
       setMessage('고객 정보 수정 중 오류가 발생했습니다.');
       onComplete({ type: 'save', data: null, success: false });
     } finally {

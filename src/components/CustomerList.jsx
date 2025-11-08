@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import useCustomerStore from '../stores/useCustomerStore';
+import useVisitStore from '../stores/useVisitStore';
 import SearchBar from './commons/SearchBar.jsx';
 import Pagination from './commons/Pagination.jsx';
 import PurchaseModal from './PurchaseModal';
 import Button from './commons/Button.jsx';
 import '../assets/styles/CustomerList.css';
-import {FaArrowDown, FaArrowUp} from "react-icons/fa";
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
+import { supabase } from '../lib/supabase.js';
 
-function CustomerList({ 
-  searchTerm,
-  setSearchTerm, 
-  filteredCustomers,
-  setFilteredCustomers,
-  customers,
-  setCustomers,
-  loading,
-  error,
-  visitSuccess,
-  visitLoading,
-  handleVisit,
-  handleEdit
-}) {
+const CustomerList = ({ handleVisit, handleEdit }) => {
+
+  const filteredCustomers = useCustomerStore((state) => state.filteredCustomers);
+  const loading = useCustomerStore((state) => state.loading);
+  const error = useCustomerStore((state) => state.error);
+  const searchTerm = useCustomerStore((state) => state.searchTerm);
+  const setSearchTerm = useCustomerStore((state) => state.setSearchTerm);
+  const deleteCustomer = useCustomerStore((state) => state.deleteCustomer);
+
+  const visitSuccess = useVisitStore((state) => state.visitSuccess);
+  const visitLoading = useVisitStore((state) => state.visitLoading);
+
   const [expandedCustomer, setExpandedCustomer] = useState(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [sortBy, setSortBy] = useState('id');
@@ -32,7 +33,7 @@ function CustomerList({
 
   const calculateKoreanAge = (birthDate) => {
     if (!birthDate || birthDate === '-') return null;
-    
+
     const today = new Date();
     const birthDateObj = new Date(birthDate);
     const currentYear = today.getFullYear();
@@ -64,12 +65,12 @@ function CustomerList({
     if (!customer.birth && (!customer.gender || customer.gender === 'NA')) {
       return customer.name || '-';
     }
-    
+
     const koreanAge = calculateKoreanAge(customer.birth);
     const gender = formatGender(customer.gender);
-    
+
     let displayText = customer.name || '-';
-    
+
     if (gender && koreanAge) {
       displayText = `${customer.name} (${gender}, ${koreanAge}세)`;
     } else if (gender) {
@@ -77,7 +78,7 @@ function CustomerList({
     } else if (koreanAge) {
       displayText = `${customer.name} (${koreanAge}세)`;
     }
-    
+
     return displayText;
   };
 
@@ -102,21 +103,14 @@ function CustomerList({
   const handleDelete = async (e, customerId) => {
     e.stopPropagation();
     try {
-      const { supabase } = await import('../lib/supabase.js');
-
       const { error } = await supabase
         .from('customer')
         .update({ status: 0 })
         .eq('id', customerId);
-        
+
       if (error) throw error;
 
-      const updatedCustomers = customers.filter(customer => customer.id !== customerId);
-      setCustomers(updatedCustomers);
-
-      const updatedFilteredCustomers = filteredCustomers.filter(customer => customer.id !== customerId);
-      setFilteredCustomers(updatedFilteredCustomers);
-
+      deleteCustomer(customerId);
       setDeleteConfirmId(null);
       toast.success('고객 정보가 성공적으로 삭제되었습니다.');
     } catch (err) {
@@ -127,15 +121,15 @@ function CustomerList({
 
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
-    setCurrentPage(1); // Reset to first page when sorting changes
+    setCurrentPage(1);
   };
 
   const toggleSortDirection = () => {
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    setCurrentPage(1); // Reset to first page when sort direction changes
+    setCurrentPage(1);
   };
 
-  // 정렬 함수
+  // Sorting function
   const sortCustomers = (customerList, sortField, direction) => {
     return [...customerList].sort((a, b) => {
       let aValue = a[sortField];
@@ -149,7 +143,7 @@ function CustomerList({
         aValue = aValue.toLowerCase();
         bValue = bValue.toLowerCase();
       }
-      
+
       // Date comparison for created_at and first_visit
       if (sortField === 'created_at' || sortField === 'first_visit') {
         aValue = new Date(aValue);
@@ -161,7 +155,7 @@ function CustomerList({
         aValue = Number(aValue);
         bValue = Number(bValue);
       }
-      
+
       if (aValue < bValue) {
         return direction === 'asc' ? -1 : 1;
       }
@@ -181,16 +175,15 @@ function CustomerList({
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    setExpandedCustomer(null); // Close any expanded customer when changing page
+    setExpandedCustomer(null);
   };
 
   const handlePurchaseComplete = async (purchaseData) => {
     if (!selectedCustomer) return;
-    
+
     await handleVisit(selectedCustomer, purchaseData);
     setShowPurchaseModal(false);
     setSelectedCustomer(null);
-    toast.success(`${selectedCustomer.name}님의 구매 기록이 추가되었습니다.`);
   };
 
   const handlePurchaseClose = () => {
@@ -205,14 +198,14 @@ function CustomerList({
       <div className="search-sort-container">
         <div className="search-container">
           <SearchBar
-            searchTerm={searchTerm} 
-            setSearchTerm={setSearchTerm} 
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
             placeholder="이름 또는 전화번호로 검색..."
           />
         </div>
-        
+
         <div className="sort-container">
-          <select 
+          <select
             className="sort-select"
             value={sortBy}
             onChange={handleSortChange}
@@ -221,7 +214,7 @@ function CustomerList({
             <option value="name">이름순</option>
             <option value="first_visit">방문날짜순</option>
           </select>
-          <button 
+          <button
             className="sort-direction-button"
             onClick={toggleSortDirection}
             title={sortDirection === 'asc' ? '오름차순' : '내림차순'}
@@ -230,8 +223,8 @@ function CustomerList({
           </button>
         </div>
       </div>
-      
-      {/* 고객 목록 테이블 */}
+
+      {/* Customer List Table */}
       <div className="customer-list-table-container">
         {loading ? (
           <div className="loading-container">
@@ -252,133 +245,132 @@ function CustomerList({
             <div className="records-count">
               총 <span className="count-number">{totalItems}</span>명의 고객
             </div>
-            
-          <ul className="customer-list">
-            {paginatedCustomers.map((customer, index) => (
-              <li key={customer.id || index} className="customer-item">
-                <div 
-                  className="customer-header" 
-                  onClick={() => toggleExpand(customer.id)}
-                >
-                  <div className="customer-main-info">
-                    <div className="customer-name-container">
-                      <span className="customer-name">{renderNameWithAge(customer)}</span>
-                      {customer.visit_count > 0 && (
-                        <span className="visit-count-badge">
-                          구매 {customer.visit_count}회
-                        </span>
-                      )}
+            <ul className="customer-list">
+              {paginatedCustomers.map((customer) => (
+                <li key={customer.id} className="customer-item">
+                  <div
+                    className="customer-header"
+                    onClick={() => toggleExpand(customer.id)}
+                  >
+                    <div className="customer-main-info">
+                      <div className="customer-name-container">
+                        <span className="customer-name">{renderNameWithAge(customer)}</span>
+                        {customer.visit_count > 0 && (
+                          <span className="visit-count-badge">
+                            구매 {customer.visit_count}회
+                          </span>
+                        )}
+                      </div>
+                      <span className="customer-phone">{formatPhoneNumber(customer.phone)}</span>
                     </div>
-                    <span className="customer-phone">{formatPhoneNumber(customer.phone)}</span>
-                  </div>
-                  <div className="customer-actions">
-                    {visitSuccess === customer.id ? (
-                      <span className="visit-success">완료</span>
-                    ) : (
-                      <Button
-                        text="구매"
-                        color="yellow"
-                        size="large"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedCustomer(customer);
-                          setShowPurchaseModal(true);
-                        }}
-                        disabled={visitLoading}
-                        width="70px"
-                        style={{ fontWeight: 700 }}
-                      />
-                    )}
-                    <span className="expand-icon">
-                      {expandedCustomer === customer.id ? '▲' : '▼'}
-                    </span>
-                  </div>
-                </div>
-                
-                {expandedCustomer === customer.id && (
-                  <div className="customer-details">
-                    <div className="details-grid">
-                      <div className="detail-item">
-                        <span className="detail-label">탑 사이즈</span>
-                        <span className="detail-value">{customer.top_size || '-'}</span>
-                      </div>
-                      <div className="detail-item">
-                        <span className="detail-label">바지 사이즈</span>
-                        <span className="detail-value">{customer.bottom_size || '-'}</span>
-                      </div>
-                      <div className="detail-item">
-                        <span className="detail-label">신체 특징</span>
-                        <span className="detail-value">{customer.body_type || '-'}</span>
-                      </div>
-                      <div className="detail-item">
-                        <span className="detail-label">선호 스타일</span>
-                        <span className="detail-value">{customer.style_prefer || '-'}</span>
-                      </div>
-                      <div className="detail-item">
-                        <span className="detail-label">첫 방문</span>
-                        <span className="detail-value">{customer.first_visit ? new Date(customer.first_visit).toLocaleDateString() : '-'}</span>
-                      </div>
-                    </div>
-                    <div className="note-container">
-                      <span className="detail-label">노트</span>
-                      <pre className="note-content">{customer.note || '-'}</pre>
-                    </div>
-                    
-                    <div className="customer-edit-actions">
-                      {deleteConfirmId === customer.id ? (
-                        <div className="delete-confirm">
-                          <span className="delete-confirm-message">정말 삭제하시겠습니까?</span>
-                          <div className="delete-confirm-buttons">
-                            <Button
-                              text="예"
-                              color="red"
-                              size="small"
-                              onClick={(e) => handleDelete(e, customer.id)}
-                            />
-                            <Button
-                              text="아니오"
-                              color="light"
-                              size="small"
-                              onClick={handleDeleteCancel}
-                            />
-                          </div>
-                        </div>
+                    <div className="customer-actions">
+                      {visitSuccess === customer.id ? (
+                        <span className="visit-success">완료</span>
                       ) : (
-                        <>
-                          <Button
-                            text="수정"
-                            color="light"
-                            size="medium"
-                            onClick={(e) => handleEdit(e, customer)}
-                          />
-                          <Button
-                            text="삭제"
-                            color="light"
-                            size="medium"
-                            onClick={(e) => handleDeleteConfirm(e, customer.id)}
-                            style={{ color: '#e03131' }}
-                          />
-                        </>
+                        <Button
+                          text="구매"
+                          color="yellow"
+                          size="large"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedCustomer(customer);
+                            setShowPurchaseModal(true);
+                          }}
+                          disabled={visitLoading}
+                          width="70px"
+                          style={{ fontWeight: 700 }}
+                        />
                       )}
+                      <span className="expand-icon">
+                        {expandedCustomer === customer.id ? '▲' : '▼'}
+                      </span>
                     </div>
                   </div>
-                )}
-              </li>
-            ))}
-          </ul>
-          
-          <Pagination
-            currentPage={currentPage}
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
-            onPageChange={handlePageChange}
-            showInfo={true}
-            maxVisiblePages={5}
-          />
+
+                  {expandedCustomer === customer.id && (
+                    <div className="customer-details">
+                      <div className="details-grid">
+                        <div className="detail-item">
+                          <span className="detail-label">탑 사이즈</span>
+                          <span className="detail-value">{customer.top_size || '-'}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-label">바지 사이즈</span>
+                          <span className="detail-value">{customer.bottom_size || '-'}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-label">신체 특징</span>
+                          <span className="detail-value">{customer.body_type || '-'}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-label">선호 스타일</span>
+                          <span className="detail-value">{customer.style_prefer || '-'}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-label">첫 방문</span>
+                          <span className="detail-value">{customer.first_visit ? new Date(customer.first_visit).toLocaleDateString() : '-'}</span>
+                        </div>
+                      </div>
+                      <div className="note-container">
+                        <span className="detail-label">노트</span>
+                        <pre className="note-content">{customer.note || '-'}</pre>
+                      </div>
+
+                      <div className="customer-edit-actions">
+                        {deleteConfirmId === customer.id ? (
+                          <div className="delete-confirm">
+                            <span className="delete-confirm-message">정말 삭제하시겠습니까?</span>
+                            <div className="delete-confirm-buttons">
+                              <Button
+                                text="예"
+                                color="red"
+                                size="small"
+                                onClick={(e) => handleDelete(e, customer.id)}
+                              />
+                              <Button
+                                text="아니오"
+                                color="light"
+                                size="small"
+                                onClick={handleDeleteCancel}
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <Button
+                              text="수정"
+                              color="light"
+                              size="medium"
+                              onClick={(e) => handleEdit(e, customer)}
+                            />
+                            <Button
+                              text="삭제"
+                              color="light"
+                              size="medium"
+                              onClick={(e) => handleDeleteConfirm(e, customer.id)}
+                              style={{ color: '#e03131' }}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+
+            <Pagination
+              currentPage={currentPage}
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+              onPageChange={handlePageChange}
+              showInfo={true}
+              maxVisiblePages={5}
+            />
           </>
         )}
       </div>
-      
+
       {/* Purchase Modal */}
       {showPurchaseModal && selectedCustomer && (
         <PurchaseModal
@@ -391,4 +383,4 @@ function CustomerList({
   );
 }
 
-export default CustomerList; 
+export default CustomerList;

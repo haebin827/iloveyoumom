@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Button({
+const Button =({
   text,
   title,
   color = 'default',
@@ -14,7 +14,7 @@ function Button({
   height,
   style,
   ...rest
-}) {
+}) => {
   const buttonClasses = [
     'btn',
     `btn-${color}`,

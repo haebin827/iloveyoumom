@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router-dom';
 import Button from './commons/Button.jsx';
 import '../assets/styles/RegisterFailed.css';
 
-function RegisterFailed({ error }) {
-    const navigate = useNavigate();
+const RegisterFailed = ({ error }) => {
+    const nav = useNavigate();
 
     const handleReturnToRegister = () => {
-        navigate('/register', { replace: true });
+        nav('/register', { replace: true });
     };
 
     return (

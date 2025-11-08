@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import {Link, Navigate} from 'react-router-dom';
+import useAuthStore from '../stores/useAuthStore';
 import { supabase } from '../lib/supabase.js';
 import Button from '../components/commons/Button.jsx';
 import '../assets/styles/RegisterPage.css';
-import {useAuth} from "../providers/AuthProvider.jsx";
 
-function RegisterPage() {
+const RegisterPage = () => {
+    const session = useAuthStore((state) => state.session);
+
     const [formData, setFormData] = useState({
         name: '',
         storeName: '',
@@ -17,8 +19,6 @@ function RegisterPage() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
-
-    const { session } = useAuth();
 
     if (session) {
         return <Navigate to="/main" replace />;
@@ -100,7 +100,7 @@ function RegisterPage() {
                 email: formData.email,
                 password: formData.password,
                 options: {
-                    emailRedirectTo: window.location.origin + '/auth/callback',
+                    emailRedirectTo: `${window.location.origin + import.meta.env.VITE_AUTH_CALLBACK_PATH}`,
                     data: {
                         full_name: formData.name.trim(),
                         store_name: formData.storeName.trim(),

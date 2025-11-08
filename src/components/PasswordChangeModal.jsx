@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { useAuth } from '../providers/AuthProvider.jsx';
+import useAuthStore from '../stores/useAuthStore';
 import { supabase } from '../lib/supabase.js';
 import Button from './commons/Button.jsx';
 import '../assets/styles/PasswordChangeModal.css';
 
-function PasswordChangeModal({ onClose }) {
+const PasswordChangeModal = ({ onClose }) => {
+  const session = useAuthStore((state) => state.session);
+
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  
-  const { session } = useAuth();
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ function PasswordChangeModal({ onClose }) {
     
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(session.user.email, {
-        redirectTo: `${window.location.origin}/password-reset/callback`
+        redirectTo: `${window.location.origin + import.meta.env.VITE_PASSWORD_RESET_CALLBACK_PATH}`
       });
       
       if (error) {
@@ -34,7 +34,7 @@ function PasswordChangeModal({ onClose }) {
         setMessage('비밀번호 재설정 링크가 이메일로 전송되었습니다. 링크는 5분간 유효합니다.');
       }
     } catch (err) {
-      console.error('Password reset error:', err);
+      console.error('Password reset error');
       setMessage('비밀번호 재설정 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);

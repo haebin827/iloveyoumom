@@ -7,7 +7,11 @@
   margin-bottom: 1.5rem;
 }
 
-/* 검색 및 정렬 컨테이너 */
+.sort-direction-button {
+  background-color: var(--text-light);
+}
+
+/* Search and sort container */
 .search-sort-container {
   margin-bottom: 1.5rem;
   max-width: 550px;
@@ -46,7 +50,7 @@
 }
 
 
-/* 아코디언 스타일 고객 리스트 */
+/* Accordion-style customer list */
 .customer-list {
   list-style: none;
   padding: 0;
@@ -156,7 +160,7 @@
   to { opacity: 1; }
 }
 
-/* 노트 섹션 스타일 */
+/* Note section style */
 .note-container {
   border-top: 1px dashed var(--primary-light);
   padding-top: 1.2rem;
@@ -179,7 +183,7 @@
   overflow-x: auto;
 }
 
-/* 수정/삭제 버튼 영역 */
+/* Edit/delete button area */
 .customer-edit-actions {
   margin-top: 1.5rem;
   padding-top: 1rem;
@@ -189,7 +193,7 @@
   gap: 0.8rem;
 }
 
-/* 삭제 확인 대화상자 */
+/* Delete confirmation dialog */
 .delete-confirm {
   display: flex;
   flex-direction: column;
@@ -208,7 +212,7 @@
   gap: 0.8rem;
 }
 
-/* 로딩/에러/빈 상태 컨테이너 */
+/* Loading/error/empty state container */
 .loading-container {
   text-align: center;
   padding: 2rem;
@@ -225,7 +229,7 @@
   padding: 2rem;
 }
 
-/* 레코드 수 표시 스타일 */
+/* Record count display style */
 .records-count {
   margin-bottom: 10px;
   font-size: 0.9rem;
@@ -240,14 +244,14 @@
   margin: 0 4px;
 }
 
-/* 고객 이름 컨테이너 */
+/* Customer name container */
 .customer-name-container {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* 방문 횟수 배지 */
+/* Visit count badge */
 .visit-count-badge {
   background-color: #e8f3ff;
   color: #4a6fa5;
@@ -261,7 +265,7 @@
   border: 1px solid #d0e1f9;
 }
 
-/* 모바일 최적화 */
+/* Mobile optimization */
 @media (max-width: 768px) {
   .search-sort-container {
     flex-direction: column;
@@ -347,7 +351,7 @@
   }
 }
 
-/* 작은 모바일 화면 */
+/* Small mobile screens */
 @media (max-width: 480px) {
   .customer-header {
     padding: 0.7rem 0.8rem;

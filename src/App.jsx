@@ -9,13 +9,13 @@ import Error404 from "./pages/errors/Error404.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import AuthCallback from "./routes/AuthCallback.jsx";
 import PasswordResetCallback from "./routes/PasswordResetCallback.jsx";
-import { AuthProvider } from "./providers/AuthProvider.jsx";
+import AuthInitializer from "./components/routes/AuthInitializer.jsx";
 import ProtectedRoute from "./components/routes/ProtectedRoute.jsx";
 import Footer from "./components/layout/Footer.jsx";
 
-function App() {
+const App = () => {
     return (
-        <AuthProvider>
+        <AuthInitializer>
             <Toaster
                 position="top-right"
                 gutter={12}
@@ -69,7 +69,7 @@ function App() {
                     </div>
                 } />
             </Routes>
-        </AuthProvider>
+        </AuthInitializer>
     )
 }
 

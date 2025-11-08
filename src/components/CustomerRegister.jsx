@@ -1,17 +1,58 @@
-import React, { useState } from 'react';
-import { useAuth } from '../providers/AuthProvider.jsx';
+import React, { useState, useEffect } from 'react';
+import useAuthStore from '../stores/useAuthStore';
+import useCustomerStore from '../stores/useCustomerStore';
+import useUIStore from '../stores/useUIStore';
 import { supabase } from '../lib/supabase.js';
 import toast from 'react-hot-toast';
 import Button from './commons/Button.jsx';
 import '../assets/styles/CustomerRegister.css';
 
-function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset, onCustomerAdded }) {
+const CustomerRegister = ({ onSuccess }) => {
+  const session = useAuthStore((state) => state.session);
+  const addCustomer = useCustomerStore((state) => state.addCustomer);
+  const activeTab = useUIStore((state) => state.activeTab);
+
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const { session } = useAuth();
+  const [form, setForm] = useState({
+    name: '',
+    phone: '',
+    top_size: '',
+    bottom_size: '',
+    color_prefer: '',
+    color_avoid: '',
+    drink_prefer: '',
+    body_type: '',
+    style_prefer: '',
+    birth: '',
+    first_visit: new Date().toISOString().split('T')[0],
+    note: '',
+    gender: 'NA'
+  });
+
+  // Reset form when switching to register tab
+  useEffect(() => {
+    if (activeTab === 'register') {
+      setForm({
+        name: '',
+        phone: '',
+        top_size: '',
+        bottom_size: '',
+        color_prefer: '',
+        color_avoid: '',
+        drink_prefer: '',
+        body_type: '',
+        style_prefer: '',
+        birth: '',
+        first_visit: new Date().toISOString().split('T')[0],
+        note: '',
+        gender: 'NA'
+      });
+    }
+  }, [activeTab]);
 
   const handleFormChange = (e) => {
-    const { name } = e.target;
+    const { name, value } = e.target;
 
     if (errors[name]) {
       setErrors(prev => ({
@@ -20,7 +61,33 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset,
       }));
     }
 
-    handleChange(e);
+    if (name === 'phone') {
+      const digits = value.replace(/\D/g, '');
+      if (digits.length <= 11) {
+        setForm({ ...form, [name]: digits });
+      }
+      return;
+    }
+
+    setForm({ ...form, [name]: value });
+  };
+
+  const resetForm = () => {
+    setForm({
+      name: '',
+      phone: '',
+      top_size: '',
+      bottom_size: '',
+      color_prefer: '',
+      color_avoid: '',
+      drink_prefer: '',
+      body_type: '',
+      style_prefer: '',
+      birth: '',
+      first_visit: new Date().toISOString().split('T')[0],
+      note: '',
+      gender: 'NA'
+    });
   };
 
   const handleRegistration = async (e) => {
@@ -39,7 +106,7 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset,
         newErrors.phone = '전화번호는 11자리 숫자여야 합니다.';
       }
     }
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       setIsLoading(false);
@@ -59,7 +126,7 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset,
           .select('id, phone')
           .eq('phone', form.phone.trim())
           .eq('status', 1);
-          
+
         if (checkError) throw checkError;
 
         if (existingCustomers && existingCustomers.length > 0) {
@@ -88,19 +155,17 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset,
         .select();
 
       if (error) {
-          toast.error(`등록 실패: ${error.message}`);
+        toast.error(`등록 실패: ${error.message}`);
       } else {
         toast.success('고객이 성공적으로 등록되었습니다!');
-        
-        // Add the new customer to the parent component's state
-        if (onCustomerAdded && data && data.length > 0) {
-          const newCustomer = { ...data[0], visit_count: 0 };
-          onCustomerAdded(newCustomer);
+
+        // Add the new customer to Zustand store
+        if (data && data.length > 0) {
+          addCustomer(data[0]);
         }
 
-        if (onFormReset) {
-          onFormReset();
-        }
+        resetForm();
+
         if (onSuccess) {
           setTimeout(() => {
             onSuccess();
@@ -113,10 +178,11 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset,
       setIsLoading(false);
     }
   };
+
   return (
     <div>
       <h2 className="card-title centered">고객 등록</h2>
-      
+
       <div className="card customer-register-table-container">
         <form onSubmit={handleRegistration}>
           <div className="form-container">
@@ -212,7 +278,7 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset,
             <textarea
               name="note"
               value={form.note}
-              onChange={handleChange}
+              onChange={handleFormChange}
               className="note-textarea"
               placeholder="고객에 대한 추가 메모..."
               rows={4}
@@ -221,11 +287,11 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset,
 
           <Button
             type="submit"
-            disabled={isLoading || loading}
+            disabled={isLoading}
             className="submit-button"
             color="yellow"
             size="large"
-            text={(isLoading || loading) ? '등록 중...' : '고객 등록하기'}
+            text={isLoading ? '등록 중...' : '고객 등록하기'}
             style={{ width: '100%', padding: '12px 24px' }}
           />
 
@@ -235,4 +301,4 @@ function CustomerRegister({ form, handleChange, loading, onSuccess, onFormReset,
   );
 }
 
-export default CustomerRegister; 
+export default CustomerRegister;

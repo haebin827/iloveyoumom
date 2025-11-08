@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import Button from './commons/Button.jsx';
 
-function PasswordResetFailed({ error }) {
-    const navigate = useNavigate();
+const PasswordResetFailed = ({ error }) => {
+    const nav = useNavigate();
 
     const handleReturnToLogin = () => {
-        navigate('/', { replace: true });
+        nav('/', { replace: true });
     };
 
     return (
