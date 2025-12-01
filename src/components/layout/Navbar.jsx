@@ -97,6 +97,12 @@ const Navbar = () => {
                         >
                             구매 기록
                         </TabButton>
+                        <TabButton
+                            active={activeTab === 'sms'}
+                            onClick={() => setActiveTab('sms')}
+                        >
+                            문자 관리
+                        </TabButton>
                     </div>
                 </div>
             </div>

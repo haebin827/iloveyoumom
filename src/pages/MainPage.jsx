@@ -9,6 +9,7 @@ import EditCustomerForm from '../components/EditCustomerForm';
 import CustomerList from '../components/CustomerList';
 import CustomerRegister from '../components/CustomerRegister';
 import VisitHistory from '../components/VisitHistory';
+import SendSMS from '../components/SendSMS.jsx'
 import '../assets/styles/pages/MainPage.css';
 
 const MainPage = () => {
@@ -99,6 +100,11 @@ const MainPage = () => {
                 {/* Visit History Tab */}
                 {activeTab === 'visits' && (
                     <VisitHistory />
+                )}
+
+                {/* Send SMS Tab */}
+                {activeTab === 'sms' && (
+                    <SendSMS />
                 )}
             </div>
         </>
