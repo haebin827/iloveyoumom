@@ -89,7 +89,7 @@ body {
 }
 
 
-/* 모바일 최적화 */
+/* Mobile optimization */
 @media (max-width: 768px) {
   .home-container {
     padding-top: 40px;
@@ -140,7 +140,7 @@ body {
   }
 }
 
-/* 작은 모바일 화면 */
+/* Small mobile screens */
 @media (max-width: 480px) {
   .home-container {
     padding-top: 20px;

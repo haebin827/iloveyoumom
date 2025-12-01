@@ -131,7 +131,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 모바일 반응형 */
+/* Mobile responsive */
 @media (max-width: 480px) {
   .edit-modal {
     max-width: 320px;

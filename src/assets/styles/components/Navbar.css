@@ -149,7 +149,7 @@
   border-color: #ced4da;
 }
 
-/* 모바일 최적화 */
+/* Mobile optimization */
 @media (max-width: 768px) {
   .fixed-navbar {
     padding: 1rem 1rem !important;
@@ -196,7 +196,7 @@
   }
 }
 
-/* 작은 모바일 화면 */
+/* Small mobile screens */
 @media (max-width: 480px) {
   .fixed-navbar {
     padding: 0.5rem;

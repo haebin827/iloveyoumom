@@ -1,4 +1,4 @@
-/* 수정 폼 모달 스타일 */
+/* Edit form modal style */
 .edit-form-overlay {
   position: fixed;
   top: 0;
@@ -126,7 +126,7 @@
 }
 
 
-/* 애니메이션 */
+/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -143,7 +143,7 @@
   }
 }
 
-/* 반응형 조정 */
+/* Responsive adjustments */
 @media (max-width: 992px) {
   .form-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -186,14 +186,14 @@
   }
 }
 
-/* 필수 입력 필드 별표 스타일 */
+/* Required field asterisk style */
 .required-star {
   color: #e74c3c;
   font-weight: bold;
   margin-left: 2px;
 }
 
-/* 메시지 스타일 */
+/* Message styles */
 .message {
   margin-top: 1rem;
   padding: 12px 16px;
@@ -215,7 +215,7 @@
   border: 1px solid #f5c6cb;
 }
 
-/* 라디오 버튼 스타일 */
+/* Radio button styles */
 .radio-group {
   display: flex;
   gap: 16px;
@@ -238,7 +238,7 @@
   padding: 0;
 }
 
-/* 모바일 최적화 */
+/* Mobile optimization */
 @media (max-width: 768px) {
   .radio-group {
     gap: 12px;

@@ -1,4 +1,4 @@
-/* MainPage 스타일 */
+/* MainPage styles */
 .main-container {
   padding-top: 10rem;
   padding-bottom: 1rem;
@@ -10,7 +10,7 @@
 }
 
 
-/* 모바일 최적화 */
+/* Mobile optimization */
 @media (max-width: 768px) {
   .main-container {
     padding-left: 1rem;
@@ -26,7 +26,7 @@
   }
 }
 
-/* 작은 모바일 화면 */
+/* Small mobile screens */
 @media (max-width: 480px) {
   .main-container {
     padding-left: 0.5rem;
@@ -45,7 +45,7 @@
 
 
 
-/* 날짜 선택 필드 스타일 */
+/* Date picker field styles */
 input[type="date"] {
   font-family: inherit;
   color: var(--text-color);
@@ -58,7 +58,7 @@ input[type="date"] {
 
 
 
-/* 모바일 최적화 */
+/* Mobile optimization */
 @media (max-width: 768px) {
   .records-count {
     font-size: 0.85rem;
@@ -71,7 +71,7 @@ input[type="date"] {
   }
 }
 
-/* 필수 입력 필드 별표 스타일 */
+/* Required field asterisk style */
 .required-star {
   color: #e74c3c;
   font-weight: bold;
@@ -79,7 +79,7 @@ input[type="date"] {
 }
 
 
-/* 라디오 버튼 스타일 */
+/* Radio button styles */
 .radio-group {
   display: flex;
   gap: 16px;
@@ -100,7 +100,7 @@ input[type="date"] {
   cursor: pointer;
 }
 
-/* 모바일 최적화 */
+/* Mobile optimization */
 @media (max-width: 768px) {
   .radio-group {
     gap: 12px;
