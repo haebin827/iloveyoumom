@@ -1,0 +1,41 @@
+name: Send Scheduled SMS
+
+on:
+  schedule:
+    # 테스트용: 매 10분마다 실행
+    - cron: '*/10 * * * *'
+
+    # 프로덕션용: 매일 오전 10시 (KST) = 오전 1시 (UTC)
+    # 테스트 완료 후 아래 주석을 해제하고 위 라인을 주석 처리하세요
+    # - cron: '0 1 * * *'
+
+  # 수동 실행 가능 (Actions 탭에서 "Run workflow" 버튼으로 테스트)
+  workflow_dispatch:
+
+jobs:
+  send-sms:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Scheduled SMS
+        run: |
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            'https://nbfmapkzqcqymbdgpupd.supabase.co/functions/v1/send-scheduled-sms' \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+            -H "Content-Type: application/json")
+
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "HTTP Status: $http_code"
+          echo "Response: $body"
+
+          if [ "$http_code" -ne 200 ]; then
+            echo "Error: SMS sending failed"
+            exit 1
+          fi
+
+      - name: Log Results
+        if: always()
+        run: |
+          echo "✅ Scheduled SMS job completed at $(date)"
